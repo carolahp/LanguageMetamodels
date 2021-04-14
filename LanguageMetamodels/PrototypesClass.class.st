@@ -1,5 +1,5 @@
 Class {
 	#name : #PrototypesClass,
-	#superclass : #OldCandleExplicitMetaclassesClass,
+	#superclass : #ExplicitMetaclassesAugmentedClass,
 	#category : #'LanguageMetamodels-Prototypes'
 }

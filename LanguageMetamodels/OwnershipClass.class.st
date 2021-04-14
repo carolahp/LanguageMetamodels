@@ -1,5 +1,5 @@
 Class {
 	#name : #OwnershipClass,
-	#superclass : #OldCandleExplicitMetaclassesClass,
+	#superclass : #ExplicitMetaclassesAugmentedClass,
 	#category : #LanguageMetamodels
 }

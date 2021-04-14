@@ -7,7 +7,7 @@ Class {
 { #category : #'hooks-api' }
 OldCandleExplicitMetaclasses class >> classMetaclass [
 	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
-	^ OldCandleExplicitMetaclassesClass 
+	^ ExplicitMetaclassesAugmentedClass 
 ]
 
 { #category : #hooks }

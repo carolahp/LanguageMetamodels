@@ -1,5 +1,5 @@
 Class {
-	#name : #OldCandleExplicitMetaclassesClass,
+	#name : #ExplicitMetaclassesAugmentedClass,
 	#superclass : #ExplicitMetaclassesClass,
 	#instVars : [
 		'name',
@@ -10,17 +10,17 @@ Class {
 }
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> classVariables [
+ExplicitMetaclassesAugmentedClass >> classVariables [
 	^ classVariables
 ]
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> classVariables: aCollection [ 
+ExplicitMetaclassesAugmentedClass >> classVariables: aCollection [ 
 	classVariables := aCollection
 ]
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> extendWithMonticelloCustom: aMCClassDefinition [ 
+ExplicitMetaclassesAugmentedClass >> extendWithMonticelloCustom: aMCClassDefinition [ 
 	| mcDef |
 	super extendWithMonticelloCustom: aMCClassDefinition.
 	mcDef := aMCClassDefinition.
@@ -29,7 +29,7 @@ OldCandleExplicitMetaclassesClass >> extendWithMonticelloCustom: aMCClassDefinit
 ]
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> hookInstall [
+ExplicitMetaclassesAugmentedClass >> hookInstall [
 	super hookInstall.
 	
 	self remote 
@@ -40,24 +40,24 @@ OldCandleExplicitMetaclassesClass >> hookInstall [
 ]
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> initializeWithTemplateCustom: aTemplate [
+ExplicitMetaclassesAugmentedClass >> initializeWithTemplateCustom: aTemplate [
 	super initializeWithTemplateCustom: aTemplate.
 	self instVarNames: aTemplate instVarNames. 
 	self classVariables: nil
 ]
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> instVarNames1 [
+ExplicitMetaclassesAugmentedClass >> instVarNames1 [
 	^ instVarNames
 ]
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> instVarNames: aCollection [ 
+ExplicitMetaclassesAugmentedClass >> instVarNames: aCollection [ 
 	instVarNames := aCollection
 ]
 
 { #category : #accessing }
-OldCandleExplicitMetaclassesClass >> testRemote [
+ExplicitMetaclassesAugmentedClass >> testRemote [
 	| remoteObject remoteName remoteInstVars |
 	super testRemote.
 	remoteObject := self remote.

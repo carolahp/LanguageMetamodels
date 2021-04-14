@@ -11,7 +11,7 @@ KernelQuitLanguage class >> classMetaclass [
 
 { #category : #hooks }
 KernelQuitLanguage >> entryPointCode [ 
-	^ 'System quit'
+	^ entryPointCode := 'System quit'
 ]
 
 { #category : #hooks }
