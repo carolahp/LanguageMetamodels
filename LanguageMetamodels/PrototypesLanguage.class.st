@@ -12,23 +12,23 @@
 	language runImageLoadedFromFile.
 "
 Class {
-	#name : #MPrototypes,
+	#name : #PrototypesLanguage,
 	#superclass : #LanguageModel,
 	#category : #'LanguageMetamodels-Prototypes'
 }
 
 { #category : #'as yet unclassified' }
-MPrototypes class >> classMetaclass [
+PrototypesLanguage class >> classMetaclass [
 	^ PrototypesClass 
 ]
 
 { #category : #'as yet unclassified' }
-MPrototypes class >> classPrototypeMetaclass [
+PrototypesLanguage class >> classPrototypeMetaclass [
 	^ PrototypesPrototype 
 ]
 
 { #category : #hooks }
-MPrototypes >> defaultGlobalVariables [
+PrototypesLanguage >> defaultGlobalVariables [
 	^ super defaultGlobalVariables
 		add:
 			((GlobalModel named: #Smalltalk parent: self)
@@ -37,7 +37,7 @@ MPrototypes >> defaultGlobalVariables [
 ]
 
 { #category : #hooks }
-MPrototypes >> hookCreateSmalltalkInstance [
+PrototypesLanguage >> hookCreateSmalltalkInstance [
 	| smalltalkImageDef smalltalk remoteSystemDictionary |
 	smalltalkImageDef := self
 		classWithRole: #SmalltalkImage.
@@ -53,13 +53,13 @@ MPrototypes >> hookCreateSmalltalkInstance [
 ]
 
 { #category : #hooks }
-MPrototypes >> hookInitalizeGlobals [
+PrototypesLanguage >> hookInitalizeGlobals [
 	^ ((self classNamed: #SystemDictionary) remote new) asRemoteSystemDictionary.
 	
 ]
 
 { #category : #hooks }
-MPrototypes >> hookInitializeProcessScheduler [ 
+PrototypesLanguage >> hookInitializeProcessScheduler [ 
 	
 	|code processor|
 	processor := super hookInitializeProcessScheduler .
@@ -76,7 +76,7 @@ MPrototypes >> hookInitializeProcessScheduler [
 ]
 
 { #category : #hooks }
-MPrototypes >> hookInitializeSpecialObjectsArray [
+PrototypesLanguage >> hookInitializeSpecialObjectsArray [
 	
 	self remote bootstrapInterpreter
 		evaluateCode: 'Smalltalk specialObjectsArray: newArray.'
@@ -84,13 +84,13 @@ MPrototypes >> hookInitializeSpecialObjectsArray [
 ]
 
 { #category : #hooks }
-MPrototypes >> hookNewSystemDictionary [
+PrototypesLanguage >> hookNewSystemDictionary [
 	self deprecated: 'return the system dictionary fom the hookInitializeGlobals'.
 	^ self evaluateCode: 'Smalltalk globals'
 ]
 
 { #category : #hooks }
-MPrototypes >> hookSetSpecialObjectsArray: anEP2RemoteArray [
+PrototypesLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 		
 	^ (self newInstruction 
 		code: 'Smalltalk specialObjectsArray: anArray';
@@ -100,7 +100,7 @@ MPrototypes >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 ]
 
 { #category : #hooks }
-MPrototypes >> loadCustomClasses [
+PrototypesLanguage >> loadCustomClasses [
 	| package classPrototype methodStart methodProperties methodName methodSetTo methodDoesNotUnderstand |
 	super loadCustomClasses.
 	" we have only one package to the moment "
@@ -173,7 +173,7 @@ sourceCode: 'error: aString
 ]
 
 { #category : #hooks }
-MPrototypes >> loadCustomClassesOld [
+PrototypesLanguage >> loadCustomClassesOld [
 	| package classPrototype classStudent classCaro methodAvg methodStart methodInstVarsDict methodName |
 	super loadCustomClasses .
 	" we have only one package to the moment "

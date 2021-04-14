@@ -1,11 +1,11 @@
 Class {
-	#name : #PPBinding,
+	#name : #PrototypesBinding,
 	#superclass : #EP2CrossCompilerBinding,
 	#category : #'LanguageMetamodels-Prototypes'
 }
 
 { #category : #binding }
-PPBinding >> binding [ 
+PrototypesBinding >> binding [ 
 	^ EP2GlobalBinding  new
 			name: class name; 
 			objectSpace: environment objectSpace;
@@ -13,14 +13,14 @@ PPBinding >> binding [
 ]
 
 { #category : #binding }
-PPBinding >> bindingOf: aString [
+PrototypesBinding >> bindingOf: aString [
 	"There are no class variables nor shared pools"
 	"Therefore it is a temp or an instance variable"
 	^ nil
 ]
 
 { #category : #binding }
-PPBinding >> innerBindingOf: aString [ 
+PrototypesBinding >> innerBindingOf: aString [ 
 	"no class variables nor shared pools"
 	"If it is a temp or an instance variable"
 	^ nil

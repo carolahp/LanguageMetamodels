@@ -1,25 +1,25 @@
 Class {
-	#name : #KernelQuit,
+	#name : #KernelQuitLanguage,
 	#superclass : #LanguageModel,
 	#category : #'LanguageMetamodels-KernelQuit'
 }
 
 { #category : #'hooks-api' }
-KernelQuit class >> classMetaclass [
+KernelQuitLanguage class >> classMetaclass [
 	^ KernelQuitClass
 ]
 
 { #category : #hooks }
-KernelQuit >> entryPointCode [ 
+KernelQuitLanguage >> entryPointCode [ 
 	^ 'System quit'
 ]
 
 { #category : #hooks }
-KernelQuit >> hookInitializeSpecialObjectsArray [
+KernelQuitLanguage >> hookInitializeSpecialObjectsArray [
 	^ nil
 ]
 
 { #category : #hooks }
-KernelQuit >> hookSetSpecialObjectsArray: anEP2RemoteArray [
+KernelQuitLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 	^ nil
 ]

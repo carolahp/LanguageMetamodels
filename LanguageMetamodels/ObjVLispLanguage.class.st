@@ -5,18 +5,18 @@ I require the PharoBootstrapGeneric and its dependencies.
 
 "
 Class {
-	#name : #OLObjVLisp,
+	#name : #ObjVLispLanguage,
 	#superclass : #LanguageModel,
 	#category : #'LanguageMetamodels-ObjVLisp'
 }
 
 { #category : #'as yet unclassified' }
-OLObjVLisp class >> classMetaclass [
+ObjVLispLanguage class >> classMetaclass [
 	^ ObjVLispClass
 ]
 
 { #category : #hooks }
-OLObjVLisp >> entryPointCode [
+ObjVLispLanguage >> entryPointCode [
 	^ '
 	| p |
 	p := Point new.
@@ -31,6 +31,6 @@ OLObjVLisp >> entryPointCode [
 ]
 
 { #category : #hooks }
-OLObjVLisp >> hookInitializeSpecialObjectsArray [
+ObjVLispLanguage >> hookInitializeSpecialObjectsArray [
 	^ nil
 ]

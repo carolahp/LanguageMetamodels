@@ -1,26 +1,26 @@
 Class {
-	#name : #MCandleExplicitMetaclasses,
+	#name : #OldCandleExplicitMetaclasses,
 	#superclass : #LanguageExplicitMetaclasses,
 	#category : #'LanguageMetamodels-Candle'
 }
 
 { #category : #'hooks-api' }
-MCandleExplicitMetaclasses class >> classMetaclass [
+OldCandleExplicitMetaclasses class >> classMetaclass [
 	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
-	^ CandleExplicitMetaclassesClass 
+	^ OldCandleExplicitMetaclassesClass 
 ]
 
 { #category : #hooks }
-MCandleExplicitMetaclasses >> entryPointCode [
+OldCandleExplicitMetaclasses >> entryPointCode [
 	^ 'System quit'
 ]
 
 { #category : #hooks }
-MCandleExplicitMetaclasses >> hookInitializeSpecialObjectsArray [
+OldCandleExplicitMetaclasses >> hookInitializeSpecialObjectsArray [
 	^ nil
 ]
 
 { #category : #hooks }
-MCandleExplicitMetaclasses >> hookSetSpecialObjectsArray: anEP2RemoteArray [ 
+OldCandleExplicitMetaclasses >> hookSetSpecialObjectsArray: anEP2RemoteArray [ 
 	^nil
 ]

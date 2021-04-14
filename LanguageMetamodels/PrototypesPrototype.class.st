@@ -63,7 +63,7 @@ PrototypesPrototype >> installMethods [
 PrototypesPrototype >> installPrototypeAccessor: code selector: selector binding: binding [
 	| classBinding localCompiledMethod remoteCompiledMethod |
 	
-	classBinding := PPBinding new class: self; environment: self remote backend builder; yourself.
+	classBinding := PrototypesBinding new class: self; environment: self remote backend builder; yourself.
 	
 	localCompiledMethod := (OpalCompiler new
 	source: code;

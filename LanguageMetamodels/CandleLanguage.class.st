@@ -1,10 +1,10 @@
 Class {
-	#name : #Candle,
+	#name : #CandleLanguage,
 	#superclass : #LanguageModel,
 	#category : #'LanguageMetamodels-Candle'
 }
 
 { #category : #'hooks-api' }
-Candle class >> classMetaclass [
+CandleLanguage class >> classMetaclass [
 	self shouldBeImplemented.
 ]
