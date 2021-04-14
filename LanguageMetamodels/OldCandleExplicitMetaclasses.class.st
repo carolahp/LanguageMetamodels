@@ -1,6 +1,6 @@
 Class {
 	#name : #OldCandleExplicitMetaclasses,
-	#superclass : #LanguageExplicitMetaclasses,
+	#superclass : #LanguageModel,
 	#category : #'LanguageMetamodels-Candle'
 }
 
