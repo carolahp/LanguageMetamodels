@@ -1,6 +1,6 @@
 Class {
 	#name : #BaselineOfLanguageMetamodels,
-	#superclass : #Object,
+	#superclass : #BaselineOf,
 	#category : #BaselineOfLanguageMetamodels
 }
 
