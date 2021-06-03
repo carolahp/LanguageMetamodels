@@ -6,7 +6,7 @@ Class {
 		'instVarNames',
 		'classVariables'
 	],
-	#category : #'LanguageMetamodels-Candle'
+	#category : #LanguageMetamodels
 }
 
 { #category : #accessing }
