@@ -22,9 +22,9 @@ Ownership >> hookInitializeSpecialObjectsArray [
 ]
 
 { #category : #hooks }
-Ownership >> loadCustomClasses [
+Ownership >> transform [
 	| package methodStart classOwnershipMeta classOwnership |
-	super loadCustomClasses.
+	super transform.
 	" we have only one package to the moment "
 	package := self ensurePackageNamed: 'Kernel-Ownership'.
 	classOwnershipMeta := self class classMetaclass named: #OwnershipMeta parent: self.

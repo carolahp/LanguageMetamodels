@@ -100,82 +100,9 @@ PrototypesLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 ]
 
 { #category : #hooks }
-PrototypesLanguage >> loadCustomClasses [
-	| package classPrototype methodStart methodProperties methodName methodSetTo methodDoesNotUnderstand |
-	super loadCustomClasses.
-	" we have only one package to the moment "
-	package := self ensurePackageNamed: 'Kernel-Prototypes'.
-
-	"Prototype class"
-	classPrototype := self class classPrototypeMetaclass
-		named: #Prototype
-		parent: self.
-	package addDefinedBehavior: classPrototype.
-	self addBehavior: classPrototype.
-	
-	classPrototype
-		layout: (EP2FixedLayout on: classPrototype);
-		superclass: (self classNamed: #Object);
-		package: package;
-		addSlot: #superclass;
-		addSlot: #methodDict;
-		addSlot: #format;
-		addSlot: #name;
-		addSlot: #instVarNames;
-		addSlot: #properties.
-	
-	"Methods"
-	classPrototype
-		addLocalMethodFromSource: 'properties
-	^ properties ifNil: [properties := IdentityDictionary new]'
-		selector: #properties.
-	
-	classPrototype
-		addLocalMethodFromSource: 'set: propertyName to: anObject
-	self properties at: propertyName put: anObject'
-		selector: #set:to:.
-	
-	classPrototype
-		addLocalMethodFromSource: 'get: propertyName
-	^ self properties at: propertyName'
-		selector: #get:.
-	
-	classPrototype
-		addLocalMethodFromSource: 'doesNotUnderstand: msg
-	^ self properties at: msg selector'
-		selector: #doesNotUnderstand.
-	
-	classPrototype
-		addLocalMethodFromSource: 'name
-	^ name'
-		selector: #name.
-		
-	
-	
-(self classNamed: #BlockClosure)
-addLocalMethodFromSource: 'on: exception do: handlerAction
-	<primitive: 199>  
-	^ self value' selector: #on:do:.
-	
-
-((self classNamed: #Object) methodDict at: #error:)
-sourceCode: 'error: aString
-	"The default behavior for error: is the same as halt:. The code is replicated in order to avoid having an extra message send on the stack. This additional message is the one a subclass should override in order to change the error handling behavior."
-	| handler |
-	System log: ''Error: '', aString asString.
-	System log: Character cr asString, ''CallStack:''.
-	System log: thisContext stringCallStack asString.
-	
-	(handler := (Smalltalk at: #Processor) activeProcess errorHandler)
-		ifNil: [ self handleExceptionName: aString context: thisContext ]
-		ifNotNil: [ handler value: aString value: self ]'
-.
-]
-
-{ #category : #hooks }
 PrototypesLanguage >> loadCustomClassesOld [
 	| package classPrototype classStudent classCaro methodAvg methodStart methodInstVarsDict methodName |
-	super loadCustomClasses .
+	super transform .
 	" we have only one package to the moment "
 	package := self ensurePackageNamed: 'Kernel-Prototypes'.
 	classPrototype := self class classPrototypeMetaclass named: #Prototype parent: self.
@@ -258,4 +185,77 @@ PrototypesLanguage >> loadCustomClassesOld [
 		package: package.
 	package addDefinedBehavior: classCaro.
 	self addBehavior: classCaro
+]
+
+{ #category : #hooks }
+PrototypesLanguage >> transform [
+	| package classPrototype methodStart methodProperties methodName methodSetTo methodDoesNotUnderstand |
+	super transform.
+	" we have only one package to the moment "
+	package := self ensurePackageNamed: 'Kernel-Prototypes'.
+
+	"Prototype class"
+	classPrototype := self class classPrototypeMetaclass
+		named: #Prototype
+		parent: self.
+	package addDefinedBehavior: classPrototype.
+	self addBehavior: classPrototype.
+	
+	classPrototype
+		layout: (EP2FixedLayout on: classPrototype);
+		superclass: (self classNamed: #Object);
+		package: package;
+		addSlot: #superclass;
+		addSlot: #methodDict;
+		addSlot: #format;
+		addSlot: #name;
+		addSlot: #instVarNames;
+		addSlot: #properties.
+	
+	"Methods"
+	classPrototype
+		addLocalMethodFromSource: 'properties
+	^ properties ifNil: [properties := IdentityDictionary new]'
+		selector: #properties.
+	
+	classPrototype
+		addLocalMethodFromSource: 'set: propertyName to: anObject
+	self properties at: propertyName put: anObject'
+		selector: #set:to:.
+	
+	classPrototype
+		addLocalMethodFromSource: 'get: propertyName
+	^ self properties at: propertyName'
+		selector: #get:.
+	
+	classPrototype
+		addLocalMethodFromSource: 'doesNotUnderstand: msg
+	^ self properties at: msg selector'
+		selector: #doesNotUnderstand.
+	
+	classPrototype
+		addLocalMethodFromSource: 'name
+	^ name'
+		selector: #name.
+		
+	
+	
+(self classNamed: #BlockClosure)
+addLocalMethodFromSource: 'on: exception do: handlerAction
+	<primitive: 199>  
+	^ self value' selector: #on:do:.
+	
+
+((self classNamed: #Object) methodDict at: #error:)
+sourceCode: 'error: aString
+	"The default behavior for error: is the same as halt:. The code is replicated in order to avoid having an extra message send on the stack. This additional message is the one a subclass should override in order to change the error handling behavior."
+	| handler |
+	System log: ''Error: '', aString asString.
+	System log: Character cr asString, ''CallStack:''.
+	System log: thisContext stringCallStack asString.
+	
+	(handler := (Smalltalk at: #Processor) activeProcess errorHandler)
+		ifNil: [ self handleExceptionName: aString context: thisContext ]
+		ifNotNil: [ handler value: aString value: self ]'
+.
 ]
