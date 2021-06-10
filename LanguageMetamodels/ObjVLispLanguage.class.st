@@ -32,8 +32,12 @@ ObjVLispLanguage >> hookInitializeSpecialObjectsArray [
 ]
 
 { #category : #hooks }
+ObjVLispLanguage >> loadClasses [
+	self loadBaseLanguageModelDefinitions.
+]
+
+{ #category : #hooks }
 ObjVLispLanguage >> loadGlobalVariables [
 	self globalVariables 
-		add: ((GlobalModel named: #Processor parent: self) role: #Processor);
-		add: ((GlobalModel named: #Undeclared parent: self) role: #Undeclared)
+		add: ((GlobalModel named: #Processor parent: self) role: #Processor)
 ]

@@ -28,15 +28,6 @@ PrototypesLanguage class >> classPrototypeMetaclass [
 ]
 
 { #category : #hooks }
-PrototypesLanguage >> defaultGlobalVariables [
-	^ super defaultGlobalVariables
-		add: ((GlobalModel named: #Processor parent: self) role: #Processor);
-		add: ((GlobalModel named: #Undeclared parent: self) role: #Undeclared);
-		add: ((GlobalModel named: #Smalltalk parent: self) role: #Smalltalk);
-		yourself
-]
-
-{ #category : #hooks }
 PrototypesLanguage >> hookCreateSmalltalkInstance [
 	| smalltalkImageDef smalltalk remoteSystemDictionary |
 	smalltalkImageDef := self
@@ -97,6 +88,11 @@ PrototypesLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 		temps: { 'anArray' -> anEP2RemoteArray };
 		yourself)
 	
+]
+
+{ #category : #hooks }
+PrototypesLanguage >> loadClasses [
+	self loadBaseLanguageModelDefinitions.
 ]
 
 { #category : #hooks }
@@ -191,7 +187,6 @@ PrototypesLanguage >> loadCustomClassesOld [
 PrototypesLanguage >> loadGlobalVariables [ 
 	self globalVariables
 		add: ((GlobalModel named: #Processor parent: self) role: #Processor);
-		add: ((GlobalModel named: #Undeclared parent: self) role: #Undeclared);
 		add: ((GlobalModel named: #Smalltalk parent: self) role: #Smalltalk)
 ]
 
