@@ -30,3 +30,10 @@ ObjVLispLanguage class >> classMetaclass [
 ObjVLispLanguage >> hookInitializeSpecialObjectsArray [
 	^ nil
 ]
+
+{ #category : #hooks }
+ObjVLispLanguage >> loadGlobalVariables [
+	self globalVariables 
+		add: ((GlobalModel named: #Processor parent: self) role: #Processor);
+		add: ((GlobalModel named: #Undeclared parent: self) role: #Undeclared)
+]
