@@ -10,7 +10,7 @@ ObjVLispMinLanguage class >> classMetaclass [
 	^ ObjVLispMinClass  
 ]
 
-{ #category : #hooks }
+{ #category : #'building-class-model' }
 ObjVLispMinLanguage >> loadClasses [
 	self
 		loadLanguageModelDefinitions:
@@ -18,7 +18,7 @@ ObjVLispMinLanguage >> loadClasses [
 				/ 'bootstrap/language-definitions/ObjVLispMin'
 ]
 
-{ #category : #hooks }
+{ #category : #'building-class-model' }
 ObjVLispMinLanguage >> loadGlobalVariables [
 	" no globals in objvlisp min"
 ]

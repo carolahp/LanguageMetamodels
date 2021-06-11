@@ -26,6 +26,28 @@ ObjVLispLanguage class >> classMetaclass [
 	^ ObjVLispClass
 ]
 
+{ #category : #'hooks-api' }
+ObjVLispLanguage class >> globalVariableMetaclass [
+
+	^ ObjVLispGlobal 
+]
+
+{ #category : #hooks }
+ObjVLispLanguage >> createRemoteSystemDictionary [
+	| code |
+
+	code := '
+		Smalltalk instVarAt: 1 put: SystemDictionary new.
+		Smalltalk globals at: #Smalltalk put: Smalltalk.
+		Smalltalk globals'.
+	^ (self newInstruction code: code) evaluate
+]
+
+{ #category : #hooks }
+ObjVLispLanguage >> hookCreateInitialObjects [
+	^ nil
+]
+
 { #category : #hooks }
 ObjVLispLanguage >> hookInitializeSpecialObjectsArray [
 	^ nil
@@ -38,6 +60,23 @@ ObjVLispLanguage >> loadClasses [
 
 { #category : #hooks }
 ObjVLispLanguage >> loadGlobalVariables [
-	self globalVariables 
-		add: ((GlobalModel named: #Processor parent: self) role: #Processor)
+	self globalVariables
+		add:
+			((self class globalVariableMetaclass named: #Processor parent: self)
+				role: #Processor;
+				initializationCode: [ :anEspellBackend | 
+					| processor processList |
+					processor := (self classWithRole: #ProcessorScheduler) remote
+						basicNew asRemoteScheduler.
+					processList := (self classWithRole: #Array) remote basicNew: 5.
+					1 to: 5 do: [ :index | 
+						| process |
+						process := (self classWithRole: #ProcessList) remote basicNew.
+						processList at: index put: process ].
+					processor suspendedProcessList: processList.
+					processor ]);
+		add:
+			((self class globalVariableMetaclass named: #Smalltalk parent: self)
+				role: #Smalltalk;
+				initializationCode: 'SmalltalkImage basicNew')
 ]

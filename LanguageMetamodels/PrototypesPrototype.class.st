@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'instVarNames',
-		'instVarsDict'
+		'instVarsDict',
+		'classVariables'
 	],
 	#category : #'LanguageMetamodels-Prototypes'
 }

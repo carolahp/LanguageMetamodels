@@ -28,23 +28,7 @@ PrototypesLanguage class >> classPrototypeMetaclass [
 ]
 
 { #category : #hooks }
-PrototypesLanguage >> hookCreateSmalltalkInstance [
-	| smalltalkImageDef smalltalk remoteSystemDictionary |
-	smalltalkImageDef := self
-		classWithRole: #SmalltalkImage.
-	remoteSystemDictionary := self remote objectSpace systemDictionary systemDictionary.
-	smalltalkImageDef
-		ifNotNil: [ 
-			smalltalk := smalltalkImageDef remote basicNew.
-			smalltalk instanceVariableAtIndex: 1 put: remoteSystemDictionary.
-			remoteSystemDictionary
-				at: (self globalWithRole: #Smalltalk) name
-				put: smalltalk. ].
-	^ smalltalk
-]
-
-{ #category : #hooks }
-PrototypesLanguage >> hookInitalizeGlobals [
+PrototypesLanguage >> createRemoteSystemDictionary [
 	^ ((self classNamed: #SystemDictionary) remote new) asRemoteSystemDictionary.
 	
 ]
@@ -53,6 +37,7 @@ PrototypesLanguage >> hookInitalizeGlobals [
 PrototypesLanguage >> hookInitializeProcessScheduler [ 
 	
 	|code processor|
+	self deprecated: 'Use the GlobalModel with role #Processor instead'.
 	processor := super hookInitializeProcessScheduler .
 	code := 
 		'Smalltalk globals at: #Processor put: processor.
@@ -88,6 +73,22 @@ PrototypesLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 		temps: { 'anArray' -> anEP2RemoteArray };
 		yourself)
 	
+]
+
+{ #category : #hooks }
+PrototypesLanguage >> initializeRemoteGlobals [
+	| smalltalkImageDef smalltalk remoteSystemDictionary |
+	smalltalkImageDef := self
+		classWithRole: #SmalltalkImage.
+	remoteSystemDictionary := self remote objectSpace systemDictionary systemDictionary.
+	smalltalkImageDef
+		ifNotNil: [ 
+			smalltalk := smalltalkImageDef remote basicNew.
+			smalltalk instanceVariableAtIndex: 1 put: remoteSystemDictionary.
+			remoteSystemDictionary
+				at: (self globalWithRole: #Smalltalk) name
+				put: smalltalk. ].
+	^ smalltalk
 ]
 
 { #category : #hooks }
@@ -184,10 +185,11 @@ PrototypesLanguage >> loadCustomClassesOld [
 ]
 
 { #category : #hooks }
-PrototypesLanguage >> loadGlobalVariables [ 
+PrototypesLanguage >> loadGlobalVariables [
 	self globalVariables
-		add: ((GlobalModel named: #Processor parent: self) role: #Processor);
-		add: ((GlobalModel named: #Smalltalk parent: self) role: #Smalltalk)
+		add:
+			((self class globalVariableMetaclass named: #Smalltalk parent: self)
+				role: #Smalltalk)
 ]
 
 { #category : #hooks }
