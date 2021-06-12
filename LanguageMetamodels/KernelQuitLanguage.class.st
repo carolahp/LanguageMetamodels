@@ -15,11 +15,11 @@ KernelQuitLanguage >> entryPointCode [
 ]
 
 { #category : #hooks }
-KernelQuitLanguage >> hookInitializeSpecialObjectsArray [
+KernelQuitLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 	^ nil
 ]
 
 { #category : #hooks }
-KernelQuitLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
+KernelQuitLanguage >> initializeSpecialObjectsArray [
 	^ nil
 ]

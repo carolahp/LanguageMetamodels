@@ -52,14 +52,6 @@ PrototypesLanguage >> hookInitializeProcessScheduler [
 ]
 
 { #category : #hooks }
-PrototypesLanguage >> hookInitializeSpecialObjectsArray [
-	
-	self remote bootstrapInterpreter
-		evaluateCode: 'Smalltalk specialObjectsArray: newArray.'
-		withTemps: { 'newArray' -> self remote espellBackend specialObjectsArray }.
-]
-
-{ #category : #hooks }
 PrototypesLanguage >> hookNewSystemDictionary [
 	self deprecated: 'return the system dictionary fom the hookInitializeGlobals'.
 	^ self evaluateCode: 'Smalltalk globals'
@@ -89,6 +81,14 @@ PrototypesLanguage >> initializeRemoteGlobals [
 				at: (self globalWithRole: #Smalltalk) name
 				put: smalltalk. ].
 	^ smalltalk
+]
+
+{ #category : #hooks }
+PrototypesLanguage >> initializeSpecialObjectsArray [
+	
+	self remote bootstrapInterpreter
+		evaluateCode: 'Smalltalk specialObjectsArray: newArray.'
+		withTemps: { 'newArray' -> self remote espellBackend specialObjectsArray }.
 ]
 
 { #category : #hooks }

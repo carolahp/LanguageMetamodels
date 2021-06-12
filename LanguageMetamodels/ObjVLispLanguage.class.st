@@ -33,6 +33,11 @@ ObjVLispLanguage class >> globalVariableMetaclass [
 ]
 
 { #category : #hooks }
+ObjVLispLanguage >> createInitialObjects [
+	^ nil
+]
+
+{ #category : #hooks }
 ObjVLispLanguage >> createRemoteSystemDictionary [
 	| code |
 
@@ -44,12 +49,7 @@ ObjVLispLanguage >> createRemoteSystemDictionary [
 ]
 
 { #category : #hooks }
-ObjVLispLanguage >> hookCreateInitialObjects [
-	^ nil
-]
-
-{ #category : #hooks }
-ObjVLispLanguage >> hookInitializeSpecialObjectsArray [
+ObjVLispLanguage >> initializeSpecialObjectsArray [
 	^ nil
 ]
 

@@ -16,11 +16,11 @@ OldCandleExplicitMetaclasses >> entryPointCode [
 ]
 
 { #category : #hooks }
-OldCandleExplicitMetaclasses >> hookInitializeSpecialObjectsArray [
-	^ nil
+OldCandleExplicitMetaclasses >> hookSetSpecialObjectsArray: anEP2RemoteArray [ 
+	^nil
 ]
 
 { #category : #hooks }
-OldCandleExplicitMetaclasses >> hookSetSpecialObjectsArray: anEP2RemoteArray [ 
-	^nil
+OldCandleExplicitMetaclasses >> initializeSpecialObjectsArray [
+	^ nil
 ]

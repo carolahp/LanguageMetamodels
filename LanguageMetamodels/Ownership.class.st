@@ -16,7 +16,7 @@ Ownership >> entryPointCode [
 ]
 
 { #category : #hooks }
-Ownership >> hookInitializeSpecialObjectsArray [
+Ownership >> initializeSpecialObjectsArray [
 	
 	^nil
 ]
