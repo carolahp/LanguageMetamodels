@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #registering }
-ObjVLispGlobal >> hookRegister [
+ObjVLispGlobal >> registerCustom [
 	| temps code |
 	temps := {(#name -> self name) . (#value -> self remote)}.
 	code := 'Smalltalk globals at: name put: value'.

@@ -11,14 +11,6 @@ ObjVLispMinLanguage class >> classMetaclass [
 ]
 
 { #category : #'building-class-model' }
-ObjVLispMinLanguage >> loadClasses [
-	self
-		loadLanguageModelDefinitions:
-			Smalltalk imageDirectory
-				/ 'bootstrap/language-definitions/ObjVLispMin'
-]
-
-{ #category : #'building-class-model' }
 ObjVLispMinLanguage >> loadGlobalVariables [
 	" no globals in objvlisp min"
 ]

@@ -54,11 +54,6 @@ ObjVLispLanguage >> initializeSpecialObjectsArray [
 ]
 
 { #category : #hooks }
-ObjVLispLanguage >> loadClasses [
-	self loadBaseLanguageModelDefinitions.
-]
-
-{ #category : #hooks }
 ObjVLispLanguage >> loadGlobalVariables [
 	self globalVariables
 		add:
