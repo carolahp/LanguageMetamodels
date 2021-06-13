@@ -48,6 +48,12 @@ ObjVLispLanguage >> createRemoteSystemDictionary [
 	^ (self newInstruction code: code) evaluate
 ]
 
+{ #category : #roles }
+ObjVLispLanguage >> customClassRoles [
+	" roles are specified in default language model in tonel repo"
+	^ nil
+]
+
 { #category : #hooks }
 ObjVLispLanguage >> initializeSpecialObjectsArray [
 	| code temps |

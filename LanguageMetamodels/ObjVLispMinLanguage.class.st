@@ -27,6 +27,11 @@ ObjVLispMinLanguage >> createRemoteSystemDictionary [
 	^ nil
 ]
 
+{ #category : #roles }
+ObjVLispMinLanguage >> customClassRoles [
+	^ nil
+]
+
 { #category : #hooks }
 ObjVLispMinLanguage >> initializeSpecialObjectsArray [
 	^ nil
