@@ -23,23 +23,33 @@ CandleClass >> classVariables1: anObject [
 CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
 	| mcDef |
 	mcDef := anEP2MCClassDefinition.
+	self name1: self name.
 	self instVarNames1: mcDef instVars.
 	self classVariables1: mcDef classVars.
-	self halt.
+	self metaclass extendWithMonticelloCustom: anEP2MCClassDefinition.
 	^ self
 ]
 
 { #category : #initialization }
+CandleClass >> initialize [ 
+	super initialize.
+	self name1: self name
+]
+
+{ #category : #initialization }
 CandleClass >> initializeWithTemplateCustom: aTemplateClass [
-	| myMetaclass |
+	
 	self instVarNames1: aTemplateClass instVarNames.
 	self classVariables1: #().
 	self name1: self name.
-	myMetaclass := self parent newMetaclassFor: self.
-	self parent
-		classNamed: myMetaclass name
-		ifAbsent: [ self parent addBehavior: myMetaclass ].
+	self parent ensureClassNamed: self name, self parent metaclassSuffix.
+	self metaclass initializeWithSoleInstance: self.
 	^ self
+]
+
+{ #category : #hooks }
+CandleClass >> innerBindingOf: aString [ 
+	^ nil
 ]
 
 { #category : #accessing }
@@ -52,9 +62,14 @@ CandleClass >> instVarNames1: anObject [
 	instVarNames := anObject
 ]
 
+{ #category : #testing }
+CandleClass >> isCandleMetaclass [
+	^ false
+]
+
 { #category : #accessing }
 CandleClass >> metaclass [
-	^ self parent classNamed: self name1 , self parent metaclassSuffix
+	^ self parent ensureClassNamed: self name1 , self parent metaclassSuffix
 ]
 
 { #category : #accessing }
@@ -73,7 +88,8 @@ CandleClass >> test [
 	self assert: self metaclass isNotNil.
 	self assert: self name1 isNotNil.
 	self assert: self name1 = self name.
-	self assert: self classVariables1 isArray.
+	self assert: (self parent isValidMetaclassName: self name1) not
+"	self assert: self classVariables1 isArray.
 	self assert: self instVarNames1 isNotNil.
-	self assert: self instVarNames1 isArray
+	self assert: self instVarNames1 isArray"
 ]

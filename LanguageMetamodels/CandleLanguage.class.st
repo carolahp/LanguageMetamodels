@@ -6,7 +6,7 @@ Class {
 
 { #category : #'hooks-api' }
 CandleLanguage class >> classMetaclass [
-	^ CandleClass
+	^ CandleMetaclass
 ]
 
 { #category : #'hooks-api' }
@@ -23,10 +23,9 @@ CandleLanguage class >> metaclassSuffix [
 { #category : #constants }
 CandleLanguage class >> newMetaclassFor: aCandleClass [
 	| newMetaclass |
-	newMetaclass := CandleMetaclass
-		named: aCandleClass name , self metaclassSuffix
-		parent: aCandleClass parent.
-
+	self deprecated: 'Use LanguageModel ensureClassNamed: '.
+	newMetaclass setLayoutKeepingSlots: (EP2FixedLayout on: newMetaclass).
+	
 	^ newMetaclass
 		superclass:
 			(aCandleClass superclass
@@ -35,13 +34,25 @@ CandleLanguage class >> newMetaclassFor: aCandleClass [
 		soleInstance: aCandleClass
 ]
 
+{ #category : #util }
+CandleLanguage >> addBehavior: aBeh [ 
+	^ super addBehavior: aBeh.
+]
+
+{ #category : #util }
+CandleLanguage >> classNameFrom: aMetaclassName [
+	^ aMetaclassName
+		copyFrom: 1
+		to: aMetaclassName size - self metaclassSuffix size
+]
+
 { #category : #roles }
 CandleLanguage >> customClassRoles [
 	^ {
 	(#Array -> #PCArray).
 	(#Association -> #PCAssociation).
-	(#Bitmap -> #PCBitmap).
-	(#BlockClosure -> #PCBlockClosure).
+	"(#Bitmap -> #PCBitmap). not defined in candle"
+	(#BlockClosure -> #PCBlock).
 	(#ByteArray -> #PCByteArray).
 	(#ByteString -> #PCByteString).
 	(#ByteSymbol -> #PCByteSymbol).
@@ -67,6 +78,25 @@ CandleLanguage >> customClassRoles [
 	(#UndefinedObject -> #PCUndefinedObject)}
 ]
 
+{ #category : #util }
+CandleLanguage >> ensureClassNamed: aName [
+	^ self
+		classNamed: aName
+		ifAbsent: [ | newBeh |
+			newBeh := (self isValidMetaclassName: aName)
+				ifTrue: [ CandleMetaclass named: aName parent: self ]
+				ifFalse: [ CandleClass named: aName parent: self ].
+			self addBehavior: newBeh.
+			newBeh ]
+]
+
+{ #category : #util }
+CandleLanguage >> isValidMetaclassName: aString [
+	^ (aString endsWith: self metaclassSuffix)
+		and: [ aString size > self metaclassSuffix size
+				and: [ (aString occurrencesOf: Character space) = 1 ] ]
+]
+
 { #category : #hooks }
 CandleLanguage >> loadGlobalVariables [
 		self globalVariables
@@ -79,9 +109,4 @@ CandleLanguage >> loadGlobalVariables [
 { #category : #constants }
 CandleLanguage >> metaclassSuffix [
 	^ self class metaclassSuffix
-]
-
-{ #category : #'class instantiation' }
-CandleLanguage >> newMetaclassFor: aCandleClass [
-	^ self class newMetaclassFor: aCandleClass
 ]
