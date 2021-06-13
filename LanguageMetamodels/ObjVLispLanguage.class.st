@@ -57,20 +57,6 @@ ObjVLispLanguage >> initializeSpecialObjectsArray [
 ObjVLispLanguage >> loadGlobalVariables [
 	self globalVariables
 		add:
-			((self class globalVariableMetaclass named: #Processor parent: self)
-				role: #Processor;
-				initializationCode: [ :anEspellBackend | 
-					| processor processList |
-					processor := (self classWithRole: #ProcessorScheduler) remote
-						basicNew asRemoteScheduler.
-					processList := (self classWithRole: #Array) remote basicNew: 5.
-					1 to: 5 do: [ :index | 
-						| process |
-						process := (self classWithRole: #ProcessList) remote basicNew.
-						processList at: index put: process ].
-					processor suspendedProcessList: processList.
-					processor ]);
-		add:
 			((self class globalVariableMetaclass named: #Smalltalk parent: self)
 				role: #Smalltalk;
 				initializationCode: 'SmalltalkImage basicNew')
