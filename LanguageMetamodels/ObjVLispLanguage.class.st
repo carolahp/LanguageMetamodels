@@ -50,7 +50,11 @@ ObjVLispLanguage >> createRemoteSystemDictionary [
 
 { #category : #hooks }
 ObjVLispLanguage >> initializeSpecialObjectsArray [
-	^ nil
+	| code temps |
+	temps := { 'soa' -> self objectSpace specialObjectsArray }.
+	code := 'Smalltalk specialObjectsArray: soa '.
+	
+	^ (self newInstruction code: code; temps: temps; yourself) evaluate.
 ]
 
 { #category : #hooks }
