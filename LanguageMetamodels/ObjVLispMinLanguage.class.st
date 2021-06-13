@@ -10,6 +10,28 @@ ObjVLispMinLanguage class >> classMetaclass [
 	^ ObjVLispMinClass  
 ]
 
+{ #category : #'hooks-api' }
+ObjVLispMinLanguage class >> globalVariableMetaclass [
+	^ ObjVLispMinGlobal 
+]
+
+{ #category : #hooks }
+ObjVLispMinLanguage >> createInitialObjects [
+	"perform operations to initialize Classes classPools, or instructinos such as String initialize"
+	^ nil
+]
+
+{ #category : #hooks }
+ObjVLispMinLanguage >> createRemoteSystemDictionary [
+	" return a new SystemDictionary instance, or nil if your language does not define a system dictionary"
+	^ nil
+]
+
+{ #category : #hooks }
+ObjVLispMinLanguage >> initializeSpecialObjectsArray [
+	^ nil
+]
+
 { #category : #'building-class-model' }
 ObjVLispMinLanguage >> loadGlobalVariables [
 	" no globals in objvlisp min"
