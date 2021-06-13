@@ -55,7 +55,7 @@ CandleMetaclass >> isCandleMetaclass [
 
 { #category : #accessing }
 CandleMetaclass >> metaclass [ 
-	self parent classNamed: self defaultMetaclassName
+	^ self parent classNamed: self defaultMetaclassName
 ]
 
 { #category : #accessing }
