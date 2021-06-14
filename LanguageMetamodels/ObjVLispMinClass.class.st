@@ -34,6 +34,8 @@ ObjVLispMinClass >> innerBindingOf: aSymbol [
 
 { #category : #hooks }
 ObjVLispMinClass >> installStubCustom [
+
+	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
 	self metaclass = self
 		ifTrue: [ ^ self installMetacircularStub ].
 	"first install the stub of my metaclass"
