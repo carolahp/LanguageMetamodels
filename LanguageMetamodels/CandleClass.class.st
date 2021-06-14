@@ -62,6 +62,45 @@ CandleClass >> instVarNames1: anObject [
 	instVarNames := anObject
 ]
 
+{ #category : #'class stub' }
+CandleClass >> installMetaclassStub [
+		"I install a class stub that is instance of itself"
+	| newMetaclassclass newMetaclass metaclassclassIndex metaclassIndex |
+	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
+	" If the metaclass was already created, it will be found in the bootstrapEnvironment dictionary "
+	self remoteIsInstalled
+		ifTrue: [ ^ self remote ].
+
+	" We need to create the metaclass from scratch "
+	metaclassclassIndex := self classLoader newClassIndex.
+	metaclassIndex := self classLoader newClassIndex.
+	
+	newMetaclassclass := self classLoader
+		createStubForClassNamed: self metaclass name
+		metaclassIndex: metaclassIndex 
+		newClassIndex: metaclassclassIndex.
+	
+	newMetaclass := self classLoader
+		createStubForClassNamed: self name
+		metaclassIndex: metaclassclassIndex
+		newClassIndex: metaclassIndex.
+	
+	self assert: newMetaclassclass basicClass = newMetaclass.
+	self assert: newMetaclassclass classTableIndex = metaclassclassIndex .
+	
+	self assert: newMetaclass basicClass = newMetaclassclass.
+	self assert: newMetaclass classTableIndex = metaclassIndex .
+	
+	self metaclass remote ifNil: [ 
+		self metaclass remote: newMetaclassclass .
+		self classLoader
+			registerClass: newMetaclassclass
+			definition: self metaclass
+			fullyLoaded: false. 
+		].
+	^ newMetaclass
+]
+
 { #category : #testing }
 CandleClass >> isCandleMetaclass [
 	^ false

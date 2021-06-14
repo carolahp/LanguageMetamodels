@@ -81,6 +81,8 @@ PrototypesPrototype >> installPrototypeAccessor: code selector: selector binding
 
 { #category : #accessing }
 PrototypesPrototype >> installStubCustom [
+
+	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
 	"I am instance of myself, therefore I install myself directly as a metaclass stub"
 	^ self installMetacircularStub
 ]

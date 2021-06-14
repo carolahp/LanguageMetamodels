@@ -3,3 +3,8 @@ Class {
 	#superclass : #GlobalModel,
 	#category : #'LanguageMetamodels-Candle'
 }
+
+{ #category : #registering }
+CandleGlobal >> registerCustom [
+	^ nil
+]

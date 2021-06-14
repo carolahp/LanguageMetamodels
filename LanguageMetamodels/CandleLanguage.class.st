@@ -46,6 +46,16 @@ CandleLanguage >> classNameFrom: aMetaclassName [
 		to: aMetaclassName size - self metaclassSuffix size
 ]
 
+{ #category : #hooks }
+CandleLanguage >> createInitialObjects [
+	^ nil
+]
+
+{ #category : #hooks }
+CandleLanguage >> createRemoteSystemDictionary [
+	^ nil
+]
+
 { #category : #roles }
 CandleLanguage >> customClassRoles [
 	^ {
@@ -103,7 +113,7 @@ CandleLanguage >> loadGlobalVariables [
 		add:
 			((self class globalVariableMetaclass named: #Smalltalk parent: self)
 				role: #Smalltalk;
-				initializationCode: 'SmalltalkImage basicNew')
+				initializationCode: 'PCSmalltalkImage basicNew')
 ]
 
 { #category : #constants }
