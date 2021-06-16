@@ -67,7 +67,7 @@ CandleLanguage >> customClassRoles [
 	"(#Bitmap -> #PCBitmap). not defined in candle"
 	(#BlockClosure -> #PCBlock).
 	(#ByteArray -> #PCByteArray).
-	(#ByteString -> #PCByteString).
+	(#ByteString -> #PCString).
 	(#ByteSymbol -> #PCByteSymbol).
 	(#Character -> #PCCharacter).
 	(#CompiledMethod -> #PCCompiledMethod).
