@@ -49,6 +49,11 @@ CandleMetaclass >> initializeWithSoleInstance: aCandleClass [
 ]
 
 { #category : #hooks }
+CandleMetaclass >> innerBindingOf: varName [ 
+	^ soleInstance innerBindingOf: varName asSymbol
+]
+
+{ #category : #hooks }
 CandleMetaclass >> installStubCustom [
 
 	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.

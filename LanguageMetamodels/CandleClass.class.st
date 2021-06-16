@@ -36,15 +36,9 @@ CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 
 { #category : #'initialize remote' }
 CandleClass >> initializeClassVars [
-	| bindings dictionary |
-	bindings := self classVars
-		collect: [ :varName | 
-			(self parent classWithRole: #Association) remote basicNew
-				asRemoteAssociation
-				key: varName;
-				value: nil ].
-	dictionary := (bindings asRemoteObjectInObjectSpace: self objectSpace)
-		asRemoteDictionary.
+	| dictionary |
+	dictionary := (self classVars
+		asRemoteObjectInObjectSpace: self objectSpace) asRemoteDictionary.
 	self testStub.
 	self remote classVars: dictionary.
 	self testStub.
@@ -64,17 +58,13 @@ CandleClass >> initializeWithTemplateCustom: aTemplateClass [
 
 { #category : #hooks }
 CandleClass >> innerBindingOf: aSymbol [
-	"Answer the binding of some variable resolved in the scope of the receiver, or one of its superclass
-	but do not look up binding in receiver's environment.
-	Use #bindingOf: for looking up the variable binding in a full scope, including receiver's environment"
-	
-	self remote classVars ifNotNilObject: [ self halt ].
 
 	"First look in classVar dictionary."
-"	(self classVars remote bindingOf: aSymbol) ifNotNil: [:binding | ^binding].
-	self sharedPools do: [:pool | (pool bindingOf: aSymbol) ifNotNil: [:binding | ^binding]]."
-	"Next look in shared pools."
-	self superclass ifNotNil: [:supercl | ^ supercl innerBindingOf: aSymbol].	
+	(self classVars bindingOf: aSymbol) ifNotNil: [ 
+		^ self remote classVars asRemoteDictionary bindingOf: aSymbol ].
+
+	self superclass
+		ifNotNil: [ :supercl | ^ supercl innerBindingOf: aSymbol ].
 	^ nil
 ]
 

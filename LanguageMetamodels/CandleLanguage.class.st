@@ -103,6 +103,11 @@ CandleLanguage >> ensureClassNamed: aName [
 			newBeh ]
 ]
 
+{ #category : #hooks }
+CandleLanguage >> initializeSpecialObjectsArray [
+	^ nil
+]
+
 { #category : #util }
 CandleLanguage >> isValidMetaclassName: aString [
 	^ (aString endsWith: self metaclassSuffix)
