@@ -1,3 +1,11 @@
+"
+Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc/tree/hooks
+and set them in the constructor 
+CandleLanguage 
+	newFromModel: pathToDefinitions 
+	withName: #Candle 
+	withEntryPoint: 'PCSystem log: ''hello from Candle!''. PCSystem quit'.
+"
 Class {
 	#name : #CandleLanguage,
 	#superclass : #LanguageModel,
