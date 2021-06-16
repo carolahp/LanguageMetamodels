@@ -20,12 +20,16 @@ CandleClass >> classVars: anObject [
 ]
 
 { #category : #hooks }
-CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
-	| mcDef |
+CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
+	| mcDef classVarsDict |
 	mcDef := anEP2MCClassDefinition.
 	self name: self name.
 	self instVarsNames: mcDef instVars.
-	self classVars: (mcDef classVars ifNil: [#()]).
+	classVarsDict := mcDef classVars
+		ifNil: [ Dictionary new ]
+		ifNotNil:
+			[ :vars | (vars collect: [ :v | v asSymbol -> nil ]) asDictionary ].
+	self classVars: classVarsDict.
 	self metaclass extendWithMonticelloCustom: anEP2MCClassDefinition.
 	^ self
 ]
@@ -40,7 +44,7 @@ CandleClass >> initializeClassVars [
 				key: varName;
 				value: nil ].
 	dictionary := (bindings asRemoteObjectInObjectSpace: self objectSpace)
-		asDictionary.
+		asRemoteDictionary.
 	self testStub.
 	self remote classVars: dictionary.
 	self testStub.
