@@ -9,6 +9,16 @@ Class {
 	#category : #'LanguageMetamodels-Candle'
 }
 
+{ #category : #binding }
+CandleClass >> bindingOf: varName [	
+	| aSymbol |
+	aSymbol := varName asSymbol.
+
+	^ (self innerBindingOf: aSymbol) ifNil: [
+		 self environment bindingOf: aSymbol
+	]
+]
+
 { #category : #accessing }
 CandleClass >> classVars [
 	^ classVars
@@ -27,8 +37,10 @@ CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	self instVarsNames: mcDef instVars.
 	classVarsDict := mcDef classVars
 		ifNil: [ Dictionary new ]
-		ifNotNil:
-			[ :vars | (vars collect: [ :v | v asSymbol -> nil ]) asDictionary ].
+		ifNotNil: [ :vars | 
+			(vars
+				collect: [ :v | CandleClassVariable named: v asSymbol parent: self ])
+				asDictionary ].
 	self classVars: classVarsDict.
 	self metaclass extendWithMonticelloCustom: anEP2MCClassDefinition.
 	^ self
@@ -60,8 +72,7 @@ CandleClass >> initializeWithTemplateCustom: aTemplateClass [
 CandleClass >> innerBindingOf: aSymbol [
 
 	"First look in classVar dictionary."
-	(self classVars bindingOf: aSymbol) ifNotNil: [ 
-		^ self remote classVars asRemoteDictionary bindingOf: aSymbol ].
+	(self classVars bindingOf: aSymbol) ifNotNil: [:binding | ^binding].
 
 	self superclass
 		ifNotNil: [ :supercl | ^ supercl innerBindingOf: aSymbol ].
