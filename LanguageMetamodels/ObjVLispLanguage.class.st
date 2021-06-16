@@ -71,3 +71,8 @@ ObjVLispLanguage >> loadGlobalVariables [
 				role: #Smalltalk;
 				initializationCode: 'SmalltalkImage basicNew')
 ]
+
+{ #category : #hooks }
+ObjVLispLanguage >> transform [ 
+	^ self
+]

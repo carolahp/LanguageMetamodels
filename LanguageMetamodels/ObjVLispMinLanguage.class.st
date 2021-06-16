@@ -41,3 +41,8 @@ ObjVLispMinLanguage >> initializeSpecialObjectsArray [
 ObjVLispMinLanguage >> loadGlobalVariables [
 	" no globals in objvlisp min"
 ]
+
+{ #category : #hooks }
+ObjVLispMinLanguage >> transform [ 
+	^ self
+]

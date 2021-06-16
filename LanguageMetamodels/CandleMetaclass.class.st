@@ -59,6 +59,11 @@ CandleMetaclass >> installStubCustom [
 ]
 
 { #category : #testing }
+CandleMetaclass >> isCandleClass [
+	^ false
+]
+
+{ #category : #testing }
 CandleMetaclass >> isCandleMetaclass [
 	^ true
 ]
@@ -66,6 +71,15 @@ CandleMetaclass >> isCandleMetaclass [
 { #category : #accessing }
 CandleMetaclass >> metaclass [ 
 	^ self parent classNamed: self defaultMetaclassName
+]
+
+{ #category : #accessing }
+CandleMetaclass >> remote [
+	self flag: 'I should cast the remote object accordingly to the language model class'.
+	remote ifNil: [ ^nil ].
+	^ remote isNilObject 
+		ifTrue: [ remote asRemoteNil ]
+		ifFalse: [ remote asRemoteMetaclass ]
 ]
 
 { #category : #accessing }

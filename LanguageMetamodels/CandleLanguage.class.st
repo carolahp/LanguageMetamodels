@@ -48,7 +48,10 @@ CandleLanguage >> classNameFrom: aMetaclassName [
 
 { #category : #hooks }
 CandleLanguage >> createInitialObjects [
-	^ nil
+	(self allClasses select: [ :class | class remote isNotNil ])
+		do: [ :class |
+		 class isCandleClass 
+			ifTrue: [ class initializeClassVars ] ].
 ]
 
 { #category : #hooks }
@@ -119,4 +122,9 @@ CandleLanguage >> loadGlobalVariables [
 { #category : #constants }
 CandleLanguage >> metaclassSuffix [
 	^ self class metaclassSuffix
+]
+
+{ #category : #hooks }
+CandleLanguage >> transform [
+	^ self
 ]

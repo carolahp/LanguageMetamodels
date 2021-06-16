@@ -3,63 +3,85 @@ Class {
 	#superclass : #ClassModel,
 	#instVars : [
 		'name',
-		'instVarNames',
-		'classVariables'
+		'instVarsNames',
+		'classVars'
 	],
 	#category : #'LanguageMetamodels-Candle'
 }
 
 { #category : #accessing }
-CandleClass >> classVariables1 [
-	^ classVariables
+CandleClass >> classVars [
+	^ classVars
 ]
 
 { #category : #accessing }
-CandleClass >> classVariables1: anObject [
-	classVariables := anObject
+CandleClass >> classVars: anObject [
+	classVars := anObject
 ]
 
 { #category : #hooks }
 CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
 	| mcDef |
 	mcDef := anEP2MCClassDefinition.
-	self name1: self name.
-	self instVarNames1: mcDef instVars.
-	self classVariables1: mcDef classVars.
+	self name: self name.
+	self instVarsNames: mcDef instVars.
+	self classVars: (mcDef classVars ifNil: [#()]).
 	self metaclass extendWithMonticelloCustom: anEP2MCClassDefinition.
 	^ self
 ]
 
-{ #category : #initialization }
-CandleClass >> initialize [ 
-	super initialize.
-	self name1: self name
+{ #category : #'initialize remote' }
+CandleClass >> initializeClassVars [
+	| bindings dictionary |
+	bindings := self classVars
+		collect: [ :varName | 
+			(self parent classWithRole: #Association) remote basicNew
+				asRemoteAssociation
+				key: varName;
+				value: nil ].
+	dictionary := (bindings asRemoteObjectInObjectSpace: self objectSpace)
+		asDictionary.
+	self testStub.
+	self remote classVars: dictionary.
+	self testStub.
+	^ dictionary
 ]
 
 { #category : #initialization }
 CandleClass >> initializeWithTemplateCustom: aTemplateClass [
 	
-	self instVarNames1: aTemplateClass instVarNames.
-	self classVariables1: #().
-	self name1: self name.
+	self instVarsNames: aTemplateClass instVarNames.
+	self classVars: #().
 	self parent ensureClassNamed: self name, self parent metaclassSuffix.
 	self metaclass initializeWithSoleInstance: self.
+	
 	^ self
 ]
 
 { #category : #hooks }
-CandleClass >> innerBindingOf: aString [ 
+CandleClass >> innerBindingOf: aSymbol [
+	"Answer the binding of some variable resolved in the scope of the receiver, or one of its superclass
+	but do not look up binding in receiver's environment.
+	Use #bindingOf: for looking up the variable binding in a full scope, including receiver's environment"
+	
+	self remote classVars ifNotNilObject: [ self halt ].
+
+	"First look in classVar dictionary."
+"	(self classVars remote bindingOf: aSymbol) ifNotNil: [:binding | ^binding].
+	self sharedPools do: [:pool | (pool bindingOf: aSymbol) ifNotNil: [:binding | ^binding]]."
+	"Next look in shared pools."
+	self superclass ifNotNil: [:supercl | ^ supercl innerBindingOf: aSymbol].	
 	^ nil
 ]
 
 { #category : #accessing }
-CandleClass >> instVarNames1 [
-	^ instVarNames
+CandleClass >> instVarsNames [
+	^ instVarsNames
 ]
 
 { #category : #accessing }
-CandleClass >> instVarNames1: anObject [
-	instVarNames := anObject
+CandleClass >> instVarsNames: anObject [
+	instVarsNames := anObject
 ]
 
 { #category : #'class stub' }
@@ -102,22 +124,28 @@ CandleClass >> installMetaclassStub [
 ]
 
 { #category : #testing }
+CandleClass >> isCandleClass [
+	^ true
+]
+
+{ #category : #testing }
 CandleClass >> isCandleMetaclass [
 	^ false
 ]
 
 { #category : #accessing }
 CandleClass >> metaclass [
-	^ self parent ensureClassNamed: self name1 , self parent metaclassSuffix
+	^ self parent ensureClassNamed: self name , self parent metaclassSuffix
 ]
 
 { #category : #accessing }
-CandleClass >> name1 [
+CandleClass >> name [
 	^ name
 ]
 
 { #category : #accessing }
-CandleClass >> name1: anObject [
+CandleClass >> name: anObject [
+	super name: anObject.
 	name := anObject
 ]
 
@@ -125,9 +153,9 @@ CandleClass >> name1: anObject [
 CandleClass >> test [ 
 	super test.
 	self assert: self metaclass isNotNil.
-	self assert: self name1 isNotNil.
-	self assert: self name1 = self name.
-	self assert: (self parent isValidMetaclassName: self name1) not
+	self assert: self name isNotNil.
+	self assert: self name = self name.
+	self assert: (self parent isValidMetaclassName: self name) not
 "	self assert: self classVariables1 isArray.
 	self assert: self instVarNames1 isNotNil.
 	self assert: self instVarNames1 isArray"
