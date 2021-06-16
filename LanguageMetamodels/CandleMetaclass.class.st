@@ -29,7 +29,7 @@ CandleMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 		name: mcDef className , self parent metaclassSuffix
 		superclassName: superclassName
 		category: mcDef category
-		instVarNames: #(soleInstance)
+		instVarNames: #()
 		comment: ''.
 	self extendWithMonticello: mcDefNew.
 	self soleInstance: (self parent classNamed: mcDef className).
