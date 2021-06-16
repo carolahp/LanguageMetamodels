@@ -56,10 +56,12 @@ CandleLanguage >> classNameFrom: aMetaclassName [
 
 { #category : #hooks }
 CandleLanguage >> createInitialObjects [
-	(self allClasses select: [ :class | class remote isNotNil ])
-		do: [ :class |
-		 class isCandleClass 
-			ifTrue: [ class initializeClassVars ] ].
+	| classes |
+	classes := self allClasses
+		select: [ :class | class isCandleClass and: [ class remote isNotNil ] ].
+	classes do: [ :class | class initializeClassVars ].
+	self evaluateCode: 'PCFloat initialize'.
+	
 ]
 
 { #category : #hooks }

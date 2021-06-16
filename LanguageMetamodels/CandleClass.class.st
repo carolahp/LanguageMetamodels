@@ -68,7 +68,7 @@ CandleClass >> initializeWithTemplateCustom: aTemplateClass [
 	^ self
 ]
 
-{ #category : #hooks }
+{ #category : #binding }
 CandleClass >> innerBindingOf: aSymbol [
 
 	"First look in classVar dictionary."
