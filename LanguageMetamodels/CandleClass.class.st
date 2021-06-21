@@ -38,7 +38,7 @@ CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 		ifNil: [ Dictionary new ]
 		ifNotNil: [ :vars | 
 			(vars
-				collect: [ :v | CandleClassVariable named: v asSymbol parent: self ])
+				collect: [ :v | self parent newClassVariableNamed: v asSymbol parent: self ])
 				asDictionary ].
 	self classVars: classVarsDict.
 	self metaclass extendWithMonticelloCustom: anEP2MCClassDefinition.

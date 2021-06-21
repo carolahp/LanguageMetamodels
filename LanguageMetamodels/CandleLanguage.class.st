@@ -18,6 +18,11 @@ CandleLanguage class >> classMetaclass [
 ]
 
 { #category : #'hooks-api' }
+CandleLanguage class >> classVariableMetaclass [
+	^ CandleClassVariable
+]
+
+{ #category : #'hooks-api' }
 CandleLanguage class >> globalVariableMetaclass [
 	" return the subclass of GlobalModel used to represent globals in your language "
 	^ CandleGlobal
@@ -137,6 +142,13 @@ CandleLanguage >> loadGlobalVariables [
 { #category : #constants }
 CandleLanguage >> metaclassSuffix [
 	^ self class metaclassSuffix
+]
+
+{ #category : #'instantiating variables' }
+CandleLanguage >> newClassVariableNamed: aString parent: aCandleClass [
+	^ self class classVariableMetaclass
+		named: aString
+		parent: aCandleClass
 ]
 
 { #category : #hooks }
