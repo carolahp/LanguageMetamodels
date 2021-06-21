@@ -34,7 +34,6 @@ CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	| mcDef classVarsDict |
 	mcDef := anEP2MCClassDefinition.
 	self name: self name.
-	self instVarsNames: mcDef instVars.
 	classVarsDict := mcDef classVars
 		ifNil: [ Dictionary new ]
 		ifNotNil: [ :vars | 
@@ -51,16 +50,15 @@ CandleClass >> initializeClassVars [
 	| dictionary |
 	dictionary := (self classVars
 		asRemoteObjectInObjectSpace: self objectSpace) asRemoteDictionary.
-	self testStub.
+	self test.
 	self remote classVars: dictionary.
-	self testStub.
+	self test.
 	^ dictionary
 ]
 
 { #category : #initialization }
 CandleClass >> initializeWithTemplateCustom: aTemplateClass [
 	
-	self instVarsNames: aTemplateClass instVarNames.
 	self classVars: #().
 	self parent ensureClassNamed: self name, self parent metaclassSuffix.
 	self metaclass initializeWithSoleInstance: self.
@@ -81,12 +79,15 @@ CandleClass >> innerBindingOf: aSymbol [
 
 { #category : #accessing }
 CandleClass >> instVarsNames [
-	^ instVarsNames
+	^ self slots select: #isInstanceVariableSlot thenCollect: #name
 ]
 
-{ #category : #accessing }
-CandleClass >> instVarsNames: anObject [
-	instVarsNames := anObject
+{ #category : #install }
+CandleClass >> installCustom [
+	self remote
+		name: self name;
+		instVarsNames: self instVarsNames.
+	self remote classVars ifNilObject: [ self initializeClassVars ]
 ]
 
 { #category : #'class stub' }

@@ -53,6 +53,12 @@ CandleMetaclass >> innerBindingOf: varName [
 	^ soleInstance innerBindingOf: varName asSymbol
 ]
 
+{ #category : #install }
+CandleMetaclass >> installCustom [
+	self remote
+		soleInstance: self soleInstance remote
+]
+
 { #category : #hooks }
 CandleMetaclass >> installStubCustom [
 

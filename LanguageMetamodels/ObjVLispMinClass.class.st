@@ -8,6 +8,14 @@ Class {
 	#category : #'LanguageMetamodels-ObjVLispMin'
 }
 
+{ #category : #binding }
+ObjVLispMinClass >> bindingOf: varName [ 
+	| aSymbol |
+	aSymbol := varName asSymbol.
+
+	^ self environment bindingOf: aSymbol
+]
+
 { #category : #hooks }
 ObjVLispMinClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
 	| mcDef metaclassDef |
@@ -29,6 +37,11 @@ ObjVLispMinClass >> initializeWithTemplateCustom: aTemplate [
 { #category : #hooks }
 ObjVLispMinClass >> innerBindingOf: aSymbol [ 
 	" no classPool, nor classVars"
+	^ nil
+]
+
+{ #category : #install }
+ObjVLispMinClass >> installCustom [
 	^ nil
 ]
 
