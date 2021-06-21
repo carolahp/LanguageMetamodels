@@ -78,10 +78,10 @@ CandleLanguage >> customClassRoles [
 	(#BlockClosure -> #PCBlock).
 	(#ByteArray -> #PCByteArray).
 	(#ByteString -> #PCString).
-	(#ByteSymbol -> #PCByteSymbol).
+	(#ByteSymbol -> #PCSymbol).
 	(#Character -> #PCCharacter).
 	(#CompiledMethod -> #PCCompiledMethod).
-	(#Context -> #PCContext).
+	(#Context -> #PCMethodContext).
 	(#Dictionary -> #PCDictionary).
 	(#False -> #PCFalse).
 	(#Float -> #PCFloat).
