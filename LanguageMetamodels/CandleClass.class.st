@@ -22,7 +22,7 @@ CandleClass >> bindingOf: varName [
 { #category : #testing }
 CandleClass >> classIsMeta [
 	"tonel compatibility"
-	^ self isCandleClass
+	^ self isCandleMetaclass
 ]
 
 { #category : #accessing }
