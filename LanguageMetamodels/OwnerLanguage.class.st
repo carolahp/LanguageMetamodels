@@ -38,7 +38,7 @@ OwnerLanguage >> transform [
 			class
 				slotNamed: #owner
 				ifAbsent: [ getSrc := 'owner ^ nil'.
-					setSrc := 'owner:object owner:=nil' ].
+					setSrc := 'owner:object ^self' ].
 			class addLocalMethodFromSource: getSrc selector: #owner.
 			class addLocalMethodFromSource: setSrc selector: #owner:. ]
 ]
