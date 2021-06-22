@@ -14,20 +14,22 @@ Class {
 
 { #category : #hooks }
 OwnerLanguage >> transform [
+	| required insert |
+	self test.
 	self halt.
 	(self classWithRole: 'ProtoObject')
-		recursivellyDo: [ :c | 
-			c acceptsNewSlots
-				ifTrue: [ [ c addSlot: #owner ]
-						on: SlotDuplicated
-						do: #resume ] ]
+		recursivellyDo: [ :class | 
+			insert := class acceptsNewSlots.
+			class allSubclasses
+				do: [ :subclass | 
+					insert := insert and: subclass acceptsNewSlots.
+					required := subclass template
+						ifNil: [ #() ]
+						ifNotNil: [ subclass template modelAllInstVarNames ].
+					insert := insert and: (required endsWith: class allSlots) ].
+			insert
+				ifTrue:
+					[ class slotNamed: #owner ifAbsent: [ class addSlot: #owner ] ] ]
 		to: [ :c | c subclasses ].
-	self allClasses
-		do: [ :c | 
-			c acceptsNewSlots
-				ifTrue: [ c addSlot: 'owner' ] ].
-	self allClasses
-		collect: [ :c | 
-			{(c allSlots contains: [ :s | s name = 'owner' ]).
-			(c slots collect: #name)} ]
+	self test
 ]
