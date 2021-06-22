@@ -8,18 +8,18 @@ Class {
 }
 
 { #category : #'hooks-api' }
-ObjVLispMinLanguage class >> classMetaclass [
+ObjVLispMinLanguage class >> globalModel [
+	^ ObjVLispMinGlobal 
+]
+
+{ #category : #'hooks-api' }
+ObjVLispMinLanguage class >> metaclassModel [
 	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
 	^ ObjVLispMinClass  
 ]
 
 { #category : #'hooks-api' }
-ObjVLispMinLanguage class >> globalVariableMetaclass [
-	^ ObjVLispMinGlobal 
-]
-
-{ #category : #'hooks-api' }
-ObjVLispMinLanguage class >> packageMetaclass [
+ObjVLispMinLanguage class >> packageModel [
 	^ PackageModel
 ]
 

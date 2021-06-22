@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'hooks-api' }
-KernelQuitLanguage class >> classMetaclass [
+KernelQuitLanguage class >> metaclassModel [
 	^ KernelQuitClass
 ]
 

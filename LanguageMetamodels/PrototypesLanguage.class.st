@@ -18,17 +18,17 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PrototypesLanguage class >> classMetaclass [
-	^ PrototypesClass 
-]
-
-{ #category : #'as yet unclassified' }
 PrototypesLanguage class >> classPrototypeMetaclass [
 	^ PrototypesPrototype 
 ]
 
 { #category : #'as yet unclassified' }
-PrototypesLanguage class >> packageMetaclass [
+PrototypesLanguage class >> metaclassModel [
+	^ PrototypesClass 
+]
+
+{ #category : #'as yet unclassified' }
+PrototypesLanguage class >> packageModel [
 	^ PackageModel
 ]
 
@@ -117,19 +117,19 @@ PrototypesLanguage >> loadCustomClassesOld [
 		addSlot: #name;
 		addSlot: #instVarNames;
 		addSlot: #instVarsDict.
-	methodInstVarsDict := (self class methodMetaclass named: #instVarsDict parent: classPrototype)
+	methodInstVarsDict := (self class methodModel named: #instVarsDict parent: classPrototype)
 		sourceCode: 
 'instVarsDict
 	^ instVarsDict ifNil: [instVarsDict := IdentityDictionary new]';
 		selector: #instVarsDict;
 		yourself.
-	methodName := (self class methodMetaclass named: #name parent: classPrototype)
+	methodName := (self class methodModel named: #name parent: classPrototype)
 		sourceCode: 
 'name
 	^ name';
 		selector: #name;
 		yourself.
-	methodStart := (self class methodMetaclass named: #start parent: classPrototype)
+	methodStart := (self class methodModel named: #start parent: classPrototype)
 		sourceCode: 
 'start
 	| caroAvg studentAvg |
@@ -172,7 +172,7 @@ PrototypesLanguage >> loadCustomClassesOld [
 	classStudent layout: (EP2FixedLayout on: classStudent);
 		superclass: classPrototype;
 		package: package.
-	methodAvg := (self class methodMetaclass named: #avg parent: classStudent)
+	methodAvg := (self class methodModel named: #avg parent: classStudent)
 		sourceCode: 'avg 
 		^ self grades average';
 		selector: #avg;
@@ -193,7 +193,7 @@ PrototypesLanguage >> loadCustomClassesOld [
 PrototypesLanguage >> loadGlobalVariables [
 	self globalVariables
 		add:
-			((self class globalVariableMetaclass named: #Smalltalk parent: self)
+			((self class globalModel named: #Smalltalk parent: self)
 				role: #Smalltalk)
 ]
 

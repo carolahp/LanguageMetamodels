@@ -21,19 +21,19 @@ Class {
 	#category : #'LanguageMetamodels-ObjVLisp'
 }
 
-{ #category : #'as yet unclassified' }
-ObjVLispLanguage class >> classMetaclass [
-	^ ObjVLispClass
-]
-
 { #category : #'hooks-api' }
-ObjVLispLanguage class >> globalVariableMetaclass [
+ObjVLispLanguage class >> globalModel [
 
 	^ ObjVLispGlobal 
 ]
 
+{ #category : #'as yet unclassified' }
+ObjVLispLanguage class >> metaclassModel [
+	^ ObjVLispClass
+]
+
 { #category : #'hooks-api' }
-ObjVLispLanguage class >> packageMetaclass [
+ObjVLispLanguage class >> packageModel [
 	^ PackageModel
 ]
 
@@ -72,7 +72,7 @@ ObjVLispLanguage >> initializeSpecialObjectsArray [
 ObjVLispLanguage >> loadGlobalVariables [
 	self globalVariables
 		add:
-			((self class globalVariableMetaclass named: #Smalltalk parent: self)
+			((self class globalModel named: #Smalltalk parent: self)
 				role: #Smalltalk;
 				initializationCode: 'SmalltalkImage basicNew')
 ]

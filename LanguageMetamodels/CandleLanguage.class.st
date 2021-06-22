@@ -13,19 +13,19 @@ Class {
 }
 
 { #category : #'hooks-api' }
-CandleLanguage class >> classMetaclass [
-	^ CandleMetaclass
-]
-
-{ #category : #'hooks-api' }
 CandleLanguage class >> classVariableMetaclass [
 	^ CandleClassVariable
 ]
 
 { #category : #'hooks-api' }
-CandleLanguage class >> globalVariableMetaclass [
+CandleLanguage class >> globalModel [
 	" return the subclass of GlobalModel used to represent globals in your language "
 	^ CandleGlobal
+]
+
+{ #category : #'hooks-api' }
+CandleLanguage class >> metaclassModel [
+	^ CandleMetaclass
 ]
 
 { #category : #constants }
@@ -48,7 +48,7 @@ CandleLanguage class >> newMetaclassFor: aCandleClass [
 ]
 
 { #category : #'hooks-api' }
-CandleLanguage class >> packageMetaclass [
+CandleLanguage class >> packageModel [
 	^ CandlePackage 
 ]
 
@@ -155,7 +155,7 @@ CandleLanguage >> isValidMetaclassName: aString [
 CandleLanguage >> loadGlobalVariables [
 		self globalVariables
 		add:
-			((self class globalVariableMetaclass named: #Smalltalk parent: self)
+			((self class globalModel named: #Smalltalk parent: self)
 				role: #Smalltalk;
 				initializationCode: 'PCSmalltalkImage basicNew')
 ]

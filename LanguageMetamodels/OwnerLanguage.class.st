@@ -13,13 +13,13 @@ Class {
 }
 
 { #category : #'hooks-api' }
-OwnerLanguage class >> classMetaclass [
-	^ OwnerMetaclass
+OwnerLanguage class >> globalModel [
+	^ OwnerGlobal
 ]
 
 { #category : #'hooks-api' }
-OwnerLanguage class >> globalVariableMetaclass [
-	^ OwnerGlobal
+OwnerLanguage class >> metaclassModel [
+	^ OwnerMetaclass
 ]
 
 { #category : #hooks }
