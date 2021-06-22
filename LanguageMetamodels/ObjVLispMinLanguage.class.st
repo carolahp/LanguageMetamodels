@@ -1,3 +1,6 @@
+"
+Language Definitions found in https://github.com/carolahp/KernelExplicitMetaclasses/tree/minimum
+"
 Class {
 	#name : #ObjVLispMinLanguage,
 	#superclass : #LanguageModel,
