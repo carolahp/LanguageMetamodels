@@ -23,13 +23,6 @@ OwnerLanguage class >> globalVariableMetaclass [
 ]
 
 { #category : #hooks }
-OwnerLanguage >> test [ 
-
-	super test.
-	1halt.
-]
-
-{ #category : #hooks }
 OwnerLanguage >> transform [
 	self test.
 	"add inst var owner where possible"
@@ -38,11 +31,14 @@ OwnerLanguage >> transform [
 	self test.
 	self allClasses
 		do: [ :class | 
-			| srcGet srcSet |
+			| getSrc setSrc getter setter |
+			getSrc := 'owner ^ owner'.
+			setSrc := 'owner:object owner:=object'.
+			"special methods if owner does not exist"
 			class
 				slotNamed: #owner
-				ifAbsent: [ srcGet := 'owner ^ owner'.
-					srcSet := 'owner:object owner:=object' ]
-				ifPresent: [ srcGet := 'owner ^ nil'.
-					srcSet := 'owner:object owner:=nil' ] ]
+				ifAbsent: [ getSrc := 'owner ^ nil'.
+					setSrc := 'owner:object owner:=nil' ].
+			class addLocalMethodFromSource: getSrc selector: #owner.
+			class addLocalMethodFromSource: setSrc selector: #owner:. ]
 ]
