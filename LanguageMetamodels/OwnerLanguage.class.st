@@ -12,24 +12,22 @@ Class {
 	#category : #'LanguageMetamodels-Owner'
 }
 
+{ #category : #'hooks-api' }
+OwnerLanguage class >> classMetaclass [
+	^ OwnerMetaclass
+]
+
+{ #category : #'hooks-api' }
+OwnerLanguage class >> globalVariableMetaclass [
+	^ OwnerGlobal
+]
+
 { #category : #hooks }
 OwnerLanguage >> transform [
-	| required insert |
+	self test.
+	
+	(self classWithRole: #ProtoObject) addSlotRecursivelyWherePossible: #owner.
 	self test.
 	self halt.
-	(self classWithRole: 'ProtoObject')
-		recursivellyDo: [ :class | 
-			insert := class acceptsNewSlots.
-			class allSubclasses
-				do: [ :subclass | 
-					insert := insert and: subclass acceptsNewSlots.
-					required := subclass template
-						ifNil: [ #() ]
-						ifNotNil: [ subclass template modelAllInstVarNames ].
-					insert := insert and: (required endsWith: class allSlots) ].
-			insert
-				ifTrue:
-					[ class slotNamed: #owner ifAbsent: [ class addSlot: #owner ] ] ]
-		to: [ :c | c subclasses ].
-	self test
+	self allClasses select: [ :class | (class slotNamed: #owner ifAbsent: [ nil ]) isNil ].
 ]
