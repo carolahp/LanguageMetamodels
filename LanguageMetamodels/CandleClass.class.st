@@ -56,9 +56,7 @@ CandleClass >> initializeClassVars [
 	| dictionary |
 	dictionary := (self classVars
 		asRemoteObjectInObjectSpace: self objectSpace) asRemoteDictionary.
-	self test.
 	self remote classVars: dictionary.
-	self test.
 	^ dictionary
 ]
 

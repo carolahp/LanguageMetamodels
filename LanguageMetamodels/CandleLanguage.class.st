@@ -13,6 +13,11 @@ Class {
 }
 
 { #category : #'hooks-api' }
+CandleLanguage class >> classModel [
+	^ CandleClass
+]
+
+{ #category : #'hooks-api' }
 CandleLanguage class >> classVariableMetaclass [
 	^ CandleClassVariable
 ]
@@ -117,8 +122,8 @@ CandleLanguage >> ensureClassNamed: aName [
 		classNamed: aName
 		ifAbsent: [ | newBeh |
 			newBeh := (self isValidMetaclassName: aName)
-				ifTrue: [ CandleMetaclass named: aName parent: self ]
-				ifFalse: [ CandleClass named: aName parent: self ].
+				ifTrue: [ self class metaclassModel named: aName parent: self ]
+				ifFalse: [ self class classModel named: aName parent: self ].
 			self addBehavior: newBeh.
 			newBeh ]
 ]
@@ -170,6 +175,39 @@ CandleLanguage >> newClassVariableNamed: aString parent: aCandleClass [
 	^ self class classVariableMetaclass
 		named: aString
 		parent: aCandleClass
+]
+
+{ #category : #hooks }
+CandleLanguage >> test [ 
+	| model metamodel modelVars metamodelVars modelVarsLast metamodelVarsLast |
+	super test.
+		
+	model := self classNamed: 'PCClass'.
+	metamodel := self class classModel.
+	
+	modelVars := model allInstVarNames.
+	metamodelVars := self class classModel allClassModelInstVarNames.
+	
+	modelVarsLast := (modelVars
+		copyFrom: 4
+		to: modelVars size) asIdentitySet.
+		
+	metamodelVarsLast := (metamodelVars
+		copyFrom: 4
+		to: metamodelVars size) asIdentitySet.
+	
+	self
+		assert: (modelVars beginsWith: (metamodelVars copyFrom: 1 to: 3))
+		description:
+			'The first 3 instance variables of "' , model name
+				, '" must be ' , (metamodelVars copyFrom: 1 to: 3) asString.
+	
+	self
+		assert: (metamodelVarsLast asSet difference: modelVarsLast asSet) isEmpty
+		description:
+			'The class ' , metamodel asString
+				, ' must define the same instance variables as '
+				, model name asString.
 ]
 
 { #category : #hooks }

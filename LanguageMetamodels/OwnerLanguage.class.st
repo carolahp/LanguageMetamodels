@@ -13,6 +13,11 @@ Class {
 }
 
 { #category : #'hooks-api' }
+OwnerLanguage class >> classModel [
+	^ OwnerClass
+]
+
+{ #category : #'hooks-api' }
 OwnerLanguage class >> globalModel [
 	^ OwnerGlobal
 ]
