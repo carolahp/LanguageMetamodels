@@ -27,6 +27,11 @@ PrototypesLanguage class >> classPrototypeMetaclass [
 	^ PrototypesPrototype 
 ]
 
+{ #category : #'as yet unclassified' }
+PrototypesLanguage class >> packageMetaclass [
+	^ PackageModel
+]
+
 { #category : #hooks }
 PrototypesLanguage >> createRemoteSystemDictionary [
 	^ ((self classNamed: #SystemDictionary) remote new) asRemoteSystemDictionary.

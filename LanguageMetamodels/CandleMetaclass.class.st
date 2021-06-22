@@ -7,6 +7,12 @@ Class {
 	#category : #'LanguageMetamodels-Candle'
 }
 
+{ #category : #testing }
+CandleMetaclass >> classIsMeta [
+	"tonel compatibility"
+	^ self isCandleMetaclass
+]
+
 { #category : #contants }
 CandleMetaclass >> defaultMetaclassName [
 	^ #PCMetaclass
@@ -67,6 +73,11 @@ CandleMetaclass >> installStubCustom [
 	self metaclass installStub.
 	"instantiate my metaclass to create a stub of me"
 	^ self metaclass newStubWithFormat: self format
+]
+
+{ #category : #accessing }
+CandleMetaclass >> instanceSide [ 
+	^ soleInstance
 ]
 
 { #category : #testing }

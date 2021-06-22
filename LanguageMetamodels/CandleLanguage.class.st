@@ -47,6 +47,11 @@ CandleLanguage class >> newMetaclassFor: aCandleClass [
 		soleInstance: aCandleClass
 ]
 
+{ #category : #'hooks-api' }
+CandleLanguage class >> packageMetaclass [
+	^ CandlePackage 
+]
+
 { #category : #util }
 CandleLanguage >> addBehavior: aBeh [ 
 	^ super addBehavior: aBeh.
@@ -116,6 +121,22 @@ CandleLanguage >> ensureClassNamed: aName [
 				ifFalse: [ CandleClass named: aName parent: self ].
 			self addBehavior: newBeh.
 			newBeh ]
+]
+
+{ #category : #hooks }
+CandleLanguage >> exportAsTonelRepository: aFileReference [
+	(self packages select: [ :pkg | pkg isNotEmpty ])
+		do: [ :aPackage | 
+			| aSnapshot info aVersion |
+			aSnapshot := aPackage asMCSnapshot.
+			info := MCVersionInfo new.
+			info instVarNamed: #name put: aPackage name , '-author'.
+			aVersion := MCVersion
+				package: (MCPackage new name: aPackage name)
+				info: info
+				snapshot: aSnapshot
+				dependencies: #().
+			EP2TonelWriter fileOut: aVersion on: aFileReference metamodel: self ]
 ]
 
 { #category : #hooks }

@@ -32,6 +32,11 @@ ObjVLispLanguage class >> globalVariableMetaclass [
 	^ ObjVLispGlobal 
 ]
 
+{ #category : #'hooks-api' }
+ObjVLispLanguage class >> packageMetaclass [
+	^ PackageModel
+]
+
 { #category : #hooks }
 ObjVLispLanguage >> createInitialObjects [
 	^ nil

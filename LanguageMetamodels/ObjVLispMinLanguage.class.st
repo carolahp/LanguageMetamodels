@@ -15,6 +15,11 @@ ObjVLispMinLanguage class >> globalVariableMetaclass [
 	^ ObjVLispMinGlobal 
 ]
 
+{ #category : #'hooks-api' }
+ObjVLispMinLanguage class >> packageMetaclass [
+	^ PackageModel
+]
+
 { #category : #hooks }
 ObjVLispMinLanguage >> createInitialObjects [
 	"perform operations to initialize Classes classPools, or instructinos such as String initialize"
