@@ -42,8 +42,8 @@ OwnerLanguage >> transform [
 			"special methods if owner does not exist"
 			class
 				slotNamed: #owner
-				ifAbsent: [ getSrc := 'owner ^ nil'.
-					setSrc := 'owner:object ^self' ].
+				ifAbsent: [ getSrc := 'owner ^ self class instancesDict at: self'.
+					setSrc := 'owner:object ^ self class instancesDict at: self put: object' ].
 			class addLocalMethodFromSource: getSrc selector: #owner.
 			class addLocalMethodFromSource: setSrc selector: #owner:. ]
 ]

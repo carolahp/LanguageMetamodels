@@ -17,9 +17,7 @@ Class {
 OwnerClass >> installCustom [
 	| dictionary |
 	super installCustom.
-	dictionary := (Dictionary new asRemoteObjectInObjectSpace: self objectSpace) asRemoteDictionary.
+	dictionary := self objectSpace newRemoteDictionaryOfSize: 1000.
 	self remote instancesDict: dictionary.
-	self test.
-	
-	
+	self test
 ]
