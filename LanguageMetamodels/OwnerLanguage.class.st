@@ -33,21 +33,36 @@ OwnerLanguage class >> methodModel [
 ]
 
 { #category : #hooks }
+OwnerLanguage >> createInitialObjects [
+	super createInitialObjects.
+	(self classNamed: #PCString) ensureRemote classVars asRemoteDictionary
+		at: #AsciiOrder 
+		put: ((0 to: 255) as: ByteArray)
+]
+
+{ #category : #hooks }
 OwnerLanguage >> createRemoteSystemDictionary [
-	| code dictionary smalltalk |
+	| dictionary smalltalk |
 	smalltalk := (self globalVariableNamed: #Smalltalk) remote.
-	dictionary := (EP2RemoteDictionary
+	dictionary := (EP2RemoteSystemDictionary
 		newWithBackend: self remote backend
-		size: 50) asRemoteDictionary.
+		size: 50).
 	dictionary at: #Smalltalk put: smalltalk.
 	smalltalk instanceVariableAtIndex: 1 put: dictionary.
 	^ dictionary
 ]
 
 { #category : #install }
+OwnerLanguage >> customClassRoles [
+	^ super customClassRoles asOrderedCollection
+		add: #IdentityDictionary -> #PCIdentityDictionary;
+		yourself
+]
+
+{ #category : #install }
 OwnerLanguage >> myRemoteSystemDictionary [
 	^ ((self globalVariableNamed: #Smalltalk) remote
-		instanceVariableAtIndex: 1) asRemoteDictionary
+		instanceVariableAtIndex: 1) asRemoteSystemDictionary 
 ]
 
 { #category : #hooks }
