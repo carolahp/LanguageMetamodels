@@ -18,8 +18,13 @@ OwnerClass >> installCustom [
 	| dictionary |
 	super installCustom.
 	"dictionary := self objectSpace newRemoteDictionaryOfSize: 2."
-	dictionary := self newInstruction code: 'InstancesDictionary new: 100'; temps: #(); evaluate.
-
+	dictionary := self newInstruction
+		code: 'InstancesDictionary new: 100';
+		temps: #();
+		evaluate.
 	self remote instancesDict: dictionary.
-	self test
+	self test.
+	self parent myRemoteSystemDictionary 
+		at: self name asSymbol
+		put: self remote
 ]

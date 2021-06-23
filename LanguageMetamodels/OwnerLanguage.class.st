@@ -27,6 +27,29 @@ OwnerLanguage class >> metaclassModel [
 	^ OwnerMetaclass
 ]
 
+{ #category : #'hooks-api' }
+OwnerLanguage class >> methodModel [
+	^OwnerMethod
+]
+
+{ #category : #hooks }
+OwnerLanguage >> createRemoteSystemDictionary [
+	| code dictionary smalltalk |
+	smalltalk := (self globalVariableNamed: #Smalltalk) remote.
+	dictionary := (EP2RemoteDictionary
+		newWithBackend: self remote backend
+		size: 50) asRemoteDictionary.
+	dictionary at: #Smalltalk put: smalltalk.
+	smalltalk instanceVariableAtIndex: 1 put: dictionary.
+	^ dictionary
+]
+
+{ #category : #install }
+OwnerLanguage >> myRemoteSystemDictionary [
+	^ ((self globalVariableNamed: #Smalltalk) remote
+		instanceVariableAtIndex: 1) asRemoteDictionary
+]
+
 { #category : #hooks }
 OwnerLanguage >> transform [
 	self test.
