@@ -90,6 +90,11 @@ CandleMetaclass >> isCandleMetaclass [
 	^ true
 ]
 
+{ #category : #testing }
+CandleMetaclass >> isMeta [ 
+	^ self isCandleMetaclass 
+]
+
 { #category : #accessing }
 CandleMetaclass >> metaclass [ 
 	^ self parent classNamed: self defaultMetaclassName
