@@ -35,9 +35,11 @@ OwnerLanguage class >> methodModel [
 { #category : #hooks }
 OwnerLanguage >> createInitialObjects [
 	super createInitialObjects.
-	(self classNamed: #PCString) ensureRemote classVars asRemoteDictionary
-		at: #AsciiOrder 
-		put: ((0 to: 255) as: ByteArray)
+	((self classNamed: #PCString) classVars
+		bindingOf: #AsciiOrder)
+		remote:
+			(((0 to: 255) as: ByteArray)
+				asRemoteObjectInObjectSpace: self objectSpace)
 ]
 
 { #category : #hooks }

@@ -18,7 +18,7 @@ CandleLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
-CandleLanguage class >> classVariableMetaclass [
+CandleLanguage class >> classVariableModel [
 	^ CandleClassVariable
 ]
 
@@ -172,7 +172,7 @@ CandleLanguage >> metaclassSuffix [
 
 { #category : #'instantiating variables' }
 CandleLanguage >> newClassVariableNamed: aString parent: aCandleClass [
-	^ self class classVariableMetaclass
+	^ self class classVariableModel
 		named: aString
 		parent: aCandleClass
 ]
