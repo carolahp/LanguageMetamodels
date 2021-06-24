@@ -3,3 +3,8 @@ Class {
 	#superclass : #LiteralVariableModel,
 	#category : #'LanguageMetamodels-Protect'
 }
+
+{ #category : #testing }
+ProtectProtectedVariable >> isGlobalVariable [ 
+	^ false
+]
