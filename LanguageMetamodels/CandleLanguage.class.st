@@ -58,11 +58,6 @@ CandleLanguage class >> packageModel [
 ]
 
 { #category : #util }
-CandleLanguage >> addBehavior: aBeh [ 
-	^ super addBehavior: aBeh.
-]
-
-{ #category : #util }
 CandleLanguage >> classNameFrom: aMetaclassName [
 	^ aMetaclassName
 		copyFrom: 1

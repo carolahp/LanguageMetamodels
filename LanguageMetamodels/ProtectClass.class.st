@@ -2,7 +2,7 @@ Class {
 	#name : #ProtectClass,
 	#superclass : #CandleClass,
 	#instVars : [
-		'protectVars'
+		'protectedVars'
 	],
 	#category : #'LanguageMetamodels-Protect'
 }
