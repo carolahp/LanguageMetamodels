@@ -41,6 +41,11 @@ ObjVLispMinLanguage >> customClassRoles [
 ]
 
 { #category : #hooks }
+ObjVLispMinLanguage >> firstMetaclasses [
+	^{self classWithRole: #Metaclass}
+]
+
+{ #category : #hooks }
 ObjVLispMinLanguage >> initializeSpecialObjectsArray [
 	^ nil
 ]

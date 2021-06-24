@@ -145,6 +145,13 @@ CandleLanguage >> exportAsTonelRepository: aFileReference [
 ]
 
 { #category : #hooks }
+CandleLanguage >> firstMetaclasses [
+	| metaclass |
+	metaclass := self classWithRole: #Metaclass.
+	^ { metaclass . metaclass metaclass }
+]
+
+{ #category : #hooks }
 CandleLanguage >> initializeSpecialObjectsArray [
 	^ nil
 ]

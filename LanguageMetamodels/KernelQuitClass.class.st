@@ -4,6 +4,12 @@ Class {
 	#category : #'LanguageMetamodels-KernelQuit'
 }
 
+{ #category : #binding }
+KernelQuitClass >> bindingOf: aSymbol [
+
+	^ nil
+]
+
 { #category : #hooks }
 KernelQuitClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
 	^ self 
@@ -14,16 +20,13 @@ KernelQuitClass >> initializeWithTemplateCustom: aClass [
 	^ self 
 ]
 
-{ #category : #'stubs creation' }
-KernelQuitClass >> installStubCustom [
+{ #category : #hooks }
+KernelQuitClass >> innerBindingOf: aSymbol [ 
+	^ nil
+]
 
-	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
-	self metaclass = self
-		ifTrue: [ ^ self installMetacircularStub ].
-	"first install the stub of my metaclass"
-	self metaclass installStub.
-	"instantiate my metaclass to create a stub of me"
-	self remote: (self metaclass newStubWithFormat: self format).
+{ #category : #install }
+KernelQuitClass >> installCustom [
 	^ self remote
 ]
 

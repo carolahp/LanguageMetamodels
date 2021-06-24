@@ -77,7 +77,8 @@ CandleMetaclass >> installStubCustom [
 
 { #category : #accessing }
 CandleMetaclass >> instanceSide [ 
-	^ soleInstance
+	
+	^ self
 ]
 
 { #category : #testing }
@@ -126,4 +127,10 @@ CandleMetaclass >> test [
 	self assert: self soleInstance isNotNil.
 	self assert: self soleInstance isCandleMetaclass not
 	
+]
+
+{ #category : #accessing }
+CandleMetaclass >> tonelInstanceSide [ 
+	
+	^ soleInstance 
 ]
