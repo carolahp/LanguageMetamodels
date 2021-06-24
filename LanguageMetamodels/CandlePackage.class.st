@@ -22,7 +22,7 @@ CandlePackage >> asMCSnapshot [
 			(self definedBehaviors , (self definedBehaviors collect: #metaclass)
 				flatCollect: [ :behavior | 
 					(behavior localMethods
-						reject: [ :each | (each parent instanceSide package = each package) not ])
+						reject: [ :each | (each parent tonelInstanceSide package = each package) not ])
 						collect: [ :method | method asMCDefinition ] ]).
 	^ MCSnapshot fromDefinitions: definitions
 ]
