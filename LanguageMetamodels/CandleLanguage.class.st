@@ -1,5 +1,5 @@
 "
-Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc/tree/hooks
+Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc (master branch)
 and set them in the constructor 
 CandleLanguage 
 	newFromModel: pathToDefinitions 
