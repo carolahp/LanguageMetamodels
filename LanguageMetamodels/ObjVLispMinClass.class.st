@@ -67,3 +67,8 @@ ObjVLispMinClass >> metaclass [
 ObjVLispMinClass >> metaclass: anObject [
 	metaclass := anObject 
 ]
+
+{ #category : #hooks }
+ObjVLispMinClass >> registerCustom [
+	^ nil
+]

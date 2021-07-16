@@ -27,20 +27,31 @@ CandlePackage >> asMCSnapshot [
 	^ MCSnapshot fromDefinitions: definitions
 ]
 
-{ #category : #installing }
-CandlePackage >> bindingOf: aSymbol [ 
-	| class result |
-	class := [ self environment classNamed: aSymbol ] on: PBClassDefinitionNotFound do: [nil].
-	result := (self definedBehaviors like: class)
-		ifNotNil: [ 
-			class ensureRemote.
-			class		
-			 ].
-	self halt.
-	self haltIf: [result isNil].
+{ #category : #binding }
+CandlePackage >> at: aString ifAbsent: aBlockClosure [
+	^ self environment at: aString ifAbsent: aBlockClosure
+]
+
+{ #category : #binding }
+CandlePackage >> bindingOf: aSymbol [
+	| result |
+	result := self classNamed: aSymbol ifAbsent: [ nil ].
 	result := result
-		ifNil: [ (self environment globalVariableNamed: aSymbol) ifNil: [ self halt.^ nil ] ].
+		ifNil: [ (self environment globalVariableNamed: aSymbol)
+				ifNil: [ 	^ nil ] ].
 	^ self environment newGlobalBindingFor: aSymbol
+]
+
+{ #category : #binding }
+CandlePackage >> classNamed: aSymbol ifAbsent: aBlockClosure [ 
+	| found |
+	found := [ self environment classNamed: aSymbol ]
+		on: PBClassDefinitionNotFound
+		do: [ ^ aBlockClosure value ].
+	found := (self definedBehaviors like: found)
+		ifNil: [ ^ aBlockClosure value ].
+	found ensureRemote.
+	^ found
 ]
 
 { #category : #installing }
@@ -66,6 +77,11 @@ CandlePackage >> install [
 	remote instanceVariableAtIndex: 2 put: remoteClassesDict.
 	
 	^ remote
+]
+
+{ #category : #installing }
+CandlePackage >> installAccessedObjectsOnly [
+	^ self environment installAccessedObjectsOnly 
 ]
 
 { #category : #'accessing remote' }

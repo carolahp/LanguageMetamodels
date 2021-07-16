@@ -11,6 +11,12 @@ Class {
 }
 
 { #category : #binding }
+CandleClass >> binding [
+
+	^ self environment environment newGlobalBindingFor: self name asSymbol
+]
+
+{ #category : #binding }
 CandleClass >> bindingOf: varName [	
 	| aSymbol |
 	aSymbol := varName asSymbol.
@@ -34,6 +40,11 @@ CandleClass >> classVars [
 { #category : #accessing }
 CandleClass >> classVars: anObject [
 	classVars := anObject
+]
+
+{ #category : #binding }
+CandleClass >> environment [ 
+	^ self package
 ]
 
 { #category : #hooks }

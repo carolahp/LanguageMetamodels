@@ -7,6 +7,17 @@ Class {
 	#category : #'LanguageMetamodels-Candle'
 }
 
+{ #category : #hooks }
+CandleMetaclass >> binding [
+
+	^ self environment environment newGlobalBindingFor: self name asSymbol
+]
+
+{ #category : #hooks }
+CandleMetaclass >> bindingOf: varName [ 
+	^ soleInstance bindingOf: varName asSymbol
+]
+
 { #category : #testing }
 CandleMetaclass >> classIsMeta [
 	"tonel compatibility"
@@ -21,6 +32,11 @@ CandleMetaclass >> defaultMetaclassName [
 { #category : #contants }
 CandleMetaclass >> defaultSuperclassName [
 	^ #PCClass
+]
+
+{ #category : #hooks }
+CandleMetaclass >> environment [ 
+	^ self soleInstance environment
 ]
 
 { #category : #hooks }
@@ -99,6 +115,14 @@ CandleMetaclass >> isMeta [
 { #category : #accessing }
 CandleMetaclass >> metaclass [ 
 	^ self parent classNamed: self defaultMetaclassName
+]
+
+{ #category : #hooks }
+CandleMetaclass >> registerCustom [
+	^ ((self parent globalVariableNamed: #Smalltalk) remote
+		instanceVariableAtIndex: 2) asRemoteDictionary
+		at: self name asSymbol
+		put: self remote
 ]
 
 { #category : #accessing }
