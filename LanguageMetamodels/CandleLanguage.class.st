@@ -57,6 +57,11 @@ CandleLanguage class >> packageModel [
 	^ CandlePackage 
 ]
 
+{ #category : #'accessing classes' }
+CandleLanguage >> allClasses [
+	^ self packages flatCollect: #definedBehaviors 
+]
+
 { #category : #hooks }
 CandleLanguage >> bindingOf: aSymbol [
 	"result := self
@@ -68,7 +73,7 @@ CandleLanguage >> bindingOf: aSymbol [
 
 	(self globalVariableNamed: aSymbol)
 		ifNil: [ (self packageNamed: aSymbol ifAbsent: [nil]) ifNil: [ ^ nil ] ].
-		
+	
 	^ self newGlobalBindingFor: aSymbol
 ]
 
@@ -82,12 +87,12 @@ CandleLanguage >> classNameFrom: aMetaclassName [
 { #category : #hooks }
 CandleLanguage >> createInitialObjects [
 	| classes |
+	self packages do: [ :pkg | pkg install. pkg register ].
 	classes := self allClasses
 		select: [ :class | class isCandleClass and: [ class remote isNotNil ] ].
 	classes do: [ :class | class initializeClassVars ].
 	classes do: [ :class | class register ].
-	self evaluateCode: '(Smalltalk classes at: #PCFloat) initialize'
-	
+	self evaluateCode: '(Kernel>#PCFloat) initialize'
 ]
 
 { #category : #hooks }
@@ -243,5 +248,23 @@ CandleLanguage >> test [
 
 { #category : #hooks }
 CandleLanguage >> transform [
+	| objclass newclass newmetaclass package |
+	objclass := self classNamed: #PCObject.
+	package := self packageNamed: 'Application'.
+	
+	newclass := self class classModel named: #Cat parent: self.
+	newclass package: package.
+	newclass layout: (EP2FixedLayout on: newclass).
+	newclass superclass: objclass.
+	
+	newmetaclass := self class metaclassModel named: #'Cat class' parent: self.
+	newmetaclass package: package.
+	newmetaclass layout: (EP2FixedLayout on: newmetaclass).
+	newmetaclass soleInstance: newclass. 
+	newmetaclass superclass: objclass metaclass.
+	
+	package addDefinedBehavior: newclass.
+	package addDefinedBehavior: newmetaclass.
+	
 	^ self
 ]

@@ -65,6 +65,11 @@ CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	^ self
 ]
 
+{ #category : #accessing }
+CandleClass >> fullName [ 
+	^ self package name, '>', self name
+]
+
 { #category : #'initialize remote' }
 CandleClass >> initializeClassVars [
 	| dictionary |
@@ -179,10 +184,10 @@ CandleClass >> name: anObject [
 
 { #category : #accessing }
 CandleClass >> registerCustom [
-	^ ((self parent globalVariableNamed: #Smalltalk) remote
+	"^ ((self parent globalVariableNamed: #Smalltalk) remote
 		instanceVariableAtIndex: 2) asRemoteDictionary
 		at: self name asSymbol
-		put: self remote
+		put: self remote"
 ]
 
 { #category : #accessing }
