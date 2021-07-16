@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'instVarsNames',
-		'classVars'
+		'classVars',
+		'package'
 	],
 	#category : #'LanguageMetamodels-Candle'
 }
@@ -13,9 +14,9 @@ Class {
 CandleClass >> bindingOf: varName [	
 	| aSymbol |
 	aSymbol := varName asSymbol.
-
 	^ (self innerBindingOf: aSymbol) ifNil: [
-		 self environment bindingOf: aSymbol
+		self package bindingOf: aSymbol
+		"self environment bindingOf: aSymbol"
 	]
 ]
 
@@ -67,8 +68,8 @@ CandleClass >> initializeWithTemplateCustom: aTemplateClass [
 	
 	self classVars: #().
 	self parent ensureClassNamed: self name, self parent metaclassSuffix.
-	self metaclass initializeWithSoleInstance: self.
 	
+	self metaclass initializeWithSoleInstance: self.
 	^ self
 ]
 
@@ -92,7 +93,11 @@ CandleClass >> instVarsNames [
 CandleClass >> installCustom [
 	self remote
 		name: self name;
-		instVarsNames: self instVarsNames.
+		instVarsNames: self instVarsNames;
+		package: self remotePackage.
+	(self remotePackage instanceVariableAtIndex: 2) asRemoteDictionary
+		at: self name
+		put: self remote.
 	self remote classVars ifNilObject: [ self initializeClassVars ]
 ]
 
@@ -159,6 +164,20 @@ CandleClass >> name [
 CandleClass >> name: anObject [
 	super name: anObject.
 	name := anObject
+]
+
+{ #category : #accessing }
+CandleClass >> registerCustom [
+	^ ((self parent globalVariableNamed: #Smalltalk) remote
+		instanceVariableAtIndex: 2) asRemoteDictionary
+		at: self name asSymbol
+		put: self remote
+]
+
+{ #category : #accessing }
+CandleClass >> remotePackage [
+	^ self package ensureRemote.
+	
 ]
 
 { #category : #accessing }

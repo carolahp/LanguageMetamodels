@@ -57,6 +57,18 @@ CandleLanguage class >> packageModel [
 	^ CandlePackage 
 ]
 
+{ #category : #hooks }
+CandleLanguage >> bindingOf: aSymbol [
+	"result := self
+		classNamed: aSymbol
+		ifAbsent: [ nil ]
+		ifPresent: [ :class | 
+			class ensureRemote.
+			class ]."
+	(self globalVariableNamed: aSymbol) ifNil: [ ^ nil ].
+	^ self newGlobalBindingFor: aSymbol
+]
+
 { #category : #util }
 CandleLanguage >> classNameFrom: aMetaclassName [
 	^ aMetaclassName
@@ -70,7 +82,8 @@ CandleLanguage >> createInitialObjects [
 	classes := self allClasses
 		select: [ :class | class isCandleClass and: [ class remote isNotNil ] ].
 	classes do: [ :class | class initializeClassVars ].
-	self evaluateCode: 'PCFloat initialize'.
+	classes do: [ :class | class register ].
+	self evaluateCode: '(Smalltalk classes at: #PCFloat) initialize'
 	
 ]
 
@@ -160,11 +173,24 @@ CandleLanguage >> isValidMetaclassName: aString [
 
 { #category : #hooks }
 CandleLanguage >> loadGlobalVariables [
-		self globalVariables
+	self globalVariables
 		add:
 			((self class globalModel named: #Smalltalk parent: self)
 				role: #Smalltalk;
-				initializationCode: 'PCSmalltalkImage basicNew')
+				initializationCode: [ :anEspellBackend | 
+					"'PCSmalltalkImage basicNew'"
+					| remoteSmalltalk |
+					remoteSmalltalk := (self classNamed: #PCSmalltalkImage)	ensureRemote basicNew.
+					remoteSmalltalk
+						instanceVariableAtIndex: 1
+						put:
+							(Dictionary new
+								asRemoteObjectInObjectSpace: anEspellBackend objectSpace).
+					remoteSmalltalk
+						instanceVariableAtIndex: 2
+						put:
+							(Dictionary new
+								asRemoteObjectInObjectSpace: anEspellBackend objectSpace) ])
 ]
 
 { #category : #constants }
