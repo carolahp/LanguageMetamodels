@@ -37,8 +37,10 @@ CandlePackage >> bindingOf: aSymbol [
 	| result |
 	result := self classNamed: aSymbol ifAbsent: [ nil ].
 	result := result
-		ifNil: [ (self environment globalVariableNamed: aSymbol)
+		ifNil: [ 
+			(self environment bindingOf: aSymbol)
 				ifNil: [ 	^ nil ] ].
+	
 	^ self environment newGlobalBindingFor: aSymbol
 ]
 
@@ -67,6 +69,8 @@ CandlePackage >> ensureRemote [
 { #category : #installing }
 CandlePackage >> install [
 	| remotePackageClass remoteClassesDict remoteName |
+	remote ifNotNil: [ ^ remote ].
+	
 	remotePackageClass := (self parent classNamed: 'PCPackage') ensureRemote.
 	remote := remotePackageClass basicNew.
 	remoteName := self name asString asRemoteObjectInObjectSpace: self parent objectSpace.
@@ -75,13 +79,21 @@ CandlePackage >> install [
 	
 	remote instanceVariableAtIndex: 1 put: remoteName.
 	remote instanceVariableAtIndex: 2 put: remoteClassesDict.
-	
+	self register.
 	^ remote
 ]
 
 { #category : #installing }
 CandlePackage >> installAccessedObjectsOnly [
 	^ self environment installAccessedObjectsOnly 
+]
+
+{ #category : #registering }
+CandlePackage >> registerCustom [
+	^ ((self parent globalVariableNamed: #Smalltalk) remote
+		instanceVariableAtIndex: 1) asRemoteDictionary
+		at: self name asSymbol
+		put: self remote
 ]
 
 { #category : #'accessing remote' }

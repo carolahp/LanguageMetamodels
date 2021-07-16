@@ -16,6 +16,7 @@ PrototypesBinding >> binding [
 PrototypesBinding >> bindingOf: aString [
 	"There are no class variables nor shared pools"
 	"Therefore it is a temp or an instance variable"
+	self deprecated: 'use binding from object models'.
 	^ nil
 ]
 

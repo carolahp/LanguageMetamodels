@@ -65,7 +65,10 @@ CandleLanguage >> bindingOf: aSymbol [
 		ifPresent: [ :class | 
 			class ensureRemote.
 			class ]."
-	(self globalVariableNamed: aSymbol) ifNil: [ ^ nil ].
+
+	(self globalVariableNamed: aSymbol)
+		ifNil: [ (self packageNamed: aSymbol ifAbsent: [nil]) ifNil: [ ^ nil ] ].
+		
 	^ self newGlobalBindingFor: aSymbol
 ]
 
