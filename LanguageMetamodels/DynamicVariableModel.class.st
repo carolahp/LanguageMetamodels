@@ -6,7 +6,6 @@ Class {
 
 { #category : #instanciation }
 DynamicVariableModel class >> named: aString parent: anEP2MLanguage [ 
-self haltIf:[aString = 'activeProcess'].
 	^ self basicNew
 		name: aString asSymbol;
 		parent: anEP2MLanguage;
@@ -34,24 +33,51 @@ DynamicVariableModel >> asRemoteObjectInObjectSpace: anEP2ObjectSpace [
 
 { #category : #'accessing-api' }
 DynamicVariableModel >> emitStore: methodBuilder [
-
-	"generate bytecode to call the reflective write method of the Slot"
-	| tempName |
-	tempName := '0slotTempForStackManipulation'.  
-	methodBuilder
-		addTemp: tempName;
-		storeTemp: tempName;
-		popTop;
-		pushReceiver;
-		pushLiteralVariable: (AdditionalBinding key: #dynvar value: (self asRemoteObjectInObjectSpace: self environment objectSpace));
-		pushTemp: tempName;
-		send: #writeVar:value:
+	
+	name = 'holahola'
+		ifTrue: [ | tempName |
+			tempName := '0slotTempForStackManipulation'.
+			methodBuilder
+				addTemp: tempName;
+				storeTemp: tempName;
+				popTop;
+				"pushReceiver;"
+				pushLiteralVariable:
+					(AdditionalBinding
+						key: name
+						value: (self asRemoteObjectInObjectSpace: self environment objectSpace));
+				pushTemp: tempName;
+				send: #write: ]
+		ifFalse: [ methodBuilder storeTemp: name ]
 ]
 
 { #category : #'accessing-api' }
 DynamicVariableModel >> emitValue: methodBuilder [
-	methodBuilder
-		pushLiteralVariable: (AdditionalBinding key: #dynvar value: (self asRemoteObjectInObjectSpace: self parent objectSpace));
-		pushReceiver;
-		send: #read:
+	name = 'holahola'
+		ifTrue: [ 
+			methodBuilder
+				pushLiteralVariable:
+					(AdditionalBinding
+						key: name
+						value: (self asRemoteObjectInObjectSpace: self parent objectSpace));
+				"pushReceiver;"
+				send: #read ]
+		ifFalse: [ methodBuilder pushTemp: name ]
+]
+
+{ #category : #testing }
+DynamicVariableModel >> isLiteralVariable [
+	^false
+]
+
+{ #category : #testing }
+DynamicVariableModel >> isUndeclared [
+
+	^ false
+]
+
+{ #category : #asd }
+DynamicVariableModel >> markRead [
+	"reading does not change a #write, nor an #arg"
+	usage ifNil: [usage := #read]
 ]
