@@ -6,5 +6,12 @@ Class {
 
 { #category : #hooks }
 ObjVLispDynMethod >> installCustom [
-	^ remote
+]
+
+{ #category : #hooks }
+ObjVLispDynMethod >> localCompiledMethodFromAST: aRBMethodNode [
+	| temporaries ir |
+	temporaries := aRBMethodNode temporaries collect: #name.
+	ir := 	EP2IRMethod newFrom: aRBMethodNode generateIR.
+	^ ir compiledMethodWith: CompiledMethodTrailer empty model: self.
 ]
