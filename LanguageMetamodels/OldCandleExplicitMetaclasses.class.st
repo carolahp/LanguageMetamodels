@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'hooks-api' }
-OldCandleExplicitMetaclasses class >> classMetaclass [
+OldCandleExplicitMetaclasses class >> metaclassModel [
 	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
 	^ ExplicitMetaclassesAugmentedClass 
 ]
@@ -16,11 +16,11 @@ OldCandleExplicitMetaclasses >> entryPointCode [
 ]
 
 { #category : #hooks }
-OldCandleExplicitMetaclasses >> hookInitializeSpecialObjectsArray [
-	^ nil
+OldCandleExplicitMetaclasses >> hookSetSpecialObjectsArray: anEP2RemoteArray [ 
+	^nil
 ]
 
 { #category : #hooks }
-OldCandleExplicitMetaclasses >> hookSetSpecialObjectsArray: anEP2RemoteArray [ 
-	^nil
+OldCandleExplicitMetaclasses >> initializeSpecialObjectsArray [
+	^ nil
 ]

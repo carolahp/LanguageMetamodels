@@ -18,42 +18,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PrototypesLanguage class >> classMetaclass [
-	^ PrototypesClass 
-]
-
-{ #category : #'as yet unclassified' }
 PrototypesLanguage class >> classPrototypeMetaclass [
 	^ PrototypesPrototype 
 ]
 
-{ #category : #hooks }
-PrototypesLanguage >> defaultGlobalVariables [
-	^ super defaultGlobalVariables
-		add:
-			((GlobalModel named: #Smalltalk parent: self)
-				role: #Smalltalk);
-		yourself
+{ #category : #'as yet unclassified' }
+PrototypesLanguage class >> metaclassModel [
+	^ PrototypesClass 
+]
+
+{ #category : #'as yet unclassified' }
+PrototypesLanguage class >> packageModel [
+	^ PackageModel
 ]
 
 { #category : #hooks }
-PrototypesLanguage >> hookCreateSmalltalkInstance [
-	| smalltalkImageDef smalltalk remoteSystemDictionary |
-	smalltalkImageDef := self
-		classWithRole: #SmalltalkImage.
-	remoteSystemDictionary := self remote objectSpace systemDictionary systemDictionary.
-	smalltalkImageDef
-		ifNotNil: [ 
-			smalltalk := smalltalkImageDef remote basicNew.
-			smalltalk instanceVariableAtIndex: 1 put: remoteSystemDictionary.
-			remoteSystemDictionary
-				at: (self globalWithRole: #Smalltalk) name
-				put: smalltalk. ].
-	^ smalltalk
-]
-
-{ #category : #hooks }
-PrototypesLanguage >> hookInitalizeGlobals [
+PrototypesLanguage >> createRemoteSystemDictionary [
 	^ ((self classNamed: #SystemDictionary) remote new) asRemoteSystemDictionary.
 	
 ]
@@ -62,6 +42,7 @@ PrototypesLanguage >> hookInitalizeGlobals [
 PrototypesLanguage >> hookInitializeProcessScheduler [ 
 	
 	|code processor|
+	self deprecated: 'Use the GlobalModel with role #Processor instead'.
 	processor := super hookInitializeProcessScheduler .
 	code := 
 		'Smalltalk globals at: #Processor put: processor.
@@ -73,14 +54,6 @@ PrototypesLanguage >> hookInitializeProcessScheduler [
 		temps: {#processor -> processor};
 		yourself ) evaluate
 
-]
-
-{ #category : #hooks }
-PrototypesLanguage >> hookInitializeSpecialObjectsArray [
-	
-	self remote bootstrapInterpreter
-		evaluateCode: 'Smalltalk specialObjectsArray: newArray.'
-		withTemps: { 'newArray' -> self remote espellBackend specialObjectsArray }.
 ]
 
 { #category : #hooks }
@@ -100,6 +73,35 @@ PrototypesLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 ]
 
 { #category : #hooks }
+PrototypesLanguage >> initializeRemoteGlobals [
+	| smalltalkImageDef smalltalk remoteSystemDictionary |
+	smalltalkImageDef := self
+		classWithRole: #SmalltalkImage.
+	remoteSystemDictionary := self remote objectSpace systemDictionary systemDictionary.
+	smalltalkImageDef
+		ifNotNil: [ 
+			smalltalk := smalltalkImageDef remote basicNew.
+			smalltalk instanceVariableAtIndex: 1 put: remoteSystemDictionary.
+			remoteSystemDictionary
+				at: (self globalWithRole: #Smalltalk) name
+				put: smalltalk. ].
+	^ smalltalk
+]
+
+{ #category : #hooks }
+PrototypesLanguage >> initializeSpecialObjectsArray [
+	
+	self remote bootstrapInterpreter
+		evaluateCode: 'Smalltalk specialObjectsArray: newArray.'
+		withTemps: { 'newArray' -> self remote espellBackend specialObjectsArray }.
+]
+
+{ #category : #hooks }
+PrototypesLanguage >> loadClasses [
+	self loadBaseLanguageModelDefinitions.
+]
+
+{ #category : #hooks }
 PrototypesLanguage >> loadCustomClassesOld [
 	| package classPrototype classStudent classCaro methodAvg methodStart methodInstVarsDict methodName |
 	super transform .
@@ -115,19 +117,19 @@ PrototypesLanguage >> loadCustomClassesOld [
 		addSlot: #name;
 		addSlot: #instVarNames;
 		addSlot: #instVarsDict.
-	methodInstVarsDict := (self class methodMetaclass named: #instVarsDict parent: classPrototype)
+	methodInstVarsDict := (self class methodModel named: #instVarsDict parent: classPrototype)
 		sourceCode: 
 'instVarsDict
 	^ instVarsDict ifNil: [instVarsDict := IdentityDictionary new]';
 		selector: #instVarsDict;
 		yourself.
-	methodName := (self class methodMetaclass named: #name parent: classPrototype)
+	methodName := (self class methodModel named: #name parent: classPrototype)
 		sourceCode: 
 'name
 	^ name';
 		selector: #name;
 		yourself.
-	methodStart := (self class methodMetaclass named: #start parent: classPrototype)
+	methodStart := (self class methodModel named: #start parent: classPrototype)
 		sourceCode: 
 'start
 	| caroAvg studentAvg |
@@ -170,7 +172,7 @@ PrototypesLanguage >> loadCustomClassesOld [
 	classStudent layout: (EP2FixedLayout on: classStudent);
 		superclass: classPrototype;
 		package: package.
-	methodAvg := (self class methodMetaclass named: #avg parent: classStudent)
+	methodAvg := (self class methodModel named: #avg parent: classStudent)
 		sourceCode: 'avg 
 		^ self grades average';
 		selector: #avg;
@@ -185,6 +187,14 @@ PrototypesLanguage >> loadCustomClassesOld [
 		package: package.
 	package addDefinedBehavior: classCaro.
 	self addBehavior: classCaro
+]
+
+{ #category : #hooks }
+PrototypesLanguage >> loadGlobalVariables [
+	self globalVariables
+		add:
+			((self class globalModel named: #Smalltalk parent: self)
+				role: #Smalltalk)
 ]
 
 { #category : #hooks }

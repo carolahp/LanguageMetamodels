@@ -63,8 +63,8 @@ ExplicitMetaclassesAugmentedClass >> testRemote [
 	remoteObject := self remote.
 	remoteName := (remoteObject instanceVariableNamed: #name).
 	self assert: remoteName isNotNilObject.
-	self assert: remoteName basicClass = (self parent remote classNamed: #ByteSymbol).
+	self assert: remoteName basicClass = (self parent remote remoteClass: #ByteSymbol).
 	remoteInstVars := (remoteObject instanceVariableNamed: #instVarNames).
 	self assert: remoteInstVars isNotNilObject.
-	self assert: remoteInstVars basicClass = (self parent remote classNamed: #Array)
+	self assert: remoteInstVars basicClass = (self parent remote remoteClass: #Array)
 ]

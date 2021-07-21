@@ -21,12 +21,63 @@ Class {
 	#category : #'LanguageMetamodels-ObjVLisp'
 }
 
+{ #category : #'hooks-api' }
+ObjVLispLanguage class >> globalModel [
+
+	^ ObjVLispGlobal 
+]
+
 { #category : #'as yet unclassified' }
-ObjVLispLanguage class >> classMetaclass [
+ObjVLispLanguage class >> metaclassModel [
 	^ ObjVLispClass
 ]
 
+{ #category : #'hooks-api' }
+ObjVLispLanguage class >> packageModel [
+	^ PackageModel
+]
+
 { #category : #hooks }
-ObjVLispLanguage >> hookInitializeSpecialObjectsArray [
+ObjVLispLanguage >> createInitialObjects [
 	^ nil
+]
+
+{ #category : #hooks }
+ObjVLispLanguage >> createRemoteSystemDictionary [
+	| code |
+
+	code := '
+		Smalltalk instVarAt: 1 put: SystemDictionary new.
+		Smalltalk globals at: #Smalltalk put: Smalltalk.
+		Smalltalk globals'.
+	^ (self newInstruction code: code) evaluate
+]
+
+{ #category : #roles }
+ObjVLispLanguage >> customClassRoles [
+	" roles are specified in default language model in tonel repo"
+	^ nil
+]
+
+{ #category : #hooks }
+ObjVLispLanguage >> initializeSpecialObjectsArray [
+	| code temps |
+	temps := { 'soa' -> self objectSpace specialObjectsArray }.
+	code := 'Smalltalk specialObjectsArray: soa '.
+	
+	^ (self newInstruction code: code; temps: temps; yourself) evaluate.
+]
+
+{ #category : #hooks }
+ObjVLispLanguage >> loadGlobalVariables [
+	self globalVariables
+		add:
+			((self class globalModel named: #Smalltalk parent: self)
+				role: #Smalltalk;
+				initializationCode: 'SmalltalkImage basicNew')
+]
+
+{ #category : #hooks }
+ObjVLispLanguage >> transform [ 
+	^ self
 ]
