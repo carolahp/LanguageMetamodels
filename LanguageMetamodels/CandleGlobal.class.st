@@ -6,8 +6,6 @@ Class {
 
 { #category : #registering }
 CandleGlobal >> registerCustom [
-	^ ((self parent globalVariableNamed: #Smalltalk) remote
-		instanceVariableAtIndex: 1) asRemoteDictionary
-		at: self name asSymbol
-		put: self remote
+	"no system dictionary"
+	^ nil
 ]

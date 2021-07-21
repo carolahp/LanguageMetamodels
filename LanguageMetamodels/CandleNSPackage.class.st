@@ -1,11 +1,11 @@
 Class {
-	#name : #CandlePackage,
+	#name : #CandleNSPackage,
 	#superclass : #PackageModel,
-	#category : #'LanguageMetamodels-Candle'
+	#category : #'LanguageMetamodels-CandleNameSpaces'
 }
 
 { #category : #exporting }
-CandlePackage >> asMCSnapshot [
+CandleNSPackage >> asMCSnapshot [
 	| definitions |
 	definitions := #() asOrderedCollection.
 	"adding the package"
@@ -28,12 +28,12 @@ CandlePackage >> asMCSnapshot [
 ]
 
 { #category : #binding }
-CandlePackage >> at: aString ifAbsent: aBlockClosure [
+CandleNSPackage >> at: aString ifAbsent: aBlockClosure [
 	^ self environment at: aString ifAbsent: aBlockClosure
 ]
 
 { #category : #binding }
-CandlePackage >> bindingOf: aSymbol [
+CandleNSPackage >> bindingOf: aSymbol [
 	| result |
 	result := self classNamed: aSymbol ifAbsent: [ nil ].
 	result := result
@@ -45,7 +45,7 @@ CandlePackage >> bindingOf: aSymbol [
 ]
 
 { #category : #binding }
-CandlePackage >> classNamed: aSymbol ifAbsent: aBlockClosure [ 
+CandleNSPackage >> classNamed: aSymbol ifAbsent: aBlockClosure [ 
 	| found |
 	found := [ self environment classNamed: aSymbol ]
 		on: PBClassDefinitionNotFound
@@ -57,7 +57,7 @@ CandlePackage >> classNamed: aSymbol ifAbsent: aBlockClosure [
 ]
 
 { #category : #installing }
-CandlePackage >> ensureRemote [
+CandleNSPackage >> ensureRemote [
 
 	^ (self remote
 		ifNil:
@@ -67,7 +67,7 @@ CandlePackage >> ensureRemote [
 ]
 
 { #category : #installing }
-CandlePackage >> install [
+CandleNSPackage >> install [
 	| remotePackageClass remoteClassesDict remoteName |
 	remote ifNotNil: [ ^ remote ].
 	
@@ -84,12 +84,12 @@ CandlePackage >> install [
 ]
 
 { #category : #installing }
-CandlePackage >> installAccessedObjectsOnly [
+CandleNSPackage >> installAccessedObjectsOnly [
 	^ self environment installAccessedObjectsOnly 
 ]
 
 { #category : #registering }
-CandlePackage >> registerCustom [
+CandleNSPackage >> registerCustom [
 	^ ((self parent globalVariableNamed: #Smalltalk) remote
 		instanceVariableAtIndex: 1) asRemoteDictionary
 		at: self name asSymbol
@@ -97,6 +97,6 @@ CandlePackage >> registerCustom [
 ]
 
 { #category : #'accessing remote' }
-CandlePackage >> remote [
+CandleNSPackage >> remote [
 	^ remote
 ]

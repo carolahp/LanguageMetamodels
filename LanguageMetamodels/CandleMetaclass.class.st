@@ -7,15 +7,9 @@ Class {
 	#category : #'LanguageMetamodels-Candle'
 }
 
-{ #category : #hooks }
-CandleMetaclass >> binding [
-
-	^ self environment environment newGlobalBindingFor: self name asSymbol
-]
-
-{ #category : #hooks }
-CandleMetaclass >> bindingOf: varName [ 
-	^ soleInstance bindingOf: varName asSymbol
+{ #category : #testing }
+CandleMetaclass >> bindingOf: aSymbol [ 
+	^ self instanceSide bindingOf: aSymbol
 ]
 
 { #category : #testing }
@@ -119,10 +113,7 @@ CandleMetaclass >> metaclass [
 
 { #category : #hooks }
 CandleMetaclass >> registerCustom [
-	^ ((self parent globalVariableNamed: #Smalltalk) remote
-		instanceVariableAtIndex: 2) asRemoteDictionary
-		at: self name asSymbol
-		put: self remote
+	" no system dictionary to register to"
 ]
 
 { #category : #accessing }

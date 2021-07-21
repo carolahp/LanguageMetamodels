@@ -54,27 +54,7 @@ CandleLanguage class >> newMetaclassFor: aCandleClass [
 
 { #category : #'hooks-api' }
 CandleLanguage class >> packageModel [
-	^ CandlePackage 
-]
-
-{ #category : #'accessing classes' }
-CandleLanguage >> allClasses [
-	^ self packages flatCollect: #definedBehaviors 
-]
-
-{ #category : #hooks }
-CandleLanguage >> bindingOf: aSymbol [
-	"result := self
-		classNamed: aSymbol
-		ifAbsent: [ nil ]
-		ifPresent: [ :class | 
-			class ensureRemote.
-			class ]."
-
-	(self globalVariableNamed: aSymbol)
-		ifNil: [ (self packageNamed: aSymbol ifAbsent: [nil]) ifNil: [ ^ nil ] ].
-	
-	^ self newGlobalBindingFor: aSymbol
+	^ CandleNSPackage 
 ]
 
 { #category : #util }
@@ -87,12 +67,10 @@ CandleLanguage >> classNameFrom: aMetaclassName [
 { #category : #hooks }
 CandleLanguage >> createInitialObjects [
 	| classes |
-	self packages do: [ :pkg | pkg install. pkg register ].
 	classes := self allClasses
 		select: [ :class | class isCandleClass and: [ class remote isNotNil ] ].
 	classes do: [ :class | class initializeClassVars ].
-	classes do: [ :class | class register ].
-	self evaluateCode: '(Kernel>#PCFloat) initialize'
+	self evaluateCode: 'PCFloat initialize'.
 ]
 
 { #category : #hooks }
@@ -185,20 +163,7 @@ CandleLanguage >> loadGlobalVariables [
 		add:
 			((self class globalModel named: #Smalltalk parent: self)
 				role: #Smalltalk;
-				initializationCode: [ :anEspellBackend | 
-					"'PCSmalltalkImage basicNew'"
-					| remoteSmalltalk |
-					remoteSmalltalk := (self classNamed: #PCSmalltalkImage)	ensureRemote basicNew.
-					remoteSmalltalk
-						instanceVariableAtIndex: 1
-						put:
-							(Dictionary new
-								asRemoteObjectInObjectSpace: anEspellBackend objectSpace).
-					remoteSmalltalk
-						instanceVariableAtIndex: 2
-						put:
-							(Dictionary new
-								asRemoteObjectInObjectSpace: anEspellBackend objectSpace) ])
+				initializationCode: 'PCSmalltalkImage basicNew')
 ]
 
 { #category : #constants }
@@ -246,25 +211,7 @@ CandleLanguage >> test [
 				, model name asString.
 ]
 
-{ #category : #hooks }
-CandleLanguage >> transform [
-	| objclass newclass newmetaclass package |
-	objclass := self classNamed: #PCObject.
-	package := self packageNamed: 'Application'.
-	
-	newclass := self class classModel named: #Cat parent: self.
-	newclass package: package.
-	newclass layout: (EP2FixedLayout on: newclass).
-	newclass superclass: objclass.
-	
-	newmetaclass := self class metaclassModel named: #'Cat class' parent: self.
-	newmetaclass package: package.
-	newmetaclass layout: (EP2FixedLayout on: newmetaclass).
-	newmetaclass soleInstance: newclass. 
-	newmetaclass superclass: objclass metaclass.
-	
-	package addDefinedBehavior: newclass.
-	package addDefinedBehavior: newmetaclass.
-	
+{ #category : #util }
+CandleLanguage >> transform [ 
 	^ self
 ]
