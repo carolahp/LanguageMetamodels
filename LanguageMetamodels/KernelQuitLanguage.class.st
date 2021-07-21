@@ -1,3 +1,16 @@
+"
+quit destroy.
+quit := (KernelQuitLanguage  
+	newWithName:  'Quit3' withEntryPoint:  'Metaclass quit.').
+quit generate.
+quit destroy.
+quit := nil.
+quit writeImage.
+quit imageInDisk executeInVM.
+
+quit debugEntryPoint .
+quit imageInMemory.
+"
 Class {
 	#name : #KernelQuitLanguage,
 	#superclass : #LanguageModel,

@@ -1,10 +1,32 @@
 "
 Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc (master branch)
 and set them in the constructor 
+--------------------------------------------------------------------------
 CandleLanguage 
 	newFromModel: pathToDefinitions 
 	withName: #Candle 
 	withEntryPoint: 'PCSystem log: ''hello from Candle!''. PCSystem quit'.
+--------------------------------------------------------------------------
+Another example:	
+
+candle destroy.
+candle := CandleLanguage 
+newFromModel: '/Users/carolina.hernandez/Documents/gitrepos/PharoCandleLast/PharoCandleSrc' asFileReference 
+withName: 'Candle'
+withEntryPoint: '
+| dog sys |
+sys := PCSystem.
+sys log: ''hola desde Candle!''.
+sys quit'.
+
+candle generate.
+candle writeImage.
+candle imageInDisk executeInVM.
+candle browse.
+
+candle spurImage.
+candle debugEntryPoint.
+candle evaluateCode: 'Smalltalk classes'
 "
 Class {
 	#name : #CandleLanguage,

@@ -1,5 +1,23 @@
 "
 Language Definitions found in https://github.com/carolahp/KernelExplicitMetaclasses/tree/minimum
+
+""instantiate the language model""
+language := (ObjVLispMinLanguage 
+newFromModel: '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMinLiterals' asFileReference 
+withName:  'ObjVLispMin'  
+withEntryPoint: '
+	| holi |
+	holi := 1.
+	System log: ''hello world''.
+	System log: ''hello world'' identityHash asString.
+   
+	System quit.').
+language generate.
+language writeImage.
+language imageInDisk executeInVM.
+
+language imageInDisk executeInVMSimulator.
+language browse.
 "
 Class {
 	#name : #ObjVLispMinLanguage,

@@ -17,6 +17,27 @@ sys := (Kernel>#PCSystem).
 dog := (Application>#Dog) new.
 dog logPackage.
 sys quit
+
+--------------------------------------------------------------------------
+candle destroy.
+candle := CandleNSLanguage 
+newFromModel: '/Users/carolina.hernandez/Documents/gitrepos/PharoCandleLast/PharoCandleWithPackages' asFileReference 
+withName: 'CandleP'
+withEntryPoint: '
+| dog sys |
+sys := (Kernel>#PCSystem).
+dog := (Application>#Dog) new.
+dog logPackage.
+sys quit'.
+
+candle generate.
+candle writeImage.
+candle imageInDisk executeInVM.
+candle browse.
+
+candle spurImage.
+candle debugEntryPoint.
+candle evaluateCode: 'Smalltalk classes'
 "
 Class {
 	#name : #CandleNSLanguage,
