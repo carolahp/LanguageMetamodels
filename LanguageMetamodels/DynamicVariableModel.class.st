@@ -6,7 +6,7 @@ Class {
 
 { #category : #instanciation }
 DynamicVariableModel class >> named: aString parent: anEP2MLanguage [ 
-
+self haltIf:[aString = 'activeProcess'].
 	^ self basicNew
 		name: aString asSymbol;
 		parent: anEP2MLanguage;
@@ -15,9 +15,20 @@ DynamicVariableModel class >> named: aString parent: anEP2MLanguage [
 ]
 
 { #category : #'accessing-api' }
-DynamicVariableModel >> asRemoteObjectInObjectSpace: anEP2ObjectSpace [ 
-	remote := ((self parent classNamed: 'DynVar') ensureRemote basicNew).
-	remote instanceVariableAtIndex: 1 put: (objectName asRemoteObjectInObjectSpace: anEP2ObjectSpace).
+DynamicVariableModel >> asRemoteObjectInObjectSpace: anEP2ObjectSpace [
+	| nameInstVarIndex indexInstVarIndex |
+	" the index of the instance variable 'name' in the class DynVar "
+	nameInstVarIndex := 1.
+	" the index of the instance variable 'index' in the class DynVar "
+	indexInstVarIndex := 2.
+	remote := (self parent classNamed: 'DynVar') ensureRemote basicNew.
+	remote
+		instanceVariableAtIndex: nameInstVarIndex
+		put: (objectName asRemoteObjectInObjectSpace: anEP2ObjectSpace).
+	remote
+		instanceVariableAtIndex: indexInstVarIndex
+		put: (index asRemoteObjectInObjectSpace: anEP2ObjectSpace).
+
 	^ remote
 ]
 
@@ -26,7 +37,6 @@ DynamicVariableModel >> emitStore: methodBuilder [
 
 	"generate bytecode to call the reflective write method of the Slot"
 	| tempName |
-
 	tempName := '0slotTempForStackManipulation'.  
 	methodBuilder
 		addTemp: tempName;
@@ -35,7 +45,7 @@ DynamicVariableModel >> emitStore: methodBuilder [
 		pushReceiver;
 		pushLiteralVariable: (AdditionalBinding key: #dynvar value: (self asRemoteObjectInObjectSpace: self environment objectSpace));
 		pushTemp: tempName;
-		send: #writeSlot:value:
+		send: #writeVar:value:
 ]
 
 { #category : #'accessing-api' }
