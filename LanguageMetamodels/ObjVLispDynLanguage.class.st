@@ -12,6 +12,6 @@ ObjVLispDynLanguage class >> metaclassModel [
 
 { #category : #metamodel }
 ObjVLispDynLanguage class >> tempVariableModel [
-	 "^ DynamicVariableModel "
-	^ TempVariableModel
+	^ DynamicVariableModel
+	"^ TempVariableModel"
 ]

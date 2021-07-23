@@ -18,6 +18,7 @@ DynamicVariableModel class >> named: aString parent: anEP2MLanguage [
 DynamicVariableModel >> asRemoteObjectInObjectSpace: anEP2ObjectSpace [ 
 	remote := ((self parent classNamed: 'DynVar') ensureRemote basicNew).
 	remote instanceVariableAtIndex: 1 put: (objectName asRemoteObjectInObjectSpace: anEP2ObjectSpace).
+	remote instanceVariableAtIndex: 2 put: (index asRemoteObjectInObjectSpace: anEP2ObjectSpace).
 	^ remote
 ]
 
@@ -32,16 +33,21 @@ DynamicVariableModel >> emitStore: methodBuilder [
 		addTemp: tempName;
 		storeTemp: tempName;
 		popTop;
-		pushReceiver;
+		"pushReceiver;"
 		pushLiteralVariable: (AdditionalBinding key: #dynvar value: (self asRemoteObjectInObjectSpace: self environment objectSpace));
 		pushTemp: tempName;
-		send: #writeSlot:value:
+		send: #write:
 ]
 
 { #category : #'accessing-api' }
 DynamicVariableModel >> emitValue: methodBuilder [
 	methodBuilder
 		pushLiteralVariable: (AdditionalBinding key: #dynvar value: (self asRemoteObjectInObjectSpace: self parent objectSpace));
-		pushReceiver;
-		send: #read:
+		"pushReceiver;"
+		send: #read
+]
+
+{ #category : #accessing }
+DynamicVariableModel >> index: anInteger [ 
+	index := anInteger
 ]
