@@ -88,7 +88,7 @@ CandleMetaclass >> installStubCustom [
 { #category : #accessing }
 CandleMetaclass >> instanceSide [ 
 	
-	^ self
+	^ soleInstance
 ]
 
 { #category : #testing }
