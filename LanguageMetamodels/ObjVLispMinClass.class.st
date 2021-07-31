@@ -42,7 +42,8 @@ ObjVLispMinClass >> innerBindingOf: aSymbol [
 
 { #category : #install }
 ObjVLispMinClass >> installCustom [
-	^ nil
+	self remote name: self name.
+	self remote metaclass: self metaclass ensureRemote
 ]
 
 { #category : #hooks }
