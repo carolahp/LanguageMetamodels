@@ -47,3 +47,12 @@ CandleNSClass >> installCustom [
 CandleNSClass >> remotePackage [
 	^ self package ensureRemote.
 ]
+
+{ #category : #binding }
+CandleNSClass >> testStub [
+	self assert: self remote isNotNil.
+	self assert: self remote basicClass = self metaclass remote.
+	self assert: self remote indexInClassTable = self indexInClassTable.
+	
+	self remote testStub
+]

@@ -27,3 +27,10 @@ ObjVLispMinLanguageTest >> testInVMExecutePrintHola [
 	expectedResult := 'hola'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
+
+{ #category : #'instance creation' }
+ObjVLispMinLanguageTest >> testInVMExecutePrintThisContext [
+	entryPointCode := 'System log: thisContext asString. System quit'.
+	expectedResult := '*nil* UndefinedObject(UndefinedObject) >>> entryPoint'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
