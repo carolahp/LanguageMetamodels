@@ -27,11 +27,6 @@ KernelQuitLanguage class >> metaclassModel [
 	^ KernelQuitClass
 ]
 
-{ #category : #'hooks-api' }
-KernelQuitLanguage class >> packageModel [
-	^PackageModel
-]
-
 { #category : #hooks }
 KernelQuitLanguage >> createInitialObjects [
 	^ nil

@@ -36,11 +36,6 @@ ObjVLispMinLanguage class >> metaclassModel [
 	^ ObjVLispMinClass  
 ]
 
-{ #category : #'hooks-api' }
-ObjVLispMinLanguage class >> packageModel [
-	^ PackageModel
-]
-
 { #category : #hooks }
 ObjVLispMinLanguage >> createInitialObjects [
 	"perform operations to initialize Classes classPools, or instructinos such as String initialize"

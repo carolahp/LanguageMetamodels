@@ -32,11 +32,6 @@ ObjVLispLanguage class >> metaclassModel [
 	^ ObjVLispClass
 ]
 
-{ #category : #'hooks-api' }
-ObjVLispLanguage class >> packageModel [
-	^ PackageModel
-]
-
 { #category : #hooks }
 ObjVLispLanguage >> createInitialObjects [
 	^ nil
