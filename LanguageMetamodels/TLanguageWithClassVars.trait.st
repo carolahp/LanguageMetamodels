@@ -4,7 +4,7 @@ Trait {
 }
 
 { #category : #transforming }
-TLanguageWithClassVars >> transform [
+TLanguageWithClassVars >> ttransform [
 	| metaclass |
 	super transform.
 	metaclass := self classWithRole: #Metaclass.
