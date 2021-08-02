@@ -12,11 +12,13 @@ Class {
 
 { #category : #become }
 CandleFromObjVLispClass >> becomeMetaclass [
-	| newMetaclass |
+	| newMetaclass newName |
 	self halt.
 	self assert: self metaclass = self parent classMetaclass.
-	self name: (self name copyReplaceAll: 'Meta' with: self parent class metaclassSuffix).
-	newMetaclass := self parent ensureMetaclassNamed: self name.
+	newName := self name copyReplaceAll: 'Meta' with: self parent class metaclassSuffix.
+	newMetaclass := self parent ensureMetaclassNamed: newName.
+	self halt.
+	self parent removeBehavior: self.
 	
 ]
 
@@ -58,6 +60,11 @@ CandleFromObjVLispClass >> initializeWithTemplateCustom: aTemplateClass [
 	"self parent ensureClassNamed: self name, self parent class metaclassSuffix."
 	"self metaclass initializeWithSoleInstance: self."
 	^ self
+]
+
+{ #category : #become }
+CandleFromObjVLispClass >> isMetaclass [ 
+	^ self allSuperclasses includes: (self parent classWithRole: #Metaclass)
 ]
 
 { #category : #accessing }

@@ -9,19 +9,24 @@ Class {
 
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> defaultSuperclassName [
-	^ #Behavior
+	^ #'PCObject class'
 ]
 
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> initializeWithSoleInstance: aCandleClass [ 
 	self setLayoutKeepingSlots: (EP2FixedLayout on: self).
-	self halt.
+	
 	^ self
 		superclass:
 			(aCandleClass superclass
-				ifNil: [ aCandleClass parent ensureClassNamed: self defaultSuperclassName ]
+				ifNil: [ self halt.aCandleClass parent ensureClassNamed: self defaultSuperclassName ]
 				ifNotNil: [ aCandleClass superclass metaclass ]);
 		soleInstance: aCandleClass
+]
+
+{ #category : #initialization }
+CandleFromObjVLispMetaclass >> metaclass [
+	^ self parent classMetaclass
 ]
 
 { #category : #initialization }

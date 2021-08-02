@@ -30,7 +30,7 @@ CandleFromObjVLispLanguage class >> metaclassSuffixInObjVLisp [
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> customClassRoles [
+CandleFromObjVLispLanguage >> customClassRoles [ 
 	^ nil
 ]
 
@@ -40,7 +40,7 @@ CandleFromObjVLispLanguage >> ensureClassNamed: aName [
 		classNamed: aName
 		ifAbsent: [ | newBeh |
 			newBeh := (self isValidMetaclassName: aName)
-				ifTrue: [ self halt.self class metaclassModel named: aName parent: self ]
+				ifTrue: [ self class metaclassModel named: aName parent: self ]
 				ifFalse: [ self class classModel named: aName parent: self ].
 			self addBehavior: newBeh.
 			newBeh ]
@@ -104,29 +104,40 @@ CandleFromObjVLispLanguage >> test [
 
 { #category : #roles }
 CandleFromObjVLispLanguage >> transform [
-	| metaclass haveMetaclassMeta dontHaveMetaclassMeta areMeta areNotMeta |
+	| classes object metaclass areMeta areNotMeta |
+	
 	metaclass := self classWithRole: #Metaclass.
-	metaclass
-		addSlot: 'instVarsNames';
-		addSlot: 'classVars'.
-	areMeta := (self allClasses
-		select: [ :class | class name endsWith: 'Meta' ]) asSet.
-	areNotMeta := (self allClasses
-		select: [ :class | (class name endsWith: 'Meta') not ]) asSet.
-
-	"tienen metaclass Meta"
-	haveMetaclassMeta := (self allClasses
-		select: [ :class | class metaclass name endsWith: 'Meta' ]) asSet.
-	"no tienen metaclass Meta"
-	dontHaveMetaclassMeta := (self allClasses
-		select: [ :class | (class metaclass name endsWith: 'Meta') not ])
-		asSet.
-	self assert: (areMeta asSet intersection: haveMetaclassMeta) isEmpty.
-	areMeta
-		do: [ :class | 
-			class becomeMetaclass ].
-	self halt.
-	"are not Meta and their metaclass is Class"
-	(areNotMeta asSet intersection: dontHaveMetaclassMeta)
-		do: [ :class | class metaclass: (self ensureMetaclassFor: class) ].
+	metaclass name: #Metaclass.
+	
+	object := self classWithRole: #ProtoObject.
+	classes := self allClasses reject: [ :class | class = metaclass or: [class = object] ].
+	
+	object metaclass: (self ensureMetaclassNamed: object name, self class metaclassSuffix).
+	object metaclass 
+		layout: (EP2FixedLayout on: object metaclass);
+		superclass: metaclass;
+		soleInstance: object.
+	
+	metaclass 
+		removeSlot: 'metaclass';
+		removeSlot: 'name';
+		addSlot: 'soleInstance'.
+	
+	metaclass metaclass: (self ensureMetaclassNamed: metaclass name, self class metaclassSuffix).
+	metaclass metaclass 
+		layout: (EP2FixedLayout on: metaclass metaclass);
+		superclass: object metaclass;
+		soleInstance: metaclass.
+	
+	
+	areMeta := (classes select: #isMetaclass) asSet.
+	areNotMeta := (classes difference: areMeta) asSet.
+	
+	areNotMeta do: [ :class | | newMeta |
+		newMeta := self ensureMetaclassNamed: class name, self class metaclassSuffix.
+		newMeta initializeWithSoleInstance: class.
+		newMeta methodDict: class metaclass methodDict clone.
+		class metaclass: newMeta.].
+	
+	
 ]

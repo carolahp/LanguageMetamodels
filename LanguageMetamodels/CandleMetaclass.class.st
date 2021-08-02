@@ -25,7 +25,7 @@ CandleMetaclass >> defaultMetaclassName [
 
 { #category : #contants }
 CandleMetaclass >> defaultSuperclassName [
-	^ #PCClass
+	^ #'PCObject class'
 ]
 
 { #category : #hooks }
@@ -71,6 +71,7 @@ CandleMetaclass >> innerBindingOf: varName [
 
 { #category : #install }
 CandleMetaclass >> installCustom [
+	
 	self remote
 		soleInstance: self soleInstance remote
 ]

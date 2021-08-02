@@ -177,3 +177,10 @@ CandleClass >> test [
 	self assert: self instVarNames1 isNotNil.
 	self assert: self instVarNames1 isArray"
 ]
+
+{ #category : #accessing }
+CandleClass >> testFull [ 
+	super testFull.
+	self assert: (self metaclass = self parent classMetaclass 
+		or: (self metaclass allSuperclasses includes: (self parent classNamed: #PCClass)))
+]

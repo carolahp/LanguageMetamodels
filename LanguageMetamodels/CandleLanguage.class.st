@@ -204,7 +204,7 @@ CandleLanguage >> newClassVariableNamed: aString parent: aCandleClass [
 CandleLanguage >> test [ 
 	| model metamodel modelVars metamodelVars modelVarsLast metamodelVarsLast |
 	super test.
-		
+	
 	model := self classNamed: 'PCClass'.
 	metamodel := self class classModel.
 	
@@ -235,5 +235,9 @@ CandleLanguage >> test [
 
 { #category : #util }
 CandleLanguage >> transform [ 
+	| class object |
+	class := (self classNamed: #PCClass).
+	object := (self classWithRole: #ProtoObject).
+	object metaclass superclass: class.
 	^ self
 ]
