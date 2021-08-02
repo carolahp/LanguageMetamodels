@@ -46,6 +46,17 @@ CandleFromObjVLispLanguage >> ensureClassNamed: aName [
 			newBeh ]
 ]
 
+{ #category : #'model updating' }
+CandleFromObjVLispLanguage >> ensureMetaclassNamed: aName [ 
+	self assert: (self isValidMetaclassName: aName).
+	^ self
+		classNamed: aName
+		ifAbsent: [ | newBeh |
+			newBeh := self class metaclassModel named: aName parent: self.
+			self addBehavior: newBeh.
+			newBeh ]
+]
+
 { #category : #roles }
 CandleFromObjVLispLanguage >> isValidMetaclassName: aString [
 	^ (aString endsWith: self class metaclassSuffix)
@@ -92,13 +103,30 @@ CandleFromObjVLispLanguage >> test [
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> transform [ 
-	| metaclass |
+CandleFromObjVLispLanguage >> transform [
+	| metaclass haveMetaclassMeta dontHaveMetaclassMeta areMeta areNotMeta |
 	metaclass := self classWithRole: #Metaclass.
-	metaclass 
+	metaclass
 		addSlot: 'instVarsNames';
 		addSlot: 'classVars'.
-	(self allClasses select: [ :class | class name endsWith: 'Meta' ])
-		collect: #metaclass.
-		self halt.
+	areMeta := (self allClasses
+		select: [ :class | class name endsWith: 'Meta' ]) asSet.
+	areNotMeta := (self allClasses
+		select: [ :class | (class name endsWith: 'Meta') not ]) asSet.
+
+	"tienen metaclass Meta"
+	haveMetaclassMeta := (self allClasses
+		select: [ :class | class metaclass name endsWith: 'Meta' ]) asSet.
+	"no tienen metaclass Meta"
+	dontHaveMetaclassMeta := (self allClasses
+		select: [ :class | (class metaclass name endsWith: 'Meta') not ])
+		asSet.
+	self assert: (areMeta asSet intersection: haveMetaclassMeta) isEmpty.
+	areMeta
+		do: [ :class | 
+			class becomeMetaclass ].
+	self halt.
+	"are not Meta and their metaclass is Class"
+	(areNotMeta asSet intersection: dontHaveMetaclassMeta)
+		do: [ :class | class metaclass: (self ensureMetaclassFor: class) ].
 ]

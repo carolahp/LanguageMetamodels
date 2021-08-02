@@ -10,6 +10,16 @@ Class {
 	#category : #'LanguageMetamodels-CandleFromObjVLisp'
 }
 
+{ #category : #become }
+CandleFromObjVLispClass >> becomeMetaclass [
+	| newMetaclass |
+	self halt.
+	self assert: self metaclass = self parent classMetaclass.
+	self name: (self name copyReplaceAll: 'Meta' with: self parent class metaclassSuffix).
+	newMetaclass := self parent ensureMetaclassNamed: self name.
+	
+]
+
 { #category : #accessing }
 CandleFromObjVLispClass >> classVars [
 	^ classVars
@@ -44,7 +54,7 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 CandleFromObjVLispClass >> initializeWithTemplateCustom: aTemplateClass [
 	
 	self classVars: #().
-	self metaclass: (self parent ensureClassNamed: self parent classMetaclass).
+	self metaclass: (self parent ensureClassNamed: self parent classMetaclass name).
 	"self parent ensureClassNamed: self name, self parent class metaclassSuffix."
 	"self metaclass initializeWithSoleInstance: self."
 	^ self
