@@ -6,7 +6,6 @@ Trait {
 { #category : #transforming }
 TLanguageWithClassVars >> ttransform [
 	| metaclass |
-	super transform.
 	metaclass := self classWithRole: #Metaclass.
 	self
 		assert: (metaclass class instVarNames indexOf: #classVariables) > 0
