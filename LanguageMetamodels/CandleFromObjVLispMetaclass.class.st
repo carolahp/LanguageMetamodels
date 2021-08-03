@@ -8,18 +8,31 @@ Class {
 }
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> defaultSuperclassName [
-	^ #'PCObject class'
+CandleFromObjVLispMetaclass >> defaultMetaclass [ 
+	^ self parent classMetaclass
+]
+
+{ #category : #initialization }
+CandleFromObjVLispMetaclass >> defaultSuperclass [
+	self halt.
+	^ (self parent classWithRole: #ProtoObject) metaclass
+	"^ #'PCObject class'"
+]
+
+{ #category : #initialization }
+CandleFromObjVLispMetaclass >> initialize [ 
+	super initialize.
+	self halt.
 ]
 
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> initializeWithSoleInstance: aCandleClass [ 
 	self setLayoutKeepingSlots: (EP2FixedLayout on: self).
-	
+	self package: aCandleClass package.
 	^ self
 		superclass:
 			(aCandleClass superclass
-				ifNil: [ self halt.aCandleClass parent ensureClassNamed: self defaultSuperclassName ]
+				ifNil: [ self halt.self defaultSuperclass ]
 				ifNotNil: [ aCandleClass superclass metaclass ]);
 		soleInstance: aCandleClass
 ]

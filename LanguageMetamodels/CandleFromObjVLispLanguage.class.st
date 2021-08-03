@@ -29,6 +29,11 @@ CandleFromObjVLispLanguage class >> metaclassSuffixInObjVLisp [
 	^ 'Meta'
 ]
 
+{ #category : #'model updating' }
+CandleFromObjVLispLanguage >> classClass [ 
+	^ self classNamed: #Class
+]
+
 { #category : #roles }
 CandleFromObjVLispLanguage >> customClassRoles [ 
 	^ nil
@@ -69,12 +74,68 @@ CandleFromObjVLispLanguage >> loadGlobalVariables [
 	^ nil
 ]
 
+{ #category : #'model updating' }
+CandleFromObjVLispLanguage >> loadKernel [
+	| object class metaclass behavior |
+	" load the first classes necessary to create the rest "
+	" OVERRIDE if your language has implicit metaclasses "
+	object := self class classModel basicNew
+		name: #Object;
+		parent: self.
+	object role: #ProtoObject.
+	object template: EP2RemoteEmpty.
+	object layout: (EP2RemoteEmpty layoutClass on: object).
+	(self packageNamed: self defaultPackageName) addDefinedBehavior: object.
+	object superclass: nil.
+	self addBehavior: object.
+	self halt.
+	behavior := self class classModel basicNew
+		name: #Behavior;
+		parent: self.
+	behavior layout: (EP2FixedLayout on: behavior).
+	(self packageNamed: self defaultPackageName) addDefinedBehavior: behavior.
+	EP2RemoteClass modelInstVarNames 
+		doWithIndex: [ :ivname :index| behavior addSlot: ivname index: index ].
+	behavior superclass: object.
+	self addBehavior: behavior.
+	
+	class := self class classModel basicNew
+		name: #Class;
+		parent: self.
+	class role: #Class.
+	class superclass: behavior.
+	class layout: (EP2FixedLayout on: class).
+	(self packageNamed: self defaultPackageName) addDefinedBehavior: class.
+	class addSlot: #name;
+		addSlot: #instVarsNames;
+		addSlot: #classVars.
+	self addBehavior: class.
+	
+	metaclass := self class classModel basicNew
+		name: #Metaclass;
+		parent: self.
+	metaclass role: #Metaclass.
+	metaclass superclass: behavior.
+	metaclass layout: (EP2FixedLayout on: metaclass).
+	(self packageNamed: self defaultPackageName) addDefinedBehavior: metaclass.
+	metaclass addSlot: #soleInstance.
+	self addBehavior: metaclass.
+	
+	metaclass metaclass metaclass: metaclass.
+	behavior initialize.
+	class initialize.
+	object initialize.
+	object metaclass metaclass: metaclass.
+	object metaclass superclass: class.
+	self halt.
+]
+
 { #category : #roles }
 CandleFromObjVLispLanguage >> test [ 
 	| model metamodel modelVars metamodelVars modelVarsLast metamodelVarsLast |
 	super test.
-		
-	model := self classNamed: 'Class'.
+	
+	model := self classClass.
 	metamodel := self class classModel.
 	
 	modelVars := model allInstVarNames.
@@ -110,12 +171,13 @@ CandleFromObjVLispLanguage >> transform [
 	metaclass name: #Metaclass.
 	
 	object := self classWithRole: #ProtoObject.
-	classes := self allClasses reject: [ :class | class = metaclass or: [class = object] ].
+	
+	classes := self allClasses reject: [ :aClass | aClass = metaclass or: [aClass = object] ].
 	
 	object metaclass: (self ensureMetaclassNamed: object name, self class metaclassSuffix).
 	object metaclass 
 		layout: (EP2FixedLayout on: object metaclass);
-		superclass: metaclass;
+		superclass: (self classNamed: #Class);
 		soleInstance: object.
 	
 	metaclass 
@@ -133,11 +195,11 @@ CandleFromObjVLispLanguage >> transform [
 	areMeta := (classes select: #isMetaclass) asSet.
 	areNotMeta := (classes difference: areMeta) asSet.
 	
-	areNotMeta do: [ :class | | newMeta |
-		newMeta := self ensureMetaclassNamed: class name, self class metaclassSuffix.
-		newMeta initializeWithSoleInstance: class.
-		newMeta methodDict: class metaclass methodDict clone.
-		class metaclass: newMeta.].
+	areNotMeta do: [ :aClass | | newMeta |
+		newMeta := self ensureMetaclassNamed: aClass name, self class metaclassSuffix.
+		newMeta initializeWithSoleInstance: aClass.
+		newMeta methodDict: aClass metaclass methodDict clone.
+		aClass metaclass: newMeta.].
 	
 	
 ]

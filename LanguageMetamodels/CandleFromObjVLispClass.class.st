@@ -32,6 +32,16 @@ CandleFromObjVLispClass >> classVars: anObject [
 	classVars := anObject
 ]
 
+{ #category : #hooks }
+CandleFromObjVLispClass >> defaultMetaclass [
+	^ self parent ensureMetaclassNamed: self name , self parent class metaclassSuffix
+]
+
+{ #category : #hooks }
+CandleFromObjVLispClass >> defaultSuperclass [
+	^ self parent classProtoObject
+]
+
 { #category : #initialization }
 CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	| mcDef classVarsDict |
@@ -52,6 +62,13 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	^ self
 ]
 
+{ #category : #hooks }
+CandleFromObjVLispClass >> initialize [ 
+	super initialize.
+	"metaclass ifNil: [ metaclass := self defaultMetaclass ].
+	superclass ifNil: [ superclass := self defaultSuperclass ]."
+]
+
 { #category : #initialization }
 CandleFromObjVLispClass >> initializeWithTemplateCustom: aTemplateClass [
 	
@@ -60,6 +77,11 @@ CandleFromObjVLispClass >> initializeWithTemplateCustom: aTemplateClass [
 	"self parent ensureClassNamed: self name, self parent class metaclassSuffix."
 	"self metaclass initializeWithSoleInstance: self."
 	^ self
+]
+
+{ #category : #hooks }
+CandleFromObjVLispClass >> innerBindingOf: aString [ 
+	^ nil
 ]
 
 { #category : #become }
