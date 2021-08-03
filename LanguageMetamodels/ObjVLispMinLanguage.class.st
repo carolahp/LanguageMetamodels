@@ -50,7 +50,8 @@ ObjVLispMinLanguage >> createRemoteSystemDictionary [
 
 { #category : #roles }
 ObjVLispMinLanguage >> customClassRoles [
-	^ nil
+	^ { #Metaclass -> #Class .
+		#ProtoObject -> #Object }
 ]
 
 { #category : #hooks }
@@ -70,5 +71,14 @@ ObjVLispMinLanguage >> loadGlobalVariables [
 
 { #category : #hooks }
 ObjVLispMinLanguage >> transform [ 
-	^ self
+	| metaclass instvars |
+	metaclass := self classWithRole: #Metaclass.
+	instvars := metaclass allInstVarNames.
+	metaclass class allClassModelInstVarNames do: [ :name |
+		(instvars includes: name) ifFalse: [ metaclass addSlot: name ] ] .
+	metaclass addLocalMethodFromSource: 'name
+	^ name' selector: #name.
+	metaclass addLocalMethodFromSource: 'name: aSymbol
+	name := aSymbol' selector: #name:.
+	
 ]

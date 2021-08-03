@@ -36,7 +36,9 @@ CandleFromObjVLispLanguage >> classClass [
 
 { #category : #roles }
 CandleFromObjVLispLanguage >> customClassRoles [ 
-	^ nil
+	^ { #Metaclass -> #Metaclass .
+	#ProtoObject -> #Object.
+	#Class -> #Class }
 ]
 
 { #category : #roles }
@@ -76,20 +78,61 @@ CandleFromObjVLispLanguage >> loadGlobalVariables [
 
 { #category : #'model updating' }
 CandleFromObjVLispLanguage >> loadKernel [
-	| object class metaclass behavior |
+	| object class metaclass objectClass |
 	" load the first classes necessary to create the rest "
 	" OVERRIDE if your language has implicit metaclasses "
 	object := self class classModel basicNew
 		name: #Object;
 		parent: self.
 	object role: #ProtoObject.
-	object template: EP2RemoteEmpty.
-	object layout: (EP2RemoteEmpty layoutClass on: object).
-	(self packageNamed: self defaultPackageName) addDefinedBehavior: object.
 	object superclass: nil.
 	self addBehavior: object.
+	
+	class := self class classModel basicNew
+		name: #Class;
+		parent: self.
+	class role: #Class.
+	class superclass: object.
+	self addBehavior: class.
+	
+	metaclass := self class classModel basicNew
+		name: #Metaclass;
+		parent: self.
+	metaclass role: #Metaclass.
+	metaclass superclass: object.
+	self addBehavior: metaclass.
+	
+	objectClass := self class metaclassModel basicNew
+		name: #'Object class';
+		parent: self.
+	objectClass superclass: class.
+	object metaclass: objectClass.
+	
+	metaclass initialize.
+	class initialize.
+	object initialize.
+	
+	
 	self halt.
-	behavior := self class classModel basicNew
+	{ metaclass . class . object } do: [ :each | 
+		each package ifNil: [ (self packageNamed: self defaultPackageName) 
+			addDefinedBehavior: each ].
+		each metaclass package ifNil: [ (self packageNamed: self defaultPackageName) 
+			addDefinedBehavior: each metaclass ].
+		].
+	
+	"object template: EP2RemoteEmpty.
+	object layout: (EP2RemoteEmpty layoutClass on: object).
+	(self packageNamed: self defaultPackageName) addDefinedBehavior: object."
+	
+"class layout: (EP2FixedLayout on: class).
+	(self packageNamed: self defaultPackageName) addDefinedBehavior: class.
+	class addSlot: #name;
+		addSlot: #instVarsNames;
+		addSlot: #classVars.
+	"
+	
+"behavior := self class classModel basicNew
 		name: #Behavior;
 		parent: self.
 	behavior layout: (EP2FixedLayout on: behavior).
@@ -98,36 +141,11 @@ CandleFromObjVLispLanguage >> loadKernel [
 		doWithIndex: [ :ivname :index| behavior addSlot: ivname index: index ].
 	behavior superclass: object.
 	self addBehavior: behavior.
-	
-	class := self class classModel basicNew
-		name: #Class;
-		parent: self.
-	class role: #Class.
-	class superclass: behavior.
-	class layout: (EP2FixedLayout on: class).
-	(self packageNamed: self defaultPackageName) addDefinedBehavior: class.
-	class addSlot: #name;
-		addSlot: #instVarsNames;
-		addSlot: #classVars.
-	self addBehavior: class.
-	
-	metaclass := self class classModel basicNew
-		name: #Metaclass;
-		parent: self.
-	metaclass role: #Metaclass.
-	metaclass superclass: behavior.
-	metaclass layout: (EP2FixedLayout on: metaclass).
+	"
+	"metaclass layout: (EP2FixedLayout on: metaclass).
 	(self packageNamed: self defaultPackageName) addDefinedBehavior: metaclass.
 	metaclass addSlot: #soleInstance.
-	self addBehavior: metaclass.
-	
-	metaclass metaclass metaclass: metaclass.
-	behavior initialize.
-	class initialize.
-	object initialize.
-	object metaclass metaclass: metaclass.
-	object metaclass superclass: class.
-	self halt.
+	"
 ]
 
 { #category : #roles }

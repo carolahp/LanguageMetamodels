@@ -14,15 +14,9 @@ CandleFromObjVLispMetaclass >> defaultMetaclass [
 
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> defaultSuperclass [
-	self halt.
+	
 	^ (self parent classWithRole: #ProtoObject) metaclass
 	"^ #'PCObject class'"
-]
-
-{ #category : #initialization }
-CandleFromObjVLispMetaclass >> initialize [ 
-	super initialize.
-	self halt.
 ]
 
 { #category : #initialization }
