@@ -27,13 +27,13 @@ ObjVLispMinClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 		metaclass:
 			(metaclassDef
 				ifNotNil: [ self parent ensureClassNamed: metaclassDef ]
-				ifNil: [ self parent classMetaclass ]).
+				ifNil: [ self parent classClass ]).
 ]
 
 { #category : #initialization }
 ObjVLispMinClass >> initializeWithTemplateCustom: aTemplate [
 	self name: objectName.
-	self metaclass: self parent classMetaclass
+	self metaclass: self parent classClass
 ]
 
 { #category : #hooks }

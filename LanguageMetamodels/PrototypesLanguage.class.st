@@ -18,13 +18,13 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PrototypesLanguage class >> classPrototypeMetaclass [
-	^ PrototypesPrototype 
+PrototypesLanguage class >> classModel [
+	^ PrototypesClass 
 ]
 
 { #category : #'as yet unclassified' }
-PrototypesLanguage class >> metaclassModel [
-	^ PrototypesClass 
+PrototypesLanguage class >> classPrototypeMetaclass [
+	^ PrototypesPrototype 
 ]
 
 { #category : #hooks }

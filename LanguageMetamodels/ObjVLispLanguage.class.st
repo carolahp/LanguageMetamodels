@@ -21,15 +21,15 @@ Class {
 	#category : #'LanguageMetamodels-ObjVLisp'
 }
 
+{ #category : #'as yet unclassified' }
+ObjVLispLanguage class >> classModel [
+	^ ObjVLispClass
+]
+
 { #category : #'hooks-api' }
 ObjVLispLanguage class >> globalModel [
 
 	^ ObjVLispGlobal 
-]
-
-{ #category : #'as yet unclassified' }
-ObjVLispLanguage class >> metaclassModel [
-	^ ObjVLispClass
 ]
 
 { #category : #hooks }

@@ -29,6 +29,14 @@ CandleFromObjVLispLanguage class >> metaclassSuffixInObjVLisp [
 	^ 'Meta'
 ]
 
+{ #category : #roles }
+CandleFromObjVLispLanguage >> basicNewMetaclassNamed: aName [
+	^ self class metaclassModel 
+		name: aName asSymbol;
+		parent: self;
+		yourself
+]
+
 { #category : #'model updating' }
 CandleFromObjVLispLanguage >> classClass [ 
 	^ self classNamed: #Class
@@ -149,6 +157,11 @@ CandleFromObjVLispLanguage >> loadKernel [
 ]
 
 { #category : #roles }
+CandleFromObjVLispLanguage >> newMetaclassNamed: aName [
+	^ self class metaclassModel named: aName asSymbol parent: self
+]
+
+{ #category : #roles }
 CandleFromObjVLispLanguage >> test [ 
 	| model metamodel modelVars metamodelVars modelVarsLast metamodelVarsLast |
 	super test.
@@ -185,7 +198,7 @@ CandleFromObjVLispLanguage >> test [
 CandleFromObjVLispLanguage >> transform [
 	| classes object metaclass areMeta areNotMeta |
 	
-	metaclass := self classWithRole: #Metaclass.
+	metaclass := self classMetaclass.
 	metaclass name: #Metaclass.
 	
 	object := self classWithRole: #ProtoObject.
@@ -195,7 +208,7 @@ CandleFromObjVLispLanguage >> transform [
 	object metaclass: (self ensureMetaclassNamed: object name, self class metaclassSuffix).
 	object metaclass 
 		layout: (EP2FixedLayout on: object metaclass);
-		superclass: (self classNamed: #Class);
+		superclass: self classClass;
 		soleInstance: object.
 	
 	metaclass 

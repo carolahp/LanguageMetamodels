@@ -46,6 +46,7 @@ CandleFromObjVLispClass >> defaultSuperclass [
 CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	| mcDef classVarsDict |
 	mcDef := anEP2MCClassDefinition.
+	
 	self name: self name.
 	classVarsDict := mcDef classVars
 		ifNil: [ Dictionary new ]
@@ -57,7 +58,7 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 						parent: self ]) asDictionary ].
 	self classVars: classVarsDict.
 
-	self metaclass: (self parent ensureClassNamed: anEP2MCClassDefinition metaclass).
+	self metaclass: (self parent ensureMetaclassNamed: anEP2MCClassDefinition metaclass).
 	"self metaclass extendWithMonticelloCustom: anEP2MCClassDefinition."
 	^ self
 ]
@@ -66,9 +67,10 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 CandleFromObjVLispClass >> initialize [ 
 	super initialize.
 	self package ifNil: [ self parent defaultPackage addDefinedBehavior: self ].
+	superclass ifNil: [ superclass := self defaultSuperclass ].
 	metaclass ifNil: [ metaclass := self defaultMetaclass.
 		metaclass initializeWithSoleInstance: self ].
-	superclass ifNil: [ superclass := self defaultSuperclass ].
+	
 	^ self
 ]
 
@@ -76,7 +78,7 @@ CandleFromObjVLispClass >> initialize [
 CandleFromObjVLispClass >> initializeWithTemplateCustom: aTemplateClass [
 	
 	self classVars: #().
-	self metaclass: (self parent ensureClassNamed: self parent classMetaclass name).
+	self metaclass: (self parent ensureMetaclassNamed: self parent classMetaclass name).
 	"self parent ensureClassNamed: self name, self parent class metaclassSuffix."
 	"self metaclass initializeWithSoleInstance: self."
 	^ self
@@ -89,7 +91,7 @@ CandleFromObjVLispClass >> innerBindingOf: aString [
 
 { #category : #become }
 CandleFromObjVLispClass >> isMetaclass [ 
-	^ self allSuperclasses includes: (self parent classWithRole: #Metaclass)
+	^ self allSuperclasses includes: (self parent classMetaclass)
 ]
 
 { #category : #accessing }

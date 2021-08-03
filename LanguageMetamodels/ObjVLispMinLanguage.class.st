@@ -26,14 +26,14 @@ Class {
 }
 
 { #category : #'hooks-api' }
-ObjVLispMinLanguage class >> globalModel [
-	^ ObjVLispMinGlobal 
+ObjVLispMinLanguage class >> classModel [
+	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
+	^ ObjVLispMinClass  
 ]
 
 { #category : #'hooks-api' }
-ObjVLispMinLanguage class >> metaclassModel [
-	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
-	^ ObjVLispMinClass  
+ObjVLispMinLanguage class >> globalModel [
+	^ ObjVLispMinGlobal 
 ]
 
 { #category : #hooks }
@@ -50,13 +50,13 @@ ObjVLispMinLanguage >> createRemoteSystemDictionary [
 
 { #category : #roles }
 ObjVLispMinLanguage >> customClassRoles [
-	^ { #Metaclass -> #Class .
+	^ { #Class -> #Class .
 		#ProtoObject -> #Object }
 ]
 
 { #category : #hooks }
 ObjVLispMinLanguage >> firstMetaclasses [
-	^{self classWithRole: #Metaclass}
+	^{self classClass}
 ]
 
 { #category : #hooks }
@@ -72,7 +72,7 @@ ObjVLispMinLanguage >> loadGlobalVariables [
 { #category : #hooks }
 ObjVLispMinLanguage >> transform [ 
 	| metaclass instvars |
-	metaclass := self classWithRole: #Metaclass.
+	metaclass := self classClass.
 	instvars := metaclass allInstVarNames.
 	metaclass class allClassModelInstVarNames do: [ :name |
 		(instvars includes: name) ifFalse: [ metaclass addSlot: name ] ] .

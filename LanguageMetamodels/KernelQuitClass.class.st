@@ -32,5 +32,5 @@ KernelQuitClass >> installCustom [
 
 { #category : #'accessing backend' }
 KernelQuitClass >> metaclass [
-	^ self parent classMetaclass
+	^ self parent classClass
 ]

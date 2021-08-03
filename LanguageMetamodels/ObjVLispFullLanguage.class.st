@@ -7,13 +7,19 @@ Class {
 }
 
 { #category : #'hooks-api' }
+ObjVLispFullLanguage class >> classModel [
+	^ ObjVLispFullClass  
+]
+
+{ #category : #'hooks-api' }
 ObjVLispFullLanguage class >> globalModel [
 	^ ObjVLispFullGlobal 
 ]
 
-{ #category : #'hooks-api' }
-ObjVLispFullLanguage class >> metaclassModel [
-	^ ObjVLispFullClass  
+{ #category : #transforming }
+ObjVLispFullLanguage >> customClassRoles [
+	^ { #Class -> #Class .
+		#ProtoObject -> #Object }
 ]
 
 { #category : #traits }

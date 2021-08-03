@@ -66,8 +66,7 @@ CandleClass >> initializeClassVars [
 CandleClass >> initializeWithTemplateCustom: aTemplateClass [
 	
 	self classVars: #().
-	self parent ensureClassNamed: self name, self parent metaclassSuffix.
-	
+	self parent ensureMetaclassNamed: self name, self parent metaclassSuffix.
 	self metaclass initializeWithSoleInstance: self.
 	^ self
 ]
@@ -147,7 +146,7 @@ CandleClass >> isCandleMetaclass [
 
 { #category : #accessing }
 CandleClass >> metaclass [
-	^ self parent ensureClassNamed: self name , self parent metaclassSuffix
+	^ self parent ensureMetaclassNamed: self name , self parent metaclassSuffix
 ]
 
 { #category : #accessing }

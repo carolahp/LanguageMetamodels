@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #metamodel }
-ObjVLispDynLanguage class >> metaclassModel [
+ObjVLispDynLanguage class >> classModel [
 	" Return the subclass of ClassModel that defines the metamodel for classes of the language "
 	"^ ObjVLispDynClass "
 	^ ObjVLispMinClass

@@ -6,7 +6,7 @@ Trait {
 { #category : #transforming }
 TLanguageWithClassVars >> ttransform [
 	| metaclass |
-	metaclass := self classWithRole: #Metaclass.
+	metaclass := self classClass.
 	self
 		assert: (metaclass class instVarNames indexOf: #classVariables) > 0
 		description: 'You must use TClassWithClassVars in your ClassModel'.

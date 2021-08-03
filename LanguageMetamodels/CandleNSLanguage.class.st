@@ -107,7 +107,7 @@ CandleNSLanguage >> transform [
 	newclass layout: (EP2FixedLayout on: newclass).
 	newclass superclass: objclass.
 
-	newmetaclass := self class metaclassModel named: #'Cat class' parent: self.
+	newmetaclass := self class classModel named: #'Cat class' parent: self.
 	newmetaclass package: package.
 	newmetaclass layout: (EP2FixedLayout on: newmetaclass).
 	newmetaclass soleInstance: newclass. 

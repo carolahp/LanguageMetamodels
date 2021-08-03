@@ -79,6 +79,16 @@ CandleLanguage class >> packageModel [
 	^ CandleNSPackage 
 ]
 
+{ #category : #'hooks-api' }
+CandleLanguage class >> simpleClassModel [
+	^ CandleClass
+]
+
+{ #category : #'access special class' }
+CandleLanguage >> classMetaclass [
+	^ self classWithRole: #Metaclass
+]
+
 { #category : #util }
 CandleLanguage >> classNameFrom: aMetaclassName [
 	^ aMetaclassName
@@ -119,6 +129,7 @@ CandleLanguage >> customClassRoles [
 	(#LargeNegativeInteger -> #PCLargeNegativeInteger).
 	(#LargePositiveInteger -> #PCLargePositiveInteger).
 	(#Message -> #PCMessage).
+	(#Class -> #PCClass).
 	(#Metaclass -> #PCMetaclass).
 	(#MethodDictionary -> #PCMethodDictionary).
 	(#Point -> #PCPoint).
@@ -133,13 +144,25 @@ CandleLanguage >> customClassRoles [
 ]
 
 { #category : #util }
-CandleLanguage >> ensureClassNamed: aName [
+CandleLanguage >> ensureClassNamed: aString [
+	^ self
+		classNamed: aString
+		ifAbsent: [ | newBeh |
+			newBeh := (self isValidMetaclassName: aString)
+				ifTrue: [ self newMetaclassNamed: aString ]
+				ifFalse: [ self newClassNamed: aString ].
+			self addBehavior: newBeh.
+			newBeh ]
+]
+
+{ #category : #'class instantiating' }
+CandleLanguage >> ensureMetaclassNamed: aName [ 
+	self assert: (self isValidMetaclassName: aName).
 	^ self
 		classNamed: aName
 		ifAbsent: [ | newBeh |
-			newBeh := (self isValidMetaclassName: aName)
-				ifTrue: [ self class metaclassModel named: aName parent: self ]
-				ifFalse: [ self class classModel named: aName parent: self ].
+			
+			newBeh := self class metaclassModel named: aName asSymbol parent: self.
 			self addBehavior: newBeh.
 			newBeh ]
 ]
@@ -163,7 +186,7 @@ CandleLanguage >> exportAsTonelRepository: aFileReference [
 { #category : #hooks }
 CandleLanguage >> firstMetaclasses [
 	| metaclass |
-	metaclass := self classWithRole: #Metaclass.
+	metaclass := self classMetaclass.
 	^ { metaclass . metaclass metaclass }
 ]
 
@@ -198,6 +221,11 @@ CandleLanguage >> newClassVariableNamed: aString parent: aCandleClass [
 	^ self class classVariableModel
 		named: aString
 		parent: aCandleClass
+]
+
+{ #category : #util }
+CandleLanguage >> newMetaclassNamed: aName [
+	^ self class metaclassModel named: aName asSymbol parent: self
 ]
 
 { #category : #hooks }

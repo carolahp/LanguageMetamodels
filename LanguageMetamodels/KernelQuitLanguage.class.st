@@ -18,13 +18,13 @@ Class {
 }
 
 { #category : #'hooks-api' }
-KernelQuitLanguage class >> globalModel [
-	^KernelQuitGlobal
+KernelQuitLanguage class >> classModel [
+	^ KernelQuitClass
 ]
 
 { #category : #'hooks-api' }
-KernelQuitLanguage class >> metaclassModel [
-	^ KernelQuitClass
+KernelQuitLanguage class >> globalModel [
+	^KernelQuitGlobal
 ]
 
 { #category : #hooks }
@@ -44,7 +44,7 @@ KernelQuitLanguage >> customClassRoles [
 
 { #category : #hooks }
 KernelQuitLanguage >> entryPointClass [
-	^ self classWithRole: #Metaclass
+	^ self classClass
 ]
 
 { #category : #hooks }
@@ -54,12 +54,12 @@ KernelQuitLanguage >> entryPointCode [
 
 { #category : #hooks }
 KernelQuitLanguage >> entryPointReceiver [
-	^ 'Metaclass'
+	^ 'Class'
 ]
 
 { #category : #hooks }
 KernelQuitLanguage >> firstMetaclasses [
-	^ {self classWithRole: #Metaclass}
+	^ {self classClass}
 ]
 
 { #category : #hooks }
@@ -74,12 +74,12 @@ KernelQuitLanguage >> initializeSpecialObjectsArray [
 
 { #category : #hooks }
 KernelQuitLanguage >> installClasses [
-	(self classWithRole: #Metaclass) install
+	self classClass install
 ]
 
 { #category : #hooks }
 KernelQuitLanguage >> installMethods [
-	(self classWithRole: #Metaclass) installMethods
+	self classClass installMethods
 ]
 
 { #category : #hooks }
@@ -89,12 +89,12 @@ KernelQuitLanguage >> loadGlobalVariables [
 
 { #category : #roles }
 KernelQuitLanguage >> testRemote [
-	(self classWithRole: #Metaclass) testRemote
+	self classClass testRemote
 ]
 
 { #category : #hooks }
 KernelQuitLanguage >> transform [
-	((self classWithRole: #Metaclass) 
+	(self classClass 
 		ensureLocalMethodNamed: #quit)
 		sourceCode:
 			'quit
