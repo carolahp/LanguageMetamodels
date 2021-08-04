@@ -52,6 +52,20 @@ CandleFromObjVLispLanguage >> classOrMetaclassNameFrom: aString [
 	^ aString copyReplaceAll: 'Meta' with: self class metaclassSuffix 
 ]
 
+{ #category : #hooks }
+CandleFromObjVLispLanguage >> createInitialObjects [
+	"| classes |
+	classes := self allClasses
+		select: [ :class | class isCandleClass and: [ class remote isNotNil ] ].
+	classes do: [ :class | class initializeClassVars ].
+	self evaluateCode: 'PCFloat initialize'."
+]
+
+{ #category : #hooks }
+CandleFromObjVLispLanguage >> createRemoteSystemDictionary [
+	^ nil
+]
+
 { #category : #roles }
 CandleFromObjVLispLanguage >> customClassRoles [ 
 	^ { 
@@ -86,6 +100,18 @@ CandleFromObjVLispLanguage >> ensureMetaclassNamed: aName [
 			self addBehavior: newBeh.
 			newBeh initialize.
 			newBeh ]
+]
+
+{ #category : #hooks }
+CandleFromObjVLispLanguage >> firstMetaclasses [
+	| metaclass |
+	metaclass := self classMetaclass.
+	^ { metaclass . metaclass metaclass }
+]
+
+{ #category : #hooks }
+CandleFromObjVLispLanguage >> initializeSpecialObjectsArray [
+	^ nil
 ]
 
 { #category : #roles }

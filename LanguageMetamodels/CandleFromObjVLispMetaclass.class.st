@@ -55,9 +55,24 @@ CandleFromObjVLispMetaclass >> initializeWithSoleInstance: aCandleClass [
 		soleInstance: aCandleClass
 ]
 
+{ #category : #hooks }
+CandleFromObjVLispMetaclass >> innerBindingOf: aString [ 
+	^ nil
+]
+
+{ #category : #install }
+CandleFromObjVLispMetaclass >> installCustom [
+	^ nil
+]
+
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> metaclass [
 	^ self parent classMetaclass
+]
+
+{ #category : #hooks }
+CandleFromObjVLispMetaclass >> registerCustom [
+	^ nil
 ]
 
 { #category : #initialization }

@@ -9,6 +9,11 @@ Class {
 	#category : #'LanguageMetamodels-CandleFromObjVLisp'
 }
 
+{ #category : #binding }
+CandleFromObjVLispClass >> bindingOf: aString [ 
+	^ nil
+]
+
 { #category : #accessing }
 CandleFromObjVLispClass >> classVars [
 	^ classVars
@@ -59,6 +64,11 @@ CandleFromObjVLispClass >> innerBindingOf: aString [
 	^ nil
 ]
 
+{ #category : #install }
+CandleFromObjVLispClass >> installCustom [
+	^ nil
+]
+
 { #category : #become }
 CandleFromObjVLispClass >> isMetaclass [ 
 	^ self allSuperclasses includes: (self parent classMetaclass)
@@ -67,4 +77,9 @@ CandleFromObjVLispClass >> isMetaclass [
 { #category : #accessing }
 CandleFromObjVLispClass >> metaclass [
 	^ self defaultMetaclass
+]
+
+{ #category : #hooks }
+CandleFromObjVLispClass >> registerCustom [
+	^ nil
 ]

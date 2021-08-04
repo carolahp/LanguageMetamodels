@@ -16,6 +16,13 @@ CandleFromObjVlispLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
+CandleFromObjVlispLanguageTest >> testInVMExecuteOnePlusOne [
+	entryPointCode := 'System log: (1+1) asString. System quit'.
+	expectedResult := '2'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 CandleFromObjVlispLanguageTest >> testNewModel [
 	entryPointCode:= 'System quit'.
 	self newModel.
