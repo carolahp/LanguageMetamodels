@@ -4,23 +4,10 @@ Class {
 	#instVars : [
 		'name',
 		'instVarsNames',
-		'classVars',
-		'metaclass'
+		'classVars'
 	],
 	#category : #'LanguageMetamodels-CandleFromObjVLisp'
 }
-
-{ #category : #become }
-CandleFromObjVLispClass >> becomeMetaclass [
-	| newMetaclass newName |
-	self halt.
-	self assert: self metaclass = self parent classMetaclass.
-	newName := self name copyReplaceAll: 'Meta' with: self parent class metaclassSuffix.
-	newMetaclass := self parent ensureMetaclassNamed: newName.
-	self halt.
-	self parent removeBehavior: self.
-	
-]
 
 { #category : #accessing }
 CandleFromObjVLispClass >> classVars [
@@ -47,7 +34,6 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	| mcDef classVarsDict |
 	mcDef := anEP2MCClassDefinition.
 	
-	self name: self name.
 	classVarsDict := mcDef classVars
 		ifNil: [ Dictionary new ]
 		ifNotNil: [ :vars | 
@@ -57,29 +43,14 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 						newClassVariableNamed: v asSymbol
 						parent: self ]) asDictionary ].
 	self classVars: classVarsDict.
-
-	self metaclass: (self parent ensureMetaclassNamed: anEP2MCClassDefinition metaclass).
-	"self metaclass extendWithMonticelloCustom: anEP2MCClassDefinition."
 	^ self
 ]
 
 { #category : #hooks }
 CandleFromObjVLispClass >> initialize [ 
 	super initialize.
-	metaclass ifNil: [ metaclass := self defaultMetaclass.
-		metaclass initializeWithSoleInstance: self ].
-	
-	^ self
-]
-
-{ #category : #initialization }
-CandleFromObjVLispClass >> initializeWithTemplateCustom: aTemplateClass [
-	
-	self deprecated: 'this code should be called from initialize'.
-	self classVars: #().
-	self metaclass: (self parent ensureMetaclassNamed: self parent classMetaclass name).
-	"self parent ensureClassNamed: self name, self parent class metaclassSuffix."
-	"self metaclass initializeWithSoleInstance: self."
+	name := objectName.
+	self defaultMetaclass initializeWithSoleInstance: self.
 	^ self
 ]
 
@@ -95,11 +66,5 @@ CandleFromObjVLispClass >> isMetaclass [
 
 { #category : #accessing }
 CandleFromObjVLispClass >> metaclass [
-	^ metaclass
-	"^ self parent ensureClassNamed: self name , self parent class metaclassSuffix"
-]
-
-{ #category : #metaclass }
-CandleFromObjVLispClass >> metaclass: aCandleFromObjVLispClass [ 
-	metaclass := aCandleFromObjVLispClass
+	^ self defaultMetaclass
 ]

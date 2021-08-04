@@ -31,7 +31,7 @@ CandleFromObjVLispLanguage class >> metaclassSuffix [
 
 { #category : #roles }
 CandleFromObjVLispLanguage >> basicNewMetaclassNamed: aName [
-	^ self class metaclassModel 
+	^ self class metaclassModel basicNew 
 		name: aName asSymbol;
 		parent: self;
 		yourself
@@ -40,6 +40,11 @@ CandleFromObjVLispLanguage >> basicNewMetaclassNamed: aName [
 { #category : #'model updating' }
 CandleFromObjVLispLanguage >> classClass [ 
 	^ self classNamed: #Class
+]
+
+{ #category : #'metaclass name' }
+CandleFromObjVLispLanguage >> classOrMetaclassNameFrom: aString [ 
+	^ aString copyReplaceAll: 'Meta' with: self class metaclassSuffix 
 ]
 
 { #category : #roles }
@@ -52,12 +57,16 @@ CandleFromObjVLispLanguage >> customClassRoles [
 
 { #category : #roles }
 CandleFromObjVLispLanguage >> ensureClassNamed: aName [
+	| name |
+	
+	name := self classOrMetaclassNameFrom: aName.
+	
 	^ self
-		classNamed: aName
+		classNamed: name
 		ifAbsent: [ | newBeh |
-			newBeh := (self isValidMetaclassName: aName)
-				ifTrue: [ self class metaclassModel named: aName parent: self ]
-				ifFalse: [ self class classModel named: aName parent: self ].
+			newBeh := (self isValidMetaclassName: name)
+				ifTrue: [ self class metaclassModel named: name parent: self ]
+				ifFalse: [ self class classModel named: name parent: self ].
 			self addBehavior: newBeh.
 			newBeh ]
 ]
@@ -68,8 +77,9 @@ CandleFromObjVLispLanguage >> ensureMetaclassNamed: aName [
 	^ self
 		classNamed: aName
 		ifAbsent: [ | newBeh |
-			newBeh := self class metaclassModel named: aName parent: self.
+			newBeh := self basicNewMetaclassNamed: aName.
 			self addBehavior: newBeh.
+			newBeh initialize.
 			newBeh ]
 ]
 
@@ -87,24 +97,31 @@ CandleFromObjVLispLanguage >> loadGlobalVariables [
 
 { #category : #'model updating' }
 CandleFromObjVLispLanguage >> loadKernel [
-	| object class metaclass objectClass |
+	| object class metaclass |
+	
 	object := self basicNewClassWithRole: #ProtoObject.
 	self addBehavior: object.
 	
 	class := self basicNewClassWithRole: #Class.
 	self addBehavior: class.
 	
+	
 	metaclass := self basicNewClassWithRole: #Metaclass.
 	self addBehavior: metaclass.
-	
-	objectClass := self class metaclassModel basicNew
+	"objectClass := self class metaclassModel basicNew
 		name: #'Object class';
 		parent: self.
-	objectClass superclass: class.
+	objectClass superclass: class."
+	
+	object superclass: nil.
+	class superclass: object.
+	metaclass superclass: object.
+	
 	
 	metaclass initialize.
-	class initialize.
 	object initialize.
+	class initialize.
+	
 ]
 
 { #category : #roles }

@@ -45,6 +45,11 @@ CandleLanguage class >> classVariableModel [
 ]
 
 { #category : #'hooks-api' }
+CandleLanguage class >> customModels [
+	^ {CandleMetaclass}
+]
+
+{ #category : #'hooks-api' }
 CandleLanguage class >> globalModel [
 	" return the subclass of GlobalModel used to represent globals in your language "
 	^ CandleGlobal
