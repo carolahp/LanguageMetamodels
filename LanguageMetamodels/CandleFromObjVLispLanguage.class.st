@@ -44,7 +44,7 @@ CandleFromObjVLispLanguage >> classClass [
 
 { #category : #roles }
 CandleFromObjVLispLanguage >> customClassRoles [ 
-	^ { #Metaclass -> #Metaclass .
+	^ { 
 	#ProtoObject -> #Object.
 	#Class -> #Class }
 ]

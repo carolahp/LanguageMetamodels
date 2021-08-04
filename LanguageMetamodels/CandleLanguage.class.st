@@ -86,7 +86,7 @@ CandleLanguage class >> simpleClassModel [
 
 { #category : #'access special class' }
 CandleLanguage >> classMetaclass [
-	^ self classWithRole: #Metaclass
+	^ self classNamed: #PCMetaclass
 ]
 
 { #category : #util }
@@ -209,6 +209,15 @@ CandleLanguage >> loadGlobalVariables [
 			((self class globalModel named: #Smalltalk parent: self)
 				role: #Smalltalk;
 				initializationCode: 'PCSmalltalkImage basicNew')
+]
+
+{ #category : #'class instantiating' }
+CandleLanguage >> loadKernel [
+	super loadKernel.
+	self addBehavior: (self newClassWithRole: #Metaclass).
+	
+	
+	
 ]
 
 { #category : #constants }

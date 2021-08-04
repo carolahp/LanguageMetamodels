@@ -10,7 +10,7 @@ TLanguageWithClassVars >> ttransform [
 	self
 		assert: (metaclass class instVarNames indexOf: #classVariables) > 0
 		description: 'You must use TClassWithClassVars in your ClassModel'.
-	metaclass addSlot: 'classVariables'.
+	
 	metaclass
 		addLocalMethodFromSource:
 			'classVariables 

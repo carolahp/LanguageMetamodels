@@ -7,6 +7,11 @@ Class {
 	#category : #'LanguageMetamodels-Candle'
 }
 
+{ #category : #'hooks-api' }
+CandleMetaclass class >> role [ 
+	^ #Metaclass
+]
+
 { #category : #testing }
 CandleMetaclass >> bindingOf: aSymbol [ 
 	^ self instanceSide bindingOf: aSymbol
@@ -55,11 +60,10 @@ CandleMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 { #category : #initializing }
 CandleMetaclass >> initializeWithSoleInstance: aCandleClass [ 
 	self setLayoutKeepingSlots: (EP2FixedLayout on: self).
-	
 	^ self
 		superclass:
 			(aCandleClass superclass
-				ifNil: [ aCandleClass parent ensureClassNamed: self defaultSuperclassName ]
+				ifNil: [ aCandleClass parent classClass ]
 				ifNotNil: [ aCandleClass superclass metaclass ]);
 		soleInstance: aCandleClass
 ]

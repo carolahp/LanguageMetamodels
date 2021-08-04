@@ -53,6 +53,14 @@ CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	^ self
 ]
 
+{ #category : #hooks }
+CandleClass >> initialize [
+	super initialize.
+	self classVars: #().
+	self parent ensureMetaclassNamed: self name, self parent metaclassSuffix.
+	self metaclass initializeWithSoleInstance: self.
+]
+
 { #category : #'initialize remote' }
 CandleClass >> initializeClassVars [
 	| dictionary |
