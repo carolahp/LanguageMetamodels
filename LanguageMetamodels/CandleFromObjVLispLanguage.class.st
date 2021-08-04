@@ -90,17 +90,17 @@ CandleFromObjVLispLanguage >> loadKernel [
 	" load the first classes necessary to create the rest "
 	" OVERRIDE if your language has implicit metaclasses "
 	object := self basicNewClassNamed: #Object.
-	object role: #ProtoObject.
+	object role: (self newRoleNamed: #ProtoObject).
 	object superclass: nil.
 	self addBehavior: object.
 	
 	class := self basicNewClassNamed: #Class.
-	class role: #Class.
+	class role: (self newRoleNamed: #Class).
 	class superclass: object.
 	self addBehavior: class.
 	
 	metaclass := self basicNewClassNamed: #Metaclass.
-	metaclass role: #Metaclass.
+	metaclass role: (self newRoleNamed: #Metaclass).
 	metaclass superclass: object.
 	self addBehavior: metaclass.
 	
