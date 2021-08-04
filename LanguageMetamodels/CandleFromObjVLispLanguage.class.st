@@ -42,6 +42,11 @@ CandleFromObjVLispLanguage >> classClass [
 	^ self classNamed: #Class
 ]
 
+{ #category : #'special classes' }
+CandleFromObjVLispLanguage >> classMetaclass [
+	^ self classWithRole: #Metaclass
+]
+
 { #category : #'metaclass name' }
 CandleFromObjVLispLanguage >> classOrMetaclassNameFrom: aString [ 
 	^ aString copyReplaceAll: 'Meta' with: self class metaclassSuffix 
@@ -164,41 +169,5 @@ CandleFromObjVLispLanguage >> test [
 
 { #category : #roles }
 CandleFromObjVLispLanguage >> transform [
-	| classes object metaclass areMeta areNotMeta |
-	
-	metaclass := self classMetaclass.
-	metaclass name: #Metaclass.
-	
-	object := self classWithRole: #ProtoObject.
-	
-	classes := self allClasses reject: [ :aClass | aClass = metaclass or: [aClass = object] ].
-	
-	object metaclass: (self ensureMetaclassNamed: object name, self class metaclassSuffix).
-	object metaclass 
-		layout: (EP2FixedLayout on: object metaclass);
-		superclass: self classClass;
-		soleInstance: object.
-	
-	metaclass 
-		removeSlot: 'metaclass';
-		removeSlot: 'name';
-		addSlot: 'soleInstance'.
-	
-	metaclass metaclass: (self ensureMetaclassNamed: metaclass name, self class metaclassSuffix).
-	metaclass metaclass 
-		layout: (EP2FixedLayout on: metaclass metaclass);
-		superclass: object metaclass;
-		soleInstance: metaclass.
-	
-	
-	areMeta := (classes select: #isMetaclass) asSet.
-	areNotMeta := (classes difference: areMeta) asSet.
-	
-	areNotMeta do: [ :aClass | | newMeta |
-		newMeta := self ensureMetaclassNamed: aClass name, self class metaclassSuffix.
-		newMeta initializeWithSoleInstance: aClass.
-		newMeta methodDict: aClass metaclass methodDict clone.
-		aClass metaclass: newMeta.].
-	
-	
+	^ self 
 ]
