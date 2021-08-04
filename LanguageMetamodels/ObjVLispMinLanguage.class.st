@@ -53,7 +53,7 @@ ObjVLispMinLanguage >> customClassRoles [
 	^ { #Class -> #Class .
 		#ProtoObject -> #Object .
 		#SmalltalkImage -> #SmalltalkImage .
-		#SystemDictionary -> #SystemDictionary}
+		#SystemDictionary -> #SystemDictionary }
 ]
 
 { #category : #hooks }
