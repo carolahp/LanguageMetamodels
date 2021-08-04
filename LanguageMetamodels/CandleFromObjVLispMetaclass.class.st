@@ -7,6 +7,11 @@ Class {
 	#category : #'LanguageMetamodels-CandleFromObjVLisp'
 }
 
+{ #category : #'hooks-api' }
+CandleFromObjVLispMetaclass class >> role [
+	^ #Metaclass
+]
+
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> defaultMetaclass [ 
 	^ self parent classMetaclass

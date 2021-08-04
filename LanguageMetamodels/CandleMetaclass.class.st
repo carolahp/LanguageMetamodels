@@ -80,16 +80,6 @@ CandleMetaclass >> installCustom [
 		soleInstance: self soleInstance remote
 ]
 
-{ #category : #hooks }
-CandleMetaclass >> installStubCustom [
-
-	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
-	"first install the stub of my metaclass"
-	self metaclass installStub.
-	"instantiate my metaclass to create a stub of me"
-	^ self metaclass newStubWithFormat: self format
-]
-
 { #category : #accessing }
 CandleMetaclass >> instanceSide [ 
 	

@@ -57,19 +57,6 @@ ObjVLispMinClass >> installCustom [
 	self remote metaclass: self metaclass ensureRemote
 ]
 
-{ #category : #hooks }
-ObjVLispMinClass >> installStubCustom [
-
-	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
-	self metaclass = self
-		ifTrue: [ ^ self installMetacircularStub ].
-	"first install the stub of my metaclass"
-	self metaclass installStub.
-	"instantiate my metaclass to create a stub of me"
-	^ self metaclass newStubWithFormat: self format.
-	
-]
-
 { #category : #initialization }
 ObjVLispMinClass >> metaclass [
 	^ metaclass

@@ -10,6 +10,11 @@ CandleFromObjVLispLanguage class >> classModel [
 ]
 
 { #category : #metamodel }
+CandleFromObjVLispLanguage class >> customModels [
+	^ { CandleFromObjVLispMetaclass }
+]
+
+{ #category : #metamodel }
 CandleFromObjVLispLanguage class >> globalModel [
 	^ GlobalModel
 ]
@@ -22,11 +27,6 @@ CandleFromObjVLispLanguage class >> metaclassModel [
 { #category : #'hooks-api' }
 CandleFromObjVLispLanguage class >> metaclassSuffix [
 	^ ' class'
-]
-
-{ #category : #'hooks-api' }
-CandleFromObjVLispLanguage class >> metaclassSuffixInObjVLisp [
-	^ 'Meta'
 ]
 
 { #category : #roles }
@@ -46,7 +46,8 @@ CandleFromObjVLispLanguage >> classClass [
 CandleFromObjVLispLanguage >> customClassRoles [ 
 	^ { 
 	#ProtoObject -> #Object.
-	#Class -> #Class }
+	#Class -> #Class.
+	#Metaclass -> #Metaclass }
 ]
 
 { #category : #roles }
@@ -87,67 +88,23 @@ CandleFromObjVLispLanguage >> loadGlobalVariables [
 { #category : #'model updating' }
 CandleFromObjVLispLanguage >> loadKernel [
 	| object class metaclass objectClass |
-	" load the first classes necessary to create the rest "
-	" OVERRIDE if your language has implicit metaclasses "
-	object := self basicNewClassNamed: #Object.
-	object role: (self newRoleNamed: #ProtoObject).
-	object superclass: nil.
+	object := self basicNewClassWithRole: #ProtoObject.
 	self addBehavior: object.
 	
-	class := self basicNewClassNamed: #Class.
-	class role: (self newRoleNamed: #Class).
-	class superclass: object.
+	class := self basicNewClassWithRole: #Class.
 	self addBehavior: class.
 	
-	metaclass := self basicNewClassNamed: #Metaclass.
-	metaclass role: (self newRoleNamed: #Metaclass).
-	metaclass superclass: object.
+	metaclass := self basicNewClassWithRole: #Metaclass.
 	self addBehavior: metaclass.
 	
 	objectClass := self class metaclassModel basicNew
 		name: #'Object class';
 		parent: self.
 	objectClass superclass: class.
-	object metaclass: objectClass.
 	
 	metaclass initialize.
 	class initialize.
 	object initialize.
-	
-	
-	self halt.
-	{ metaclass . class . object } do: [ :each | 
-		each package ifNil: [ (self packageNamed: self defaultPackageName) 
-			addDefinedBehavior: each ].
-		each metaclass package ifNil: [ (self packageNamed: self defaultPackageName) 
-			addDefinedBehavior: each metaclass ].
-		].
-	
-	"object template: EP2RemoteEmpty.
-	object layout: (EP2RemoteEmpty layoutClass on: object).
-	(self packageNamed: self defaultPackageName) addDefinedBehavior: object."
-	
-"class layout: (EP2FixedLayout on: class).
-	(self packageNamed: self defaultPackageName) addDefinedBehavior: class.
-	class addSlot: #name;
-		addSlot: #instVarsNames;
-		addSlot: #classVars.
-	"
-	
-"behavior := self class classModel basicNew
-		name: #Behavior;
-		parent: self.
-	behavior layout: (EP2FixedLayout on: behavior).
-	(self packageNamed: self defaultPackageName) addDefinedBehavior: behavior.
-	EP2RemoteClass modelInstVarNames 
-		doWithIndex: [ :ivname :index| behavior addSlot: ivname index: index ].
-	behavior superclass: object.
-	self addBehavior: behavior.
-	"
-	"metaclass layout: (EP2FixedLayout on: metaclass).
-	(self packageNamed: self defaultPackageName) addDefinedBehavior: metaclass.
-	metaclass addSlot: #soleInstance.
-	"
 ]
 
 { #category : #roles }
