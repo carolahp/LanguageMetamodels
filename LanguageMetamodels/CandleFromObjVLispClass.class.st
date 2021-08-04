@@ -66,8 +66,6 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 { #category : #hooks }
 CandleFromObjVLispClass >> initialize [ 
 	super initialize.
-	self package ifNil: [ self parent defaultPackage addDefinedBehavior: self ].
-	superclass ifNil: [ superclass := self defaultSuperclass ].
 	metaclass ifNil: [ metaclass := self defaultMetaclass.
 		metaclass initializeWithSoleInstance: self ].
 	
@@ -77,6 +75,7 @@ CandleFromObjVLispClass >> initialize [
 { #category : #initialization }
 CandleFromObjVLispClass >> initializeWithTemplateCustom: aTemplateClass [
 	
+	self deprecated: 'this code should be called from initialize'.
 	self classVars: #().
 	self metaclass: (self parent ensureMetaclassNamed: self parent classMetaclass name).
 	"self parent ensureClassNamed: self name, self parent class metaclassSuffix."

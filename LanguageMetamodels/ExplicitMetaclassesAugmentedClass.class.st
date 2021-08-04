@@ -41,6 +41,7 @@ ExplicitMetaclassesAugmentedClass >> hookInstall [
 
 { #category : #accessing }
 ExplicitMetaclassesAugmentedClass >> initializeWithTemplateCustom: aTemplate [
+	self deprecated: 'this code should be called from initialize'.
 	super initializeWithTemplateCustom: aTemplate.
 	self instVarNames: aTemplate instVarNames. 
 	self classVariables: nil

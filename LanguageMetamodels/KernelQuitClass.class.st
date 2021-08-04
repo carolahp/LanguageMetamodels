@@ -17,6 +17,7 @@ KernelQuitClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 
 { #category : #initialization }
 KernelQuitClass >> initializeWithTemplateCustom: aClass [ 
+	self deprecated: 'this code should be called from initialize'.
 	^ self 
 ]
 

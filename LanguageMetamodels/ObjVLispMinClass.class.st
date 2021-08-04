@@ -30,8 +30,17 @@ ObjVLispMinClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 				ifNil: [ self parent classClass ]).
 ]
 
+{ #category : #binding }
+ObjVLispMinClass >> initialize [
+	super initialize.
+	self assert: objectName isNotNil.
+	name := objectName.
+	metaclass := self parent classClass
+]
+
 { #category : #initialization }
 ObjVLispMinClass >> initializeWithTemplateCustom: aTemplate [
+	self deprecated: 'this code should be called from initialize'.
 	self name: objectName.
 	self metaclass: self parent classClass
 ]

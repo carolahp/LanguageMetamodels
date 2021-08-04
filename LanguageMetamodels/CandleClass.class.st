@@ -64,7 +64,7 @@ CandleClass >> initializeClassVars [
 
 { #category : #initialization }
 CandleClass >> initializeWithTemplateCustom: aTemplateClass [
-	
+	self deprecated: 'this code should be called from initialize'.
 	self classVars: #().
 	self parent ensureMetaclassNamed: self name, self parent metaclassSuffix.
 	self metaclass initializeWithSoleInstance: self.
