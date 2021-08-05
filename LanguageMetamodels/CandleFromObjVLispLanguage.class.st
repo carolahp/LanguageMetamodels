@@ -48,6 +48,11 @@ CandleFromObjVLispLanguage >> classMetaclass [
 ]
 
 { #category : #'metaclass name' }
+CandleFromObjVLispLanguage >> classNameFrom: aString [ 
+	^ aString copyReplaceAll: 'Meta' with: ''
+]
+
+{ #category : #'metaclass name' }
 CandleFromObjVLispLanguage >> classOrMetaclassNameFrom: aString [ 
 	^ aString copyReplaceAll: 'Meta' with: self class metaclassSuffix 
 ]

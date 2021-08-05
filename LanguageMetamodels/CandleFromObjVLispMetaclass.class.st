@@ -30,29 +30,17 @@ CandleFromObjVLispMetaclass >> defaultSuperclass [
 
 { #category : #hooks }
 CandleFromObjVLispMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
-	| mcDef mcDefNew superclassName className |
+	| mcDef soleInstanceName |
 	
 	mcDef := anEP2MCClassDefinition.
-	className := self parent classOrMetaclassNameFrom: mcDef className. 
-	self haltIf: [ className =  'ByteString'].
-	self assert: (self parent isValidMetaclassName: className).
-	superclassName := (mcDef superclassName = #nil)
-		ifTrue: [ self halt. ]
-		ifFalse: [ self parent classOrMetaclassNameFrom: mcDef superclassName ].
-	mcDefNew := EP2MCClassDefinition
-		name: className 
-		superclassName: superclassName
-		category: mcDef category
-		instVarNames: #()
-		comment: ''.
-	self extendWithMonticello: mcDefNew.
-	self soleInstance: (self parent classNamed: className).
+	soleInstanceName := self parent classNameFrom: mcDef className. 
+	self assert: (self parent isValidMetaclassName: soleInstanceName) not.
+	self initializeWithSoleInstance: (self parent ensureClassNamed: soleInstanceName).
 	^ self
 ]
 
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> initializeWithSoleInstance: aCandleClass [ 
-	self package: aCandleClass package.
 	^ self
 		superclass:
 			(aCandleClass superclass
@@ -81,6 +69,11 @@ CandleFromObjVLispMetaclass >> metaclass [
 	^ self parent classMetaclass
 ]
 
+{ #category : #initialization }
+CandleFromObjVLispMetaclass >> package [ 
+	^ self soleInstance package
+]
+
 { #category : #hooks }
 CandleFromObjVLispMetaclass >> registerCustom [
 	^ nil
@@ -97,9 +90,11 @@ CandleFromObjVLispMetaclass >> soleInstance: anObject [
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> test [ 
+CandleFromObjVLispMetaclass >> test [
 	super test.
-	self soleInstance isCandleClass.
-	self parent isValidMetaclassName: self name.
-	self allSuperclasses includes: self parent classClass
+	self assert: self soleInstance isNotNil.
+	self assert: self soleInstance isCandleClass.
+	self assert: (self parent isValidMetaclassName: self name).
+	self assert: (self allSuperclasses includes: self parent classClass).
+	self assert: self package = self soleInstance package
 ]

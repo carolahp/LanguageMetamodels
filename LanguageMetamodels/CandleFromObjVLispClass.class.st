@@ -55,7 +55,7 @@ CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 CandleFromObjVLispClass >> initialize [ 
 	super initialize.
 	name := objectName.
-	self defaultMetaclass initializeWithSoleInstance: self.
+	self metaclass initializeWithSoleInstance: self.
 	^ self
 ]
 
@@ -93,5 +93,6 @@ CandleFromObjVLispClass >> registerCustom [
 CandleFromObjVLispClass >> test [
 	super test.
 	self assert: self metaclass isCandleClass not.
-	self assert: (self parent isValidMetaclassName: self name) not
+	self assert: (self parent isValidMetaclassName: self name) not.
+	self assert: (self allSuperclasses includes: self parent classClass) not
 ]
