@@ -64,14 +64,14 @@ CandleFromObjVLispMetaclass >> isCandleClass [
 	^ false
 ]
 
-{ #category : #initialization }
-CandleFromObjVLispMetaclass >> metaclass [
-	^ self parent classMetaclass
+{ #category : #calyso }
+CandleFromObjVLispMetaclass >> isInstanceSide [ 
+	^ false
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> package [ 
-	^ self soleInstance package
+CandleFromObjVLispMetaclass >> metaclass [
+	^ self parent classMetaclass
 ]
 
 { #category : #hooks }

@@ -85,6 +85,12 @@ CandleFromObjVLispClass >> metaclass [
 ]
 
 { #category : #hooks }
+CandleFromObjVLispClass >> package: aPackageModel [
+	super package: aPackageModel.
+	self metaclass package: aPackageModel
+]
+
+{ #category : #hooks }
 CandleFromObjVLispClass >> registerCustom [
 	^ nil
 ]
