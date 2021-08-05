@@ -3,25 +3,17 @@ Class {
 	#superclass : #ClassModel,
 	#instVars : [
 		'name',
-		'instVarsNames',
-		'classVars'
+		'instVarsNames'
 	],
 	#category : #'LanguageMetamodels-CandleFromObjVLisp'
 }
 
 { #category : #binding }
-CandleFromObjVLispClass >> bindingOf: aString [ 
-	^ nil
-]
+CandleFromObjVLispClass >> bindingOf: varName [ 
+	| aSymbol |
+	aSymbol := varName asSymbol.
 
-{ #category : #accessing }
-CandleFromObjVLispClass >> classVars [
-	^ classVars
-]
-
-{ #category : #accessing }
-CandleFromObjVLispClass >> classVars: anObject [
-	classVars := anObject
+	^ self environment bindingOf: aSymbol
 ]
 
 { #category : #hooks }
@@ -36,18 +28,6 @@ CandleFromObjVLispClass >> defaultSuperclass [
 
 { #category : #initialization }
 CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
-	| mcDef classVarsDict |
-	mcDef := anEP2MCClassDefinition.
-	
-	classVarsDict := mcDef classVars
-		ifNil: [ Dictionary new ]
-		ifNotNil: [ :vars | 
-			(vars
-				collect: [ :v | 
-					self parent
-						newClassVariableNamed: v asSymbol
-						parent: self ]) asDictionary ].
-	self classVars: classVarsDict.
 	^ self
 ]
 

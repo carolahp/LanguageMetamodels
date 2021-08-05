@@ -62,8 +62,8 @@ CandleFromObjVLispLanguage >> createInitialObjects [
 	"| classes |
 	classes := self allClasses
 		select: [ :class | class isCandleClass and: [ class remote isNotNil ] ].
-	classes do: [ :class | class initializeClassVars ].
-	self evaluateCode: 'PCFloat initialize'."
+	classes do: [ :class | class initializeClassVars ]."
+	"self evaluateCode: 'Float initialize'."
 ]
 
 { #category : #hooks }

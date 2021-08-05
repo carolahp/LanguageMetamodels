@@ -14,7 +14,7 @@ CandleFromObjVLispMetaclass class >> role [
 
 { #category : #binding }
 CandleFromObjVLispMetaclass >> bindingOf: aString [ 
-	self shouldBeImplemented.
+	^ self soleInstance bindingOf: aString
 ]
 
 { #category : #initialization }
@@ -30,12 +30,12 @@ CandleFromObjVLispMetaclass >> defaultSuperclass [
 
 { #category : #hooks }
 CandleFromObjVLispMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
-	| mcDef soleInstanceName |
+	"| mcDef soleInstanceName |
 	
 	mcDef := anEP2MCClassDefinition.
 	soleInstanceName := self parent classNameFrom: mcDef className. 
 	self assert: (self parent isValidMetaclassName: soleInstanceName) not.
-	self initializeWithSoleInstance: (self parent ensureClassNamed: soleInstanceName).
+	self initializeWithSoleInstance: (self parent ensureClassNamed: soleInstanceName)."
 	^ self
 ]
 
