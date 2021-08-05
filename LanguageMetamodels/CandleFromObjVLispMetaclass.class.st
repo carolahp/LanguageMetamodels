@@ -12,6 +12,11 @@ CandleFromObjVLispMetaclass class >> role [
 	^ #Metaclass
 ]
 
+{ #category : #binding }
+CandleFromObjVLispMetaclass >> bindingOf: aString [ 
+	self shouldBeImplemented.
+]
+
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> defaultMetaclass [ 
 	^ self parent classMetaclass
@@ -29,6 +34,7 @@ CandleFromObjVLispMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinitio
 	
 	mcDef := anEP2MCClassDefinition.
 	className := self parent classOrMetaclassNameFrom: mcDef className. 
+	self haltIf: [ className =  'ByteString'].
 	self assert: (self parent isValidMetaclassName: className).
 	superclassName := (mcDef superclassName = #nil)
 		ifTrue: [ self halt. ]
