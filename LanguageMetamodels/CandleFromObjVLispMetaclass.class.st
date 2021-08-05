@@ -71,6 +71,11 @@ CandleFromObjVLispMetaclass >> installCustom [
 	^ nil
 ]
 
+{ #category : #testing }
+CandleFromObjVLispMetaclass >> isCandleClass [
+	^ false
+]
+
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> metaclass [
 	^ self parent classMetaclass
@@ -89,4 +94,12 @@ CandleFromObjVLispMetaclass >> soleInstance [
 { #category : #initialization }
 CandleFromObjVLispMetaclass >> soleInstance: anObject [
 	soleInstance := anObject
+]
+
+{ #category : #initialization }
+CandleFromObjVLispMetaclass >> test [ 
+	super test.
+	self soleInstance isCandleClass.
+	self parent isValidMetaclassName: self name.
+	self allSuperclasses includes: self parent classClass
 ]

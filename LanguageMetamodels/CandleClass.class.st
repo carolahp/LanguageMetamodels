@@ -176,18 +176,12 @@ CandleClass >> registerCustom [
 { #category : #accessing }
 CandleClass >> test [ 
 	super test.
-	self assert: self metaclass isNotNil.
+	
 	self assert: self name isNotNil.
-	self assert: self name = self name.
-	self assert: (self parent isValidMetaclassName: self name) not
+	self assert: (self parent isValidMetaclassName: self name) not.
+	self assert: (self metaclass = self parent classMetaclass 
+		or: (self metaclass allSuperclasses includes: (self parent classClass)))
 "	self assert: self classVariables1 isArray.
 	self assert: self instVarNames1 isNotNil.
 	self assert: self instVarNames1 isArray"
-]
-
-{ #category : #accessing }
-CandleClass >> testFull [ 
-	super testFull.
-	self assert: (self metaclass = self parent classMetaclass 
-		or: (self metaclass allSuperclasses includes: (self parent classNamed: #PCClass)))
 ]

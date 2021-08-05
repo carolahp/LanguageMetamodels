@@ -69,6 +69,11 @@ CandleFromObjVLispClass >> installCustom [
 	^ nil
 ]
 
+{ #category : #accessing }
+CandleFromObjVLispClass >> isCandleClass [
+	^ true
+]
+
 { #category : #become }
 CandleFromObjVLispClass >> isMetaclass [ 
 	^ self allSuperclasses includes: (self parent classMetaclass)
@@ -82,4 +87,11 @@ CandleFromObjVLispClass >> metaclass [
 { #category : #hooks }
 CandleFromObjVLispClass >> registerCustom [
 	^ nil
+]
+
+{ #category : #hooks }
+CandleFromObjVLispClass >> test [
+	super test.
+	self assert: self metaclass isCandleClass not.
+	self assert: (self parent isValidMetaclassName: self name) not
 ]

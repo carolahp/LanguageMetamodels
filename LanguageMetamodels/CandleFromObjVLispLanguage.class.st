@@ -162,35 +162,17 @@ CandleFromObjVLispLanguage >> newMetaclassNamed: aName [
 
 { #category : #roles }
 CandleFromObjVLispLanguage >> test [ 
-	| model metamodel modelVars metamodelVars modelVarsLast metamodelVarsLast |
+	| class object metaclass |
 	super test.
 	
-	model := self classClass.
-	metamodel := self class classModel.
+	class := self classClass.
+	object:= self classProtoObject.
+	metaclass := self classMetaclass.
 	
-	modelVars := model allInstVarNames.
-	metamodelVars := self class classModel allClassModelInstVarNames.
-	
-	modelVarsLast := (modelVars
-		copyFrom: 4
-		to: modelVars size) asIdentitySet.
-		
-	metamodelVarsLast := (metamodelVars
-		copyFrom: 4
-		to: metamodelVars size) asIdentitySet.
-	
-	self
-		assert: (modelVars beginsWith: (metamodelVars copyFrom: 1 to: 3))
-		description:
-			'The first 3 instance variables of "' , model name
-				, '" must be ' , (metamodelVars copyFrom: 1 to: 3) asString.
-	
-	self
-		assert: (metamodelVarsLast asSet difference: modelVarsLast asSet) isEmpty
-		description:
-			'The class ' , metamodel asString
-				, ' must define the same instance variables as '
-				, model name asString.
+	self assert: metaclass metaclass ~= metaclass.
+	self assert: metaclass metaclass metaclass = metaclass.
+	self assert: object superclass isNil.
+	self assert: object metaclass superclass = class.
 ]
 
 { #category : #roles }
