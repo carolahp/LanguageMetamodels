@@ -50,10 +50,7 @@ ObjVLispMinLanguage >> createRemoteSystemDictionary [
 
 { #category : #roles }
 ObjVLispMinLanguage >> customClassRoles [
-	^ { #Class -> #Class .
-		#ProtoObject -> #Object .
-		#SmalltalkImage -> #SmalltalkImage .
-		#SystemDictionary -> #SystemDictionary }
+	^ { #ProtoObject -> #Object }
 ]
 
 { #category : #hooks }

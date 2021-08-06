@@ -72,11 +72,8 @@ MatchLanguage >> createRemoteSystemDictionary [
 ]
 
 { #category : #roles }
-MatchLanguage >> customClassRoles [ 
-	^ { 
-	#ProtoObject -> #Object.
-	#Class -> #Class.
-	#Metaclass -> #Metaclass }
+MatchLanguage >> customClassRoles [
+	^ { #ProtoObject -> #Object }
 ]
 
 { #category : #roles }
