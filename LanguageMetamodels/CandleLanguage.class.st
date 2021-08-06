@@ -195,6 +195,18 @@ CandleLanguage >> firstMetaclasses [
 	^ { metaclass . metaclass metaclass }
 ]
 
+{ #category : #util }
+CandleLanguage >> fixCircularInheritance [
+	self classProtoObject metaclass superclass: self classClass.
+	
+	"self allClasses
+		do: [ :class | 
+			class superclass = class
+				ifTrue: [ self halt.class superclass: nil ].
+			class metaclass superclass 
+				ifNil: [ self halt. class metaclass superclass: self classClass ] ]"
+]
+
 { #category : #hooks }
 CandleLanguage >> initializeSpecialObjectsArray [
 	^ nil
@@ -205,6 +217,12 @@ CandleLanguage >> isValidMetaclassName: aString [
 	^ (aString endsWith: self metaclassSuffix)
 		and: [ aString size > self metaclassSuffix size
 				and: [ (aString occurrencesOf: Character space) = 1 ] ]
+]
+
+{ #category : #util }
+CandleLanguage >> loadClasses [
+	super loadClasses.
+	self fixCircularInheritance
 ]
 
 { #category : #hooks }
@@ -220,8 +238,7 @@ CandleLanguage >> loadGlobalVariables [
 CandleLanguage >> loadKernel [
 	super loadKernel.
 	self addBehavior: (self newClassWithRole: #Metaclass).
-	
-	
+	self classProtoObject metaclass superclass: self classClass
 	
 ]
 

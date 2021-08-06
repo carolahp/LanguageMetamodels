@@ -1,35 +1,35 @@
 Class {
-	#name : #CandleFromObjVLispMetaclass,
+	#name : #MatchMetaclass,
 	#superclass : #ClassModel,
 	#instVars : [
 		'soleInstance'
 	],
-	#category : #'LanguageMetamodels-CandleFromObjVLisp'
+	#category : #'LanguageMetamodels-Match'
 }
 
 { #category : #'hooks-api' }
-CandleFromObjVLispMetaclass class >> role [
+MatchMetaclass class >> role [
 	^ #Metaclass
 ]
 
 { #category : #binding }
-CandleFromObjVLispMetaclass >> bindingOf: aString [ 
+MatchMetaclass >> bindingOf: aString [ 
 	^ self soleInstance bindingOf: aString
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> defaultMetaclass [ 
+MatchMetaclass >> defaultMetaclass [ 
 	^ self parent classMetaclass
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> defaultSuperclass [
+MatchMetaclass >> defaultSuperclass [
 	
 	^ self parent classProtoObject metaclass
 ]
 
 { #category : #hooks }
-CandleFromObjVLispMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
+MatchMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
 	"| mcDef soleInstanceName |
 	
 	mcDef := anEP2MCClassDefinition.
@@ -40,7 +40,7 @@ CandleFromObjVLispMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinitio
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> initializeWithSoleInstance: aCandleClass [ 
+MatchMetaclass >> initializeWithSoleInstance: aCandleClass [ 
 	^ self
 		superclass:
 			(aCandleClass superclass
@@ -50,47 +50,47 @@ CandleFromObjVLispMetaclass >> initializeWithSoleInstance: aCandleClass [
 ]
 
 { #category : #hooks }
-CandleFromObjVLispMetaclass >> innerBindingOf: aString [ 
+MatchMetaclass >> innerBindingOf: aString [ 
 	^ nil
 ]
 
 { #category : #install }
-CandleFromObjVLispMetaclass >> installCustom [
+MatchMetaclass >> installCustom [
 	^ nil
 ]
 
 { #category : #testing }
-CandleFromObjVLispMetaclass >> isCandleClass [
+MatchMetaclass >> isCandleClass [
 	^ false
 ]
 
 { #category : #calyso }
-CandleFromObjVLispMetaclass >> isInstanceSide [ 
+MatchMetaclass >> isInstanceSide [ 
 	^ false
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> metaclass [
+MatchMetaclass >> metaclass [
 	^ self parent classMetaclass
 ]
 
 { #category : #hooks }
-CandleFromObjVLispMetaclass >> registerCustom [
+MatchMetaclass >> registerCustom [
 	^ nil
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> soleInstance [
+MatchMetaclass >> soleInstance [
 	^ soleInstance
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> soleInstance: anObject [
+MatchMetaclass >> soleInstance: anObject [
 	soleInstance := anObject
 ]
 
 { #category : #initialization }
-CandleFromObjVLispMetaclass >> test [
+MatchMetaclass >> test [
 	super test.
 	self assert: self soleInstance isNotNil.
 	self assert: self soleInstance isCandleClass.

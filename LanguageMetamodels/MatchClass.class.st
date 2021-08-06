@@ -1,15 +1,15 @@
 Class {
-	#name : #CandleFromObjVLispClass,
+	#name : #MatchClass,
 	#superclass : #ClassModel,
 	#instVars : [
 		'name',
 		'instVarsNames'
 	],
-	#category : #'LanguageMetamodels-CandleFromObjVLisp'
+	#category : #'LanguageMetamodels-Match'
 }
 
 { #category : #binding }
-CandleFromObjVLispClass >> bindingOf: varName [ 
+MatchClass >> bindingOf: varName [ 
 	| aSymbol |
 	aSymbol := varName asSymbol.
 
@@ -17,22 +17,22 @@ CandleFromObjVLispClass >> bindingOf: varName [
 ]
 
 { #category : #hooks }
-CandleFromObjVLispClass >> defaultMetaclass [
+MatchClass >> defaultMetaclass [
 	^ self parent ensureMetaclassNamed: self name , self parent class metaclassSuffix
 ]
 
 { #category : #hooks }
-CandleFromObjVLispClass >> defaultSuperclass [
+MatchClass >> defaultSuperclass [
 	^ self parent classProtoObject
 ]
 
 { #category : #initialization }
-CandleFromObjVLispClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
+MatchClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	^ self
 ]
 
 { #category : #hooks }
-CandleFromObjVLispClass >> initialize [ 
+MatchClass >> initialize [ 
 	super initialize.
 	name := objectName.
 	self metaclass initializeWithSoleInstance: self.
@@ -40,43 +40,43 @@ CandleFromObjVLispClass >> initialize [
 ]
 
 { #category : #hooks }
-CandleFromObjVLispClass >> innerBindingOf: aString [ 
+MatchClass >> innerBindingOf: aString [ 
 	^ nil
 ]
 
 { #category : #install }
-CandleFromObjVLispClass >> installCustom [
+MatchClass >> installCustom [
 	^ nil
 ]
 
 { #category : #accessing }
-CandleFromObjVLispClass >> isCandleClass [
+MatchClass >> isCandleClass [
 	^ true
 ]
 
 { #category : #become }
-CandleFromObjVLispClass >> isMetaclass [ 
+MatchClass >> isMetaclass [ 
 	^ self allSuperclasses includes: (self parent classMetaclass)
 ]
 
 { #category : #accessing }
-CandleFromObjVLispClass >> metaclass [
+MatchClass >> metaclass [
 	^ self defaultMetaclass
 ]
 
 { #category : #hooks }
-CandleFromObjVLispClass >> package: aPackageModel [
+MatchClass >> package: aPackageModel [
 	super package: aPackageModel.
 	self metaclass package: aPackageModel
 ]
 
 { #category : #hooks }
-CandleFromObjVLispClass >> registerCustom [
+MatchClass >> registerCustom [
 	^ nil
 ]
 
 { #category : #hooks }
-CandleFromObjVLispClass >> test [
+MatchClass >> test [
 	super test.
 	self assert: self metaclass isCandleClass not.
 	self assert: (self parent isValidMetaclassName: self name) not.

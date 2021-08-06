@@ -1,36 +1,36 @@
 Class {
-	#name : #CandleFromObjVLispLanguage,
+	#name : #MatchLanguage,
 	#superclass : #LanguageModel,
-	#category : #'LanguageMetamodels-CandleFromObjVLisp'
+	#category : #'LanguageMetamodels-Match'
 }
 
 { #category : #'hooks-api' }
-CandleFromObjVLispLanguage class >> classModel [
-	^ CandleFromObjVLispClass
+MatchLanguage class >> classModel [
+	^ MatchClass
 ]
 
 { #category : #metamodel }
-CandleFromObjVLispLanguage class >> customModels [
-	^ { CandleFromObjVLispMetaclass }
+MatchLanguage class >> customModels [
+	^ { MatchMetaclass }
 ]
 
 { #category : #metamodel }
-CandleFromObjVLispLanguage class >> globalModel [
+MatchLanguage class >> globalModel [
 	^ GlobalModel
 ]
 
 { #category : #'hooks-api' }
-CandleFromObjVLispLanguage class >> metaclassModel [
-	^ CandleFromObjVLispMetaclass
+MatchLanguage class >> metaclassModel [
+	^ MatchMetaclass
 ]
 
 { #category : #'hooks-api' }
-CandleFromObjVLispLanguage class >> metaclassSuffix [
+MatchLanguage class >> metaclassSuffix [
 	^ ' class'
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> basicNewMetaclassNamed: aName [
+MatchLanguage >> basicNewMetaclassNamed: aName [
 	^ self class metaclassModel basicNew 
 		name: aName asSymbol;
 		parent: self;
@@ -38,27 +38,27 @@ CandleFromObjVLispLanguage >> basicNewMetaclassNamed: aName [
 ]
 
 { #category : #'model updating' }
-CandleFromObjVLispLanguage >> classClass [ 
+MatchLanguage >> classClass [ 
 	^ self classNamed: #Class
 ]
 
 { #category : #'special classes' }
-CandleFromObjVLispLanguage >> classMetaclass [
+MatchLanguage >> classMetaclass [
 	^ self classWithRole: #Metaclass
 ]
 
 { #category : #'metaclass name' }
-CandleFromObjVLispLanguage >> classNameFrom: aString [ 
+MatchLanguage >> classNameFrom: aString [ 
 	^ aString copyReplaceAll: 'Meta' with: ''
 ]
 
 { #category : #'metaclass name' }
-CandleFromObjVLispLanguage >> classOrMetaclassNameFrom: aString [ 
+MatchLanguage >> classOrMetaclassNameFrom: aString [ 
 	^ aString copyReplaceAll: 'Meta' with: self class metaclassSuffix 
 ]
 
 { #category : #hooks }
-CandleFromObjVLispLanguage >> createInitialObjects [
+MatchLanguage >> createInitialObjects [
 	"| classes |
 	classes := self allClasses
 		select: [ :class | class isCandleClass and: [ class remote isNotNil ] ].
@@ -67,12 +67,12 @@ CandleFromObjVLispLanguage >> createInitialObjects [
 ]
 
 { #category : #hooks }
-CandleFromObjVLispLanguage >> createRemoteSystemDictionary [
+MatchLanguage >> createRemoteSystemDictionary [
 	^ nil
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> customClassRoles [ 
+MatchLanguage >> customClassRoles [ 
 	^ { 
 	#ProtoObject -> #Object.
 	#Class -> #Class.
@@ -80,7 +80,7 @@ CandleFromObjVLispLanguage >> customClassRoles [
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> ensureClassNamed: aName [
+MatchLanguage >> ensureClassNamed: aName [
 	| name |
 	
 	name := self classOrMetaclassNameFrom: aName.
@@ -96,7 +96,7 @@ CandleFromObjVLispLanguage >> ensureClassNamed: aName [
 ]
 
 { #category : #'model updating' }
-CandleFromObjVLispLanguage >> ensureMetaclassNamed: aName [ 
+MatchLanguage >> ensureMetaclassNamed: aName [ 
 	self assert: (self isValidMetaclassName: aName).
 	^ self
 		classNamed: aName
@@ -108,31 +108,31 @@ CandleFromObjVLispLanguage >> ensureMetaclassNamed: aName [
 ]
 
 { #category : #hooks }
-CandleFromObjVLispLanguage >> firstMetaclasses [
+MatchLanguage >> firstMetaclasses [
 	| metaclass |
 	metaclass := self classMetaclass.
 	^ { metaclass . metaclass metaclass }
 ]
 
 { #category : #hooks }
-CandleFromObjVLispLanguage >> initializeSpecialObjectsArray [
+MatchLanguage >> initializeSpecialObjectsArray [
 	^ nil
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> isValidMetaclassName: aString [
+MatchLanguage >> isValidMetaclassName: aString [
 	^ (aString endsWith: self class metaclassSuffix)
 		and: [ aString size > self class metaclassSuffix size
 				and: [ (aString occurrencesOf: Character space) = 1 ] ]
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> loadGlobalVariables [
+MatchLanguage >> loadGlobalVariables [
 	^ nil
 ]
 
 { #category : #'model updating' }
-CandleFromObjVLispLanguage >> loadKernel [
+MatchLanguage >> loadKernel [
 	| object class metaclass |
 	
 	object := self basicNewClassWithRole: #ProtoObject.
@@ -161,12 +161,12 @@ CandleFromObjVLispLanguage >> loadKernel [
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> newMetaclassNamed: aName [
+MatchLanguage >> newMetaclassNamed: aName [
 	^ self class metaclassModel named: aName asSymbol parent: self
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> test [ 
+MatchLanguage >> test [ 
 	| class object metaclass |
 	super test.
 	
@@ -181,6 +181,6 @@ CandleFromObjVLispLanguage >> test [
 ]
 
 { #category : #roles }
-CandleFromObjVLispLanguage >> transform [
+MatchLanguage >> transform [
 	^ self 
 ]

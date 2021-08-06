@@ -1,29 +1,29 @@
 Class {
-	#name : #CandleFromObjVlispLanguageTest,
+	#name : #MatchLanguageTest,
 	#superclass : #LanguageTest,
 	#category : #'LanguageMetamodels-Tests'
 }
 
 { #category : #'instance creation' }
-CandleFromObjVlispLanguageTest >> languageModelClass [
-	^ CandleFromObjVLispLanguage 
+MatchLanguageTest >> languageModelClass [
+	^ MatchLanguage 
 ]
 
 { #category : #'instance creation' }
-CandleFromObjVlispLanguageTest >> sourcesPath [
+MatchLanguageTest >> sourcesPath [
 	" same as objvlispMin "
 	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
 ]
 
 { #category : #'instance creation' }
-CandleFromObjVlispLanguageTest >> testInVMExecuteOnePlusOne [
+MatchLanguageTest >> testInVMExecuteOnePlusOne [
 	entryPointCode := 'System log: (1+1) asString. System quit'.
 	expectedResult := '2'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
 { #category : #'instance creation' }
-CandleFromObjVlispLanguageTest >> testNewModel [
+MatchLanguageTest >> testNewModel [
 	entryPointCode:= 'System quit'.
 	self newModel.
 ]
