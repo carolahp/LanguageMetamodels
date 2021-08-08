@@ -40,13 +40,22 @@ MatchMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 ]
 
 { #category : #initialization }
+MatchMetaclass >> initializeCustom [
+	self
+		initializeWithSoleInstance:
+			(self parent
+				classNamed: (self name copyReplaceAll: self parent class metaclassSuffix with: ''))
+]
+
+{ #category : #initialization }
 MatchMetaclass >> initializeWithSoleInstance: aCandleClass [ 
-	^ self
+	self
 		superclass:
 			(aCandleClass superclass
 				ifNil: [ self parent classClass ]
 				ifNotNil: [ aCandleClass superclass metaclass ]);
-		soleInstance: aCandleClass
+		soleInstance: aCandleClass;
+		package: aCandleClass package
 ]
 
 { #category : #hooks }
@@ -82,6 +91,8 @@ MatchMetaclass >> registerCustom [
 { #category : #initialization }
 MatchMetaclass >> soleInstance [
 	^ soleInstance
+		ifNil: [ self initializeCustom.
+			soleInstance ]
 ]
 
 { #category : #initialization }
@@ -96,5 +107,10 @@ MatchMetaclass >> test [
 	self assert: self soleInstance isCandleClass.
 	self assert: (self parent isValidMetaclassName: self name).
 	self assert: (self allSuperclasses includes: self parent classClass).
-	self assert: self package = self soleInstance package
+	self assert: self package = self soleInstance package.
+	self
+		assert:
+			((self soleInstance isProtoObject
+				and: [ self superclass = self parent classClass ])
+				or: [ self soleInstance superclass metaclass = self superclass ])
 ]

@@ -58,6 +58,14 @@ CandleMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 ]
 
 { #category : #initializing }
+CandleMetaclass >> initializeCustom [
+	self
+		initializeWithSoleInstance:
+			(self parent
+				classNamed: (self name copyReplaceAll: self parent class metaclassSuffix with: ''))
+]
+
+{ #category : #initializing }
 CandleMetaclass >> initializeWithSoleInstance: aCandleClass [ 
 	self setLayoutKeepingSlots: (EP2FixedLayout on: self).
 	^ self
@@ -65,7 +73,8 @@ CandleMetaclass >> initializeWithSoleInstance: aCandleClass [
 			(aCandleClass superclass
 				ifNil: [ aCandleClass parent classClass ]
 				ifNotNil: [ aCandleClass superclass metaclass ]);
-		soleInstance: aCandleClass
+		soleInstance: aCandleClass;
+		package: aCandleClass package
 ]
 
 { #category : #hooks }
@@ -123,6 +132,8 @@ CandleMetaclass >> remote [
 { #category : #accessing }
 CandleMetaclass >> soleInstance [
 	^ soleInstance
+		ifNil: [ self initializeCustom.
+			soleInstance ]
 ]
 
 { #category : #accessing }
@@ -133,10 +144,16 @@ CandleMetaclass >> soleInstance: anObject [
 { #category : #testing }
 CandleMetaclass >> test [ 
 	super test.
-	self assert: (self parent isValidMetaclassName: self name).
 	self assert: self soleInstance isNotNil.
-	self assert: self soleInstance isCandleMetaclass not
-	
+	self assert: self soleInstance isCandleClass.
+	self assert: (self parent isValidMetaclassName: self name).
+	self assert: (self allSuperclasses includes: self parent classClass).
+	self assert: self package = self soleInstance package.
+	self
+		assert:
+			((self soleInstance isProtoObject
+				and: [ self superclass = self parent classClass ])
+				or: [ self soleInstance superclass metaclass = self superclass ])
 ]
 
 { #category : #accessing }

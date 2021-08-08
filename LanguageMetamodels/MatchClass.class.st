@@ -18,7 +18,8 @@ MatchClass >> bindingOf: varName [
 
 { #category : #hooks }
 MatchClass >> defaultMetaclass [
-	^ self parent ensureMetaclassNamed: self name , self parent class metaclassSuffix
+	
+	^ self parent ensureClassNamed: self name , self parent class metaclassSuffix
 ]
 
 { #category : #hooks }
@@ -28,15 +29,21 @@ MatchClass >> defaultSuperclass [
 
 { #category : #initialization }
 MatchClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
-	^ self
+	self
 ]
 
 { #category : #hooks }
 MatchClass >> initialize [ 
 	super initialize.
 	name := objectName.
-	self metaclass initializeWithSoleInstance: self.
+	"ensure metaclass exists in language"
+	self metaclass.
 	^ self
+]
+
+{ #category : #initialization }
+MatchClass >> initializeCustom [
+	self metaclass initializeWithSoleInstance: self
 ]
 
 { #category : #hooks }
@@ -62,12 +69,6 @@ MatchClass >> isMetaclass [
 { #category : #accessing }
 MatchClass >> metaclass [
 	^ self defaultMetaclass
-]
-
-{ #category : #hooks }
-MatchClass >> package: aPackageModel [
-	super package: aPackageModel.
-	self metaclass package: aPackageModel
 ]
 
 { #category : #hooks }

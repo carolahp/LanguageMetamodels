@@ -9,6 +9,13 @@ MatchLanguage class >> classModel [
 	^ MatchClass
 ]
 
+{ #category : #'hooks-api' }
+MatchLanguage class >> classModelFor: aString [
+	^ (aString endsWith: self metaclassSuffix)
+		ifTrue: [ self metaclassModel ]
+		ifFalse: [ self classModel ]
+]
+
 { #category : #metamodel }
 MatchLanguage class >> customModels [
 	^ { MatchMetaclass }
@@ -47,13 +54,9 @@ MatchLanguage >> classMetaclass [
 	^ self classWithRole: #Metaclass
 ]
 
-{ #category : #'metaclass name' }
-MatchLanguage >> classNameFrom: aString [ 
-	^ aString copyReplaceAll: 'Meta' with: ''
-]
-
-{ #category : #'metaclass name' }
-MatchLanguage >> classOrMetaclassNameFrom: aString [ 
+{ #category : #'tonel repository' }
+MatchLanguage >> classNameFromMonticello: aString [ 
+	
 	^ aString copyReplaceAll: 'Meta' with: self class metaclassSuffix 
 ]
 
@@ -74,22 +77,6 @@ MatchLanguage >> createRemoteSystemDictionary [
 { #category : #roles }
 MatchLanguage >> customClassRoles [
 	^ { #ProtoObject -> #Object }
-]
-
-{ #category : #roles }
-MatchLanguage >> ensureClassNamed: aName [
-	| name |
-	
-	name := self classOrMetaclassNameFrom: aName.
-	
-	^ self
-		classNamed: name
-		ifAbsent: [ | newBeh |
-			newBeh := (self isValidMetaclassName: name)
-				ifTrue: [ self class metaclassModel named: name parent: self ]
-				ifFalse: [ self class classModel named: name parent: self ].
-			self addBehavior: newBeh.
-			newBeh ]
 ]
 
 { #category : #'model updating' }
@@ -130,36 +117,25 @@ MatchLanguage >> loadGlobalVariables [
 
 { #category : #'model updating' }
 MatchLanguage >> loadKernel [
-	| object class metaclass |
-	
+	| object class metaclass objectClass |
 	object := self basicNewClassWithRole: #ProtoObject.
 	self addBehavior: object.
-	
 	class := self basicNewClassWithRole: #Class.
 	self addBehavior: class.
-	
-	
 	metaclass := self basicNewClassWithRole: #Metaclass.
 	self addBehavior: metaclass.
-	"objectClass := self class metaclassModel basicNew
-		name: #'Object class';
-		parent: self.
-	objectClass superclass: class."
-	
 	object superclass: nil.
 	class superclass: object.
 	metaclass superclass: object.
-	
-	
+	objectClass := (self basicNewClassNamed: object name, self class metaclassSuffix)
+		parent: self;
+		yourself.
+	objectClass superclass: class.
+	self addBehavior: objectClass.
 	metaclass initialize.
 	object initialize.
 	class initialize.
-	
-]
-
-{ #category : #roles }
-MatchLanguage >> newMetaclassNamed: aName [
-	^ self class metaclassModel named: aName asSymbol parent: self
+	objectClass initialize
 ]
 
 { #category : #roles }

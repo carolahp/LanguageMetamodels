@@ -22,6 +22,18 @@ CandleLanguageTest >> testInInterpreterExecuteOnePlusOne [
 ]
 
 { #category : #'instance creation' }
+CandleLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
+	entryPointCode := '| dict |
+	dict := PCDictionary new.
+	dict at: #a put: #hola.
+	dict at: #b put: #chao.
+	PCSystem log: (dict at: #a) asString. 
+	PCSystem quit'.
+	expectedResult := 'hola'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 CandleLanguageTest >> testInVMExecuteOnePlusOne [
 	entryPointCode := 'PCSystem log: (1+1) asString. PCSystem quit'.
 	expectedResult := '2'.

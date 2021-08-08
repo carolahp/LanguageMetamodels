@@ -15,6 +15,18 @@ ObjVLispMinLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
+ObjVLispMinLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
+	entryPointCode := '| dict |
+	dict := Dictionary new.
+	dict at: #a put: #hola.
+	dict at: #b put: #chao.
+	System log: (dict at: #a) asString. 
+	System quit'.
+	expectedResult := 'hola'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 ObjVLispMinLanguageTest >> testInVMExecutePrintClassName [
 	entryPointCode := 'System log: Point name asString. System quit'.
 	expectedResult := 'Point'.

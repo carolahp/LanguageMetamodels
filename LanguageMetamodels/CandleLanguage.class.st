@@ -40,6 +40,13 @@ CandleLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
+CandleLanguage class >> classModelFor: aString [
+	^ (aString endsWith: self metaclassSuffix)
+		ifTrue: [ self metaclassModel ]
+		ifFalse: [ self classModel ]
+]
+
+{ #category : #'hooks-api' }
 CandleLanguage class >> classVariableModel [
 	^ CandleClassVariable
 ]
@@ -89,16 +96,27 @@ CandleLanguage class >> simpleClassModel [
 	^ CandleClass
 ]
 
+{ #category : #'tonel repository' }
+CandleLanguage >> addMethodFromMonticelloDefinition: aMCMethodDefinition [
+	| methodDef classDef mcDef className |
+	mcDef := aMCMethodDefinition.
+	className := self classNameFromMonticello: mcDef className.
+	mcDef classIsMeta
+		ifTrue: [ self
+				assert: self metaclassSuffix isNotNil
+				description:
+					'Your language should define implicit metaclasses to load class side methods'.
+			self assert: (self isValidMetaclassName: className) not.
+			className := className , self metaclassSuffix ].
+	classDef := self ensureClassNamed: className.
+	methodDef := classDef ensureLocalMethodNamed: mcDef selector.
+	methodDef extendWithMonticello: mcDef.
+	^ methodDef
+]
+
 { #category : #'access special class' }
 CandleLanguage >> classMetaclass [
 	^ self classNamed: #PCMetaclass
-]
-
-{ #category : #util }
-CandleLanguage >> classNameFrom: aMetaclassName [
-	^ aMetaclassName
-		copyFrom: 1
-		to: aMetaclassName size - self metaclassSuffix size
 ]
 
 { #category : #hooks }
@@ -146,30 +164,6 @@ CandleLanguage >> customClassRoles [
 	(#SmallInteger -> #PCSmallInteger).
 	(#True -> #PCTrue).
 	(#UndefinedObject -> #PCUndefinedObject)}
-]
-
-{ #category : #util }
-CandleLanguage >> ensureClassNamed: aString [
-	^ self
-		classNamed: aString
-		ifAbsent: [ | newBeh |
-			newBeh := (self isValidMetaclassName: aString)
-				ifTrue: [ self newMetaclassNamed: aString ]
-				ifFalse: [ self newClassNamed: aString ].
-			self addBehavior: newBeh.
-			newBeh ]
-]
-
-{ #category : #'class instantiating' }
-CandleLanguage >> ensureMetaclassNamed: aName [ 
-	self assert: (self isValidMetaclassName: aName).
-	^ self
-		classNamed: aName
-		ifAbsent: [ | newBeh |
-			
-			newBeh := self class metaclassModel named: aName asSymbol parent: self.
-			self addBehavior: newBeh.
-			newBeh ]
 ]
 
 { #category : #hooks }
@@ -236,10 +230,25 @@ CandleLanguage >> loadGlobalVariables [
 
 { #category : #'class instantiating' }
 CandleLanguage >> loadKernel [
-	super loadKernel.
-	self addBehavior: (self newClassWithRole: #Metaclass).
-	self classProtoObject metaclass superclass: self classClass
-	
+	| object class metaclass objectClass |
+	object := self basicNewClassWithRole: #ProtoObject.
+	self addBehavior: object.
+	class := self basicNewClassWithRole: #Class.
+	self addBehavior: class.
+	metaclass := self basicNewClassWithRole: #Metaclass.
+	self addBehavior: metaclass.
+	object superclass: nil.
+	class superclass: object.
+	metaclass superclass: object.
+	objectClass := (self basicNewClassNamed: object name, self class metaclassSuffix)
+		parent: self;
+		yourself.
+	objectClass superclass: class.
+	self addBehavior: objectClass.
+	metaclass initialize.
+	object initialize.
+	class initialize.
+	objectClass initialize
 ]
 
 { #category : #constants }
@@ -252,11 +261,6 @@ CandleLanguage >> newClassVariableNamed: aString parent: aCandleClass [
 	^ self class classVariableModel
 		named: aString
 		parent: aCandleClass
-]
-
-{ #category : #util }
-CandleLanguage >> newMetaclassNamed: aName [
-	^ self class metaclassModel named: aName asSymbol parent: self
 ]
 
 { #category : #hooks }
