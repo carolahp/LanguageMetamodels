@@ -3,17 +3,14 @@ Class {
 	#superclass : #ClassModel,
 	#instVars : [
 		'name',
-		'instVarsNames'
+		'instVarsNames',
+		'classPool'
 	],
 	#category : #'LanguageMetamodels-Match'
 }
 
 { #category : #binding }
 MatchClass >> bindingOf: varName [ 
-	| aSymbol |
-	aSymbol := varName asSymbol.
-
-	^ self environment bindingOf: aSymbol
 ]
 
 { #category : #hooks }
@@ -48,7 +45,7 @@ MatchClass >> initializeCustom [
 
 { #category : #hooks }
 MatchClass >> innerBindingOf: aString [ 
-	^ nil
+	
 ]
 
 { #category : #install }
