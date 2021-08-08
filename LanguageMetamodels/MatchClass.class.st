@@ -3,8 +3,7 @@ Class {
 	#superclass : #ClassModel,
 	#instVars : [
 		'name',
-		'instVarsNames',
-		'classPool'
+		'instVarsNames'
 	],
 	#category : #'LanguageMetamodels-Match'
 }
