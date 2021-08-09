@@ -44,7 +44,7 @@ MatchClass >> initializeCustom [
 
 { #category : #hooks }
 MatchClass >> innerBindingOf: aString [ 
-	
+	^ nil
 ]
 
 { #category : #install }
