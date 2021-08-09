@@ -10,6 +10,7 @@ Class {
 
 { #category : #binding }
 MatchClass >> bindingOf: varName [ 
+	^ nil
 ]
 
 { #category : #hooks }
