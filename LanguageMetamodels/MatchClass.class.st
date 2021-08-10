@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #binding }
-MatchClass >> bindingOf: varName [ 
+MatchClass >> bindingOf: varName [
 	^ nil
 ]
 
@@ -50,7 +50,7 @@ MatchClass >> innerBindingOf: aString [
 
 { #category : #install }
 MatchClass >> installCustom [
-	^ nil
+	self remote name: self name
 ]
 
 { #category : #accessing }

@@ -155,5 +155,9 @@ MatchLanguage >> test [
 
 { #category : #roles }
 MatchLanguage >> transform [
-	^ self 
+	self classClass
+		addLocalMethodFromSource:
+			'name 
+	^ name'
+		selector: #name
 ]
