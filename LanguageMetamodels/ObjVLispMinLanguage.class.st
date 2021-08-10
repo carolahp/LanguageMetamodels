@@ -31,11 +31,6 @@ ObjVLispMinLanguage class >> classModel [
 	^ ObjVLispMinClass  
 ]
 
-{ #category : #'hooks-api' }
-ObjVLispMinLanguage class >> globalModel [
-	^ ObjVLispMinGlobal 
-]
-
 { #category : #hooks }
 ObjVLispMinLanguage >> createInitialObjects [
 	"perform operations to initialize Classes classPools, or instructinos such as String initialize"
