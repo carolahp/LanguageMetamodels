@@ -34,7 +34,8 @@ MatchCVLanguage >> transform [
 			'kingdom: aString 
 			Kingdom := aString'
 		selector: #kingdom:.
-	dogClassPool := {((ClassVariableModel named: #Kingdom parent: dog)
-		initializationCode: '#animal')} asDictionary.
+	"dogClassPool := {(#Kingdom -> ((ClassVariableModel named: #Kingdom parent: dog)
+		initializationCode: '#animal'))} asDictionary."
+	dogClassPool := {(#Kingdom -> #animal)} asDictionary.
 	dog classPool: dogClassPool
 ]

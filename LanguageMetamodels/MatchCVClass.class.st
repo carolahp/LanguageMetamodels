@@ -34,7 +34,14 @@ MatchCVClass >> initialize [
 { #category : #binding }
 MatchCVClass >> innerBindingOf: aSymbol [
 	(self classPool bindingOf: aSymbol)
-		ifNotNil: [ :binding | ^ binding ].
+		ifNotNil: [ :binding | 
+			"^ EPClassVariableBinding new
+				name: aSymbol asSymbol
+					ownerName: self name
+					objectSpace: self objectSpace;
+				yourself"
+				^ self remote classPool bindingOf: aSymbol
+	 ].
 	self superclass
 		ifNotNil: [ :supercl | ^ supercl innerBindingOf: aSymbol ].
 	^ nil
