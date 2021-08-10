@@ -1,7 +1,7 @@
 Class {
 	#name : #MatchCVLanguage,
 	#superclass : #MatchLanguage,
-	#category : #'LanguageMetamodels-Match'
+	#category : #'LanguageMetamodels-MatchCV'
 }
 
 { #category : #'hooks-api' }

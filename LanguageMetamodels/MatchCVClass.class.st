@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classPool'
 	],
-	#category : #'LanguageMetamodels-Match'
+	#category : #'LanguageMetamodels-MatchCV'
 }
 
 { #category : #binding }

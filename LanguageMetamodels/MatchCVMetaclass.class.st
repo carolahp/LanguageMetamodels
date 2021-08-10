@@ -1,7 +1,7 @@
 Class {
 	#name : #MatchCVMetaclass,
 	#superclass : #MatchMetaclass,
-	#category : #'LanguageMetamodels-Match'
+	#category : #'LanguageMetamodels-MatchCV'
 }
 
 { #category : #'bootstrap - build kernel classes' }
