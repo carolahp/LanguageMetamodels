@@ -100,10 +100,11 @@ CandleClass >> instVarsNames [
 
 { #category : #install }
 CandleClass >> installCustom [
-	self remote
+	super installCustom
+	"self remote
 		name: self name;
 		instVarsNames: self instVarsNames.
-	self remote classVars ifNilObject: [ self initializeClassVars ]
+	self remote classVars ifNilObject: [ self initializeClassVars ]"
 ]
 
 { #category : #'class stub' }

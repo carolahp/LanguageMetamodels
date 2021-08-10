@@ -28,7 +28,8 @@ KernelQuitClass >> innerBindingOf: aSymbol [
 
 { #category : #install }
 KernelQuitClass >> installCustom [
-	^ self remote
+	super installCustom
+	"^ self remote"
 ]
 
 { #category : #'accessing backend' }

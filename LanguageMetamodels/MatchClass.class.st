@@ -26,7 +26,8 @@ MatchClass >> defaultSuperclass [
 
 { #category : #initialization }
 MatchClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
-	self
+	instVarsNames := ((anEP2MCClassDefinition variables
+		select: #isInstanceVariable) collect: #name) asArray
 ]
 
 { #category : #hooks }
@@ -48,9 +49,14 @@ MatchClass >> innerBindingOf: aString [
 	^ nil
 ]
 
+{ #category : #accessing }
+MatchClass >> instVarsNames [
+	^ instVarsNames
+]
+
 { #category : #install }
 MatchClass >> installCustom [
-	self remote name: self name
+	super installCustom
 ]
 
 { #category : #accessing }

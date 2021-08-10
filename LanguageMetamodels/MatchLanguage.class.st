@@ -159,5 +159,10 @@ MatchLanguage >> transform [
 		addLocalMethodFromSource:
 			'name 
 	^ name'
-		selector: #name
+		selector: #name.
+	self classClass
+		addLocalMethodFromSource:
+			'instVarsNames 
+	^ instVarsNames'
+		selector: #instVarsNames
 ]

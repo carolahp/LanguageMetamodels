@@ -45,5 +45,5 @@ MatchCVClass >> innerBindingOf: aSymbol [
 { #category : #binding }
 MatchCVClass >> installCustom [
 	super installCustom.
-	self remote classPool: self classPool
+	"self remote classPool: self classPool"
 ]

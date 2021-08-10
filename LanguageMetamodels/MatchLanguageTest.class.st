@@ -28,6 +28,15 @@ MatchLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
 ]
 
 { #category : #'instance creation' }
+MatchLanguageTest >> testInVMExecuteGetClassInstVarsNames [
+	entryPointCode := '
+	System log: Point instVarsNames asString. 
+	System quit'.
+	expectedResult := '#(''x'' ''y'' )'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 MatchLanguageTest >> testInVMExecuteOnePlusOne [
 	entryPointCode := 'System log: (1+1) asString. System quit'.
 	expectedResult := '2'.

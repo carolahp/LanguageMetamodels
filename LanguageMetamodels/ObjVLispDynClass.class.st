@@ -11,6 +11,7 @@ ObjVLispDynClass class >> methodModel [
 
 { #category : #install }
 ObjVLispDynClass >> installCustom [
-	self remote
-		name: self name
+	super installCustom
+	"self remote
+		name: self name"
 ]

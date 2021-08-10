@@ -84,9 +84,9 @@ CandleMetaclass >> innerBindingOf: varName [
 
 { #category : #install }
 CandleMetaclass >> installCustom [
-	
-	self remote
-		soleInstance: self soleInstance remote
+	super installCustom
+	"self remote
+		soleInstance: self soleInstance remote"
 ]
 
 { #category : #accessing }

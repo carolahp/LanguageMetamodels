@@ -65,7 +65,7 @@ MatchMetaclass >> innerBindingOf: aString [
 
 { #category : #install }
 MatchMetaclass >> installCustom [
-	^ nil
+	super installCustom
 ]
 
 { #category : #testing }
