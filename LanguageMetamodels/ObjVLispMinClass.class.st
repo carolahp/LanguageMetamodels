@@ -21,7 +21,6 @@ ObjVLispMinClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	| mcDef metaclassDef |
 	mcDef := anEP2MCClassDefinition.
 	metaclassDef := mcDef metaclass.
-	
 	self assert: (self name isNil or: [self name = anEP2MCClassDefinition name]).
 	self
 		metaclass:
@@ -36,13 +35,6 @@ ObjVLispMinClass >> initialize [
 	self assert: objectName isNotNil.
 	name := objectName.
 	metaclass := self parent classClass
-]
-
-{ #category : #initialization }
-ObjVLispMinClass >> initializeWithTemplateCustom: aTemplate [
-	self deprecated: 'this code should be called from initialize'.
-	self name: objectName.
-	self metaclass: self parent classClass
 ]
 
 { #category : #hooks }

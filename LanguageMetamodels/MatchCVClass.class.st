@@ -41,9 +41,3 @@ MatchCVClass >> innerBindingOf: aSymbol [
 		ifNotNil: [ :supercl | ^ supercl innerBindingOf: aSymbol ].
 	^ nil
 ]
-
-{ #category : #binding }
-MatchCVClass >> installCustom [
-	super installCustom.
-	"self remote classPool: self classPool"
-]

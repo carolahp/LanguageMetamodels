@@ -12,7 +12,7 @@ ObjVLispMinCVALanguage class >> classModel [
 
 { #category : #hooks }
 ObjVLispMinCVALanguage >> transform [ 
-	| dog dogClassPool |
+	"| dog dogClassPool |
 	super transform.
 	dog := self ensureClassNamed: 'Dog'.
 	dog
@@ -27,5 +27,5 @@ ObjVLispMinCVALanguage >> transform [
 		selector: #kingdom:.
 	dogClassPool := {((ClassVariableModel named: #Kingdom parent: dog)
 		initializationCode: '#animal')} asDictionary.
-	dog classPool: dogClassPool
+	dog classPool: dogClassPool"
 ]
