@@ -161,7 +161,7 @@ PrototypesLanguage >> loadCustomClassesOld [
 	classPrototype addLocalMethod: methodInstVarsDict.
 	classPrototype addLocalMethod: methodName.
 	package addDefinedBehavior: classPrototype.
-	self addBehavior: classPrototype.
+	self addClass: classPrototype.
 	
 	classStudent := self class classPrototypeMetaclass named: #Student parent: self.
 	classStudent layout: (EP2FixedLayout on: classStudent);
@@ -173,7 +173,7 @@ PrototypesLanguage >> loadCustomClassesOld [
 		selector: #avg;
 		yourself.
 	classStudent addLocalMethod: methodAvg.
-	self addBehavior: classStudent.
+	self addClass: classStudent.
 	package addDefinedBehavior: classStudent.
 	
 	classCaro := self class classPrototypeMetaclass named: #Caro parent: self.
@@ -181,7 +181,7 @@ PrototypesLanguage >> loadCustomClassesOld [
 		superclass: classStudent;
 		package: package.
 	package addDefinedBehavior: classCaro.
-	self addBehavior: classCaro
+	self addClass: classCaro
 ]
 
 { #category : #hooks }
@@ -204,7 +204,7 @@ PrototypesLanguage >> transform [
 		named: #Prototype
 		parent: self.
 	package addDefinedBehavior: classPrototype.
-	self addBehavior: classPrototype.
+	self addClass: classPrototype.
 	
 	classPrototype
 		layout: (EP2FixedLayout on: classPrototype);

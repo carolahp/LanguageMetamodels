@@ -86,7 +86,7 @@ MatchLanguage >> ensureMetaclassNamed: aName [
 		classNamed: aName
 		ifAbsent: [ | newBeh |
 			newBeh := self basicNewMetaclassNamed: aName.
-			self addBehavior: newBeh.
+			self addClass: newBeh.
 			newBeh initialize.
 			newBeh ]
 ]
@@ -119,11 +119,11 @@ MatchLanguage >> loadGlobalVariables [
 MatchLanguage >> loadKernel [
 	| object class metaclass objectClass |
 	object := self basicNewClassWithRole: #ProtoObject.
-	self addBehavior: object.
+	self addClass: object.
 	class := self basicNewClassWithRole: #Class.
-	self addBehavior: class.
+	self addClass: class.
 	metaclass := self basicNewClassWithRole: #Metaclass.
-	self addBehavior: metaclass.
+	self addClass: metaclass.
 	object superclass: nil.
 	class superclass: object.
 	metaclass superclass: object.
@@ -131,7 +131,7 @@ MatchLanguage >> loadKernel [
 		parent: self;
 		yourself.
 	objectClass superclass: class.
-	self addBehavior: objectClass.
+	self addClass: objectClass.
 	metaclass initialize.
 	object initialize.
 	class initialize.

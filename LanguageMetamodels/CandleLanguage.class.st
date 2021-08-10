@@ -232,11 +232,11 @@ CandleLanguage >> loadGlobalVariables [
 CandleLanguage >> loadKernel [
 	| object class metaclass objectClass |
 	object := self basicNewClassWithRole: #ProtoObject.
-	self addBehavior: object.
+	self addClass: object.
 	class := self basicNewClassWithRole: #Class.
-	self addBehavior: class.
+	self addClass: class.
 	metaclass := self basicNewClassWithRole: #Metaclass.
-	self addBehavior: metaclass.
+	self addClass: metaclass.
 	object superclass: nil.
 	class superclass: object.
 	metaclass superclass: object.
@@ -244,7 +244,7 @@ CandleLanguage >> loadKernel [
 		parent: self;
 		yourself.
 	objectClass superclass: class.
-	self addBehavior: objectClass.
+	self addClass: objectClass.
 	metaclass initialize.
 	object initialize.
 	class initialize.
