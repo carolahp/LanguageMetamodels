@@ -29,7 +29,7 @@ ObjVLispMILanguage >> transform [
 		addLocalMethodFromSource: 
 		'printOn: aStream
 			aStream 
-				store: name;
+				nextPutAll: name;
 				nextPutAll: '' => '';
 				nextPutAll: self class name'
 		selector: #printOn:.

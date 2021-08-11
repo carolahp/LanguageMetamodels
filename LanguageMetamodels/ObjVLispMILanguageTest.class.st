@@ -16,11 +16,9 @@ ObjVLispMILanguageTest >> sourcesPath [
 
 { #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInInterpreterGetPointSlots [
-	entryPointCode := '
-	System log: Point allSlots asString. 
-	System quit'.
-	expectedResult := ''.
-	self assert: (self inInterpreterExecute: 'Point allSlots asString') equals: ''
+	entryPointCode := 'System quit'.
+	expectedResult := 'OrderedCollection (x => InstanceVariableSlot y => InstanceVariableSlot )'.
+	self assert: (self inInterpreterExecute: 'Point allSlots asString') equals: expectedResult
 ]
 
 { #category : #'instance creation' }
