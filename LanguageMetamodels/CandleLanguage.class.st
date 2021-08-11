@@ -272,7 +272,7 @@ CandleLanguage >> test [
 	metamodel := self class classModel.
 	
 	modelVars := model allInstVarNames.
-	metamodelVars := self class classModel allClassModelInstVarNames.
+	metamodelVars := self class classModel allModelInstVarNames.
 	
 	modelVarsLast := (modelVars
 		copyFrom: 4

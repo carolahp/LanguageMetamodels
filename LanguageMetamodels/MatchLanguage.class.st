@@ -1,3 +1,6 @@
+"
+Match is ObjVLisp with implicit metaclasses. Its source code is the same as ObjVLisp
+"
 Class {
 	#name : #MatchLanguage,
 	#superclass : #LanguageModel,

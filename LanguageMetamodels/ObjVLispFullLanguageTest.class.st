@@ -6,7 +6,7 @@ Class {
 
 { #category : #'instance creation' }
 ObjVLispFullLanguageTest >> languageModelClass [
-	^ ObjVLispFullLanguage
+	^ ObjVLispLanguage
 ]
 
 { #category : #'instance creation' }

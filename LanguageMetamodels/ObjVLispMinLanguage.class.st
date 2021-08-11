@@ -68,7 +68,7 @@ ObjVLispMinLanguage >> transform [
 	| metaclass instvars |
 	metaclass := self classClass.
 	instvars := metaclass allInstVarNames.
-	metaclass class allClassModelInstVarNames do: [ :name |
+	metaclass class allModelInstVarNames do: [ :name |
 		(instvars includes: name) ifFalse: [ metaclass addSlot: name ] ] .
 	metaclass addLocalMethodFromSource: 'name
 	^ name' selector: #name.

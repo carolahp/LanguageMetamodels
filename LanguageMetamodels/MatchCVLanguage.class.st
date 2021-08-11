@@ -1,3 +1,6 @@
+"
+Match language with class variables
+"
 Class {
 	#name : #MatchCVLanguage,
 	#superclass : #MatchLanguage,
