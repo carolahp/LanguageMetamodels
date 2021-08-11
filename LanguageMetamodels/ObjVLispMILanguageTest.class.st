@@ -22,13 +22,10 @@ ObjVLispMILanguageTest >> testInInterpreterGetPointSlots [
 ]
 
 { #category : #'instance creation' }
-ObjVLispMILanguageTest >> testInVMExecuteCreateAndAccessDictionary [
-	entryPointCode := '| dict |
-	dict := Dictionary new.
-	dict at: #a put: #hola.
-	dict at: #b put: #chao.
-	System log: (dict at: #a) asString. 
+ObjVLispMILanguageTest >> testInVMGetPointSlots [
+	entryPointCode := '
+	System log: Point allSlots asString.
 	System quit'.
-	expectedResult := 'hola'.
+	expectedResult := 'OrderedCollection (x => InstanceVariableSlot y => InstanceVariableSlot )'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
