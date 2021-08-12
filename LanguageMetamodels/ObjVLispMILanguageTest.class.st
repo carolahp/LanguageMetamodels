@@ -15,18 +15,22 @@ ObjVLispMILanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
-ObjVLispMILanguageTest >> testInInterpreterGetPointSlots [
-	entryPointCode := 'System quit'.
-	expectedResult := 'OrderedCollection (x => InstanceVariableSlot y => InstanceVariableSlot )'.
-	self assert: (self inInterpreterExecute: 'Point allSlots asString') equals: expectedResult
-]
-
-{ #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMGetPointSlots [
 	entryPointCode := '
 	System log: Point allSlots asString.
 	System quit'.
 	expectedResult := 'OrderedCollection (x => InstanceVariableSlot y => InstanceVariableSlot )'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiClassesMetaclassIsMulticlass [
+	entryPointCode := '
+	System log: PetMulti class name asString.
+	System log: DogMulti class name asString.
+	System quit'.
+	expectedResult := 'Multiclass
+Multiclass'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
@@ -49,6 +53,16 @@ ObjVLispMILanguageTest >> testInVMPrintMulticlassSlots [
 ]
 
 { #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMReadEmptyInstVarsDictFromMulticlass [
+	entryPointCode := '| dog |
+	dog := DogMulti new initialize.
+	System log: dog instVarsDict asString.	
+	System quit'.
+	expectedResult := 'Dictionary ()'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMReadMulticlassSlotValue [
 	entryPointCode := '
 	System log: DogMulti new address asString. 
@@ -58,15 +72,47 @@ ObjVLispMILanguageTest >> testInVMReadMulticlassSlotValue [
 ]
 
 { #category : #'instance creation' }
-ObjVLispMILanguageTest >> testInVMWriteMulticlassSlotValue [
-	entryPointCode := '| dog |
-	dog := DogMulti new.
-	dog address: #dogAddress.
-	System log: dog address asString. 
-	dog address: #dogAddress2.
-	System log: dog address asString.	
+ObjVLispMILanguageTest >> testInVMReadSuperclassesFromMulticlassWithOneExtraSuperclass [
+	entryPointCode := '
+	System log: DogMulti superclass asString.	
+	System log: (DogMulti superclasses at: 1) asString.	
 	System quit'.
-	expectedResult := 'dogAddress
-dogAddress2'.
+	expectedResult := 'PetMulti
+AnimalMulti'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMWriteMulticlassInheritedSlotValue [
+	entryPointCode := '| pet dog |
+	pet := PetMulti new.
+	dog := DogMulti new.
+	dog name: #spike.
+	pet name: #pepito.
+	System log: pet name asString. 
+	System log: dog name asString. 
+	System quit'.
+	expectedResult := 'pepito
+spike'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMWriteMulticlassSlotValue [
+	entryPointCode := '| pet |
+	pet := PetMulti new.
+	pet address: #petAddress.
+	System log: pet address asString. 
+	pet address: #petAddress2.
+	System log: pet address asString.	
+	pet name: #pepito.
+	System log: pet name asString. 
+	pet name: #juanito.
+	System log: pet name asString.	
+	System quit'.
+	expectedResult := 'petAddress
+petAddress2
+pepito
+juanito'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]

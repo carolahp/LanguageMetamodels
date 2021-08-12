@@ -30,14 +30,134 @@ ObjVLispMILanguage class >> multiclassSuffix [
 
 { #category : #hooks }
 ObjVLispMILanguage >> transform [
-	| slotModel classModel dogMultiModel objectModel |
 	super transform.
+	self transformObjectModel.
+	self transformSlotModel.
+	self transformClassModel.
+	self transformMulticlassModel.
+	self transformMulticlasses
+]
+
+{ #category : #hooks }
+ObjVLispMILanguage >> transformClassModel [
+	| classModel |
+	classModel := self classClass.
+	classModel
+		addLocalMethodFromSource:
+			'allSlots
+			self superclass 
+				ifNil: [ ^ slots asOrderedCollection ].
+			^ self superclass allSlots
+				addAll: slots;
+				yourself'
+		selector: #allSlots.
+	classModel
+		addLocalMethodFromSource:
+			'slots
+			^ slots'
+		selector: #slots.
+	
+]
+
+{ #category : #hooks }
+ObjVLispMILanguage >> transformMulticlassModel [
+	| multiclassModel |
+	multiclassModel := self ensureClassNamed: #Multiclass.
+	multiclassModel metaclass: self classClass.
+	multiclassModel superclass: self classClass.
+	multiclassModel addSlot: #superclasses.
+	multiclassModel
+		addLocalMethodFromSource:
+			'superclasses
+			^ superclasses'
+		selector: #superclasses
+]
+
+{ #category : #hooks }
+ObjVLispMILanguage >> transformMulticlasses [
+	| animalMultiModel petMultiModel dogMultiModel |
+	
+	" Animal "
+	animalMultiModel := self ensureClassNamed: #AnimalMulti.
+	animalMultiModel addSlot: #color.
+	animalMultiModel
+		addLocalMethodFromSource:
+			'color
+		^ color'
+		selector: #color.
+	animalMultiModel
+		addLocalMethodFromSource:
+			'color: aString
+		color := aString'
+		selector: #color:.
+	
+	" Pet "
+	petMultiModel := self ensureClassNamed: #PetMulti.
+	petMultiModel addSlot: #address.
+	petMultiModel addSlot: #name.
+	petMultiModel
+		addLocalMethodFromSource:
+			'address
+		^ address'
+		selector: #address.
+	petMultiModel
+		addLocalMethodFromSource:
+			'address: aString
+		address := aString'
+		selector: #address:.
+	petMultiModel
+		addLocalMethodFromSource:
+			'address
+		^ address'
+		selector: #address.
+	petMultiModel
+		addLocalMethodFromSource:
+			'name: aString
+		name := aString'
+		selector: #name:.
+	petMultiModel
+		addLocalMethodFromSource:
+			'name
+		^ name'
+		selector: #name.
+	
+	" Dog "
+	dogMultiModel := self ensureClassNamed: #DogMulti.
+	dogMultiModel superclass: petMultiModel.
+	dogMultiModel addSuperclass: animalMultiModel
+	
+]
+
+{ #category : #hooks }
+ObjVLispMILanguage >> transformObjectModel [
+	| objectModel multiObject |
 	objectModel := self classProtoObject.
 	objectModel
 		addLocalMethodFromSource:
 			'writeSlot: aSlot value: anObject
 	^aSlot write: anObject to: self'
 		selector: #writeSlot:value:.
+	
+	multiObject := self ensureClassNamed: #MultiObject.
+	multiObject superclass: self classProtoObject.
+	multiObject metaclass: self classClass.
+	multiObject addSlot: #instVarsDict.
+	multiObject
+		addLocalMethodFromSource:
+			'instVarsDict
+	^ instVarsDict'
+		selector: #instVarsDict.
+	multiObject addLocalMethodFromSource:
+			'initialize
+	super initialize.
+	instVarsDict := Dictionary new'
+		selector: #initialize.
+	
+]
+
+{ #category : #hooks }
+ObjVLispMILanguage >> transformSlotModel [
+	| slotModel |
 	slotModel := self classNamed: #InstanceVariableSlot.
 	slotModel
 		addLocalMethodFromSource:
@@ -57,31 +177,5 @@ ObjVLispMILanguage >> transform [
 				nextPutAll: '' => '';
 				nextPutAll: self class name'
 		selector: #printOn:.
-	classModel := self classClass.
-	classModel
-		addLocalMethodFromSource:
-			'allSlots
-			self superclass 
-				ifNil: [ ^ slots asOrderedCollection ].
-			^ self superclass allSlots
-				addAll: slots;
-				yourself'
-		selector: #allSlots.
-	classModel
-		addLocalMethodFromSource:
-			'slots
-			^ slots'
-		selector: #slots.
-	dogMultiModel := self ensureClassNamed: #DogMulti.
-	dogMultiModel addSlot: #address.
-	dogMultiModel
-		addLocalMethodFromSource:
-			'address
-		^ address'
-		selector: #address.
-	dogMultiModel
-		addLocalMethodFromSource:
-			'address: aString
-		^ address := aString'
-		selector: #address:
+	
 ]
