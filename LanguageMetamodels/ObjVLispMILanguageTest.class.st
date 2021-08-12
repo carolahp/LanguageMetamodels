@@ -50,15 +50,55 @@ ObjVLispMILanguageTest >> testInVMMultiobjectInheritsMethodFromExtraSuperclass [
 	dog := DogMulti new.
 	dog color: #red.
 	dog name: #spike.
+	dog address: #anAddress.
+	
 	System log: dog color asString.
 	System log: dog name asString.
+	System log: dog address asString.
+	
 	System quit'.
 	expectedResult := 'red
-spike'.
-self newModel.
-model generate.
-model spurImage.
-self halt.
+spike
+anAddress'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiobjectUndefinedSlot [
+	entryPointCode := '| dog |
+	dog := DogMulti new.
+	dog undefinedInstVar: #hola.
+	System quit'.
+	expectedResult := EP2UndeclaredBindingError.
+	
+	model := self newModel.
+	(model classNamed: #DogMulti)
+		addLocalMethodFromSource:
+			'undefinedInstVar: aValue
+		^ undefinedInstVar := aValue'
+		selector: #undefinedInstVar:.
+	
+	self
+		should: [ model generate ]
+		raise: expectedResult
+		whoseDescriptionIncludes: 'undefinedInstVar'
+		description: ''
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiobjectsExtraSlotsDoNotOverrideEachOther [
+	entryPointCode := '| dog animal |
+	animal := AnimalMulti new.
+	animal color: #blue.
+	 
+	dog := DogMulti new.
+	dog color: #red.
+	
+	System log: dog color asString.
+	System log: animal color asString.
+	System quit'.
+	expectedResult := 'red
+blue'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 

@@ -168,12 +168,12 @@ ObjVLispMILanguage >> transformSlotModel [
 	slotModel
 		addLocalMethodFromSource:
 			'read: anObject
-			^ thisContext object: anObject instVarAt: index'
+			^ anObject instVarsDict at: name'
 		selector: #read:.
 	slotModel
 		addLocalMethodFromSource:
 			'write: aValue to: anObject
-			^ thisContext object: anObject instVarAt: index put: aValue'
+			^ anObject instVarsDict at: name put: aValue'
 		selector: #write:to:.
 	slotModel
 		addLocalMethodFromSource:
