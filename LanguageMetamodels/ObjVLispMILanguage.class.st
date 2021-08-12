@@ -152,6 +152,12 @@ ObjVLispMILanguage >> transformObjectModel [
 	super initialize.
 	instVarsDict := Dictionary new'
 		selector: #initialize.
+	multiObject addLocalMethodFromSource:
+			'doesNotUnderstand: aMessage
+	System log: ''multiobject does not understand message''.
+	System quit'
+		selector: #doesNotUnderstand:.
+	
 	
 ]
 

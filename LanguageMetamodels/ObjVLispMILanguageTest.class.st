@@ -35,6 +35,34 @@ Multiclass'.
 ]
 
 { #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiobjectDoesNotUnderstand [
+	entryPointCode := '| dog |
+	dog := DogMulti new.
+	dog fakeMessage: #red.
+	System quit'.
+	expectedResult := 'multiobject does not understand message'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiobjectInheritsMethodFromExtraSuperclass [
+	entryPointCode := '| dog |
+	dog := DogMulti new.
+	dog color: #red.
+	dog name: #spike.
+	System log: dog color asString.
+	System log: dog name asString.
+	System quit'.
+	expectedResult := 'red
+spike'.
+self newModel.
+model generate.
+model spurImage.
+self halt.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMPrintContext [
 	entryPointCode := '
 	System log: thisContext asString. 
@@ -55,7 +83,7 @@ ObjVLispMILanguageTest >> testInVMPrintMulticlassSlots [
 { #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMReadEmptyInstVarsDictFromMulticlass [
 	entryPointCode := '| dog |
-	dog := DogMulti new initialize.
+	dog := DogMulti new.
 	System log: dog instVarsDict asString.	
 	System quit'.
 	expectedResult := 'Dictionary ()'.
@@ -79,6 +107,19 @@ ObjVLispMILanguageTest >> testInVMReadSuperclassesFromMulticlassWithOneExtraSupe
 	System quit'.
 	expectedResult := 'PetMulti
 AnimalMulti'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMWriteAPointSlotX [
+	entryPointCode := '|p|
+	p := Point new.
+	p x: 1 y: 2.
+	System log: p x asString.
+	System log: p y asString.
+	System quit'.
+	expectedResult := '1
+2'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 

@@ -24,7 +24,9 @@ ObjVLispMIMulticlass >> addSlot: aString [
 ObjVLispMIMulticlass >> addSuperclass: aMulticlass [
 	superclasses := superclasses asOrderedCollection
 		add: aMulticlass;
-		asArray
+		asArray.
+	aMulticlass methodDict
+		do: [ :method | self methodDict at: method selector ifAbsentPut: method ]
 ]
 
 { #category : #'bootstrap - build model fields' }
