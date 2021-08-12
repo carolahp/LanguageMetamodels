@@ -19,7 +19,7 @@ ObjVLispMILanguageTest >> testInVMGetPointSlots [
 	entryPointCode := '
 	System log: Point allSlots asString.
 	System quit'.
-	expectedResult := 'OrderedCollection (x => InstanceVariableSlot y => InstanceVariableSlot )'.
+	expectedResult := '#(x => InstanceVariableSlot y => InstanceVariableSlot )'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
@@ -185,16 +185,6 @@ ObjVLispMILanguageTest >> testInVMPrintMulticlassSlots [
 	System log: DogMulti allSlots asString. 
 	System quit'.
 	expectedResult := '#(instVarsDict => InstanceVariableSlot address => InstanceVariableSlot name => InstanceVariableSlot color => InstanceVariableSlot )'.
-	self assert: self inVMExecuteEntryPoint equals: expectedResult
-]
-
-{ #category : #'instance creation' }
-ObjVLispMILanguageTest >> testInVMReadEmptyInstVarsDictFromMulticlass [
-	entryPointCode := '| dog |
-	dog := DogMulti new.
-	System log: dog instVarsDict asString.	
-	System quit'.
-	expectedResult := 'Dictionary ()'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
