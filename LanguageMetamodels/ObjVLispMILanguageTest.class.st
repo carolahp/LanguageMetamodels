@@ -24,6 +24,33 @@ ObjVLispMILanguageTest >> testInVMGetPointSlots [
 ]
 
 { #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiClassAddsLocalSlot [
+	| dogModel |
+	entryPointCode := '| dog |
+	dog := DogMulti new.
+	dog breed: #poodle.
+	System log: dog breed asString. 
+	System quit'.
+	expectedResult := 'poodle'.
+	
+	model := self newModel.
+	dogModel := model classNamed: #DogMulti.
+	dogModel addSlot: #breed.
+	dogModel
+		addLocalMethodFromSource:
+			'breed: aValue
+	breed := aValue'
+		selector: #breed:.
+	dogModel
+		addLocalMethodFromSource:
+			'breed
+	^ breed'
+		selector: #breed.
+	model generate.
+	self assert: model writeImage executeInVM equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMMultiClassesMetaclassIsMulticlass [
 	entryPointCode := '
 	System log: PetMulti class name asString.
