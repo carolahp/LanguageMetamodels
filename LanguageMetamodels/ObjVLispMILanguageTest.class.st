@@ -35,6 +35,51 @@ Multiclass'.
 ]
 
 { #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiobjectDefinesMLocalMethodReferencingInheritedSlot [
+	entryPointCode := '| dog |
+	dog := DogMulti new.
+	dog name: #spike.
+	System log: dog prettyPrintName asString.
+	System quit'.
+	expectedResult := '"spike"'.
+	
+	model := self newModel.
+	(model classNamed: #DogMulti)
+		addLocalMethodFromSource:
+			'prettyPrintName
+		^ ''"'', name, ''"'''
+		selector: #prettyPrintName.
+	model generate.
+	
+	self
+		assert: model writeImage executeInVM
+		equals: expectedResult
+		
+]
+
+{ #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiobjectDefinesMLocalMethodReferencingInheritedSlotFromExtraSuperclass [
+	entryPointCode := '| dog |
+	dog := DogMulti new.
+	dog color: #red.
+	System log: dog prettyPrintColor asString.
+	System quit'.
+	expectedResult := '"red"'.
+	
+	model := self newModel.
+	(model classNamed: #DogMulti)
+		addLocalMethodFromSource:
+			'prettyPrintColor
+		^ ''"'', color, ''"'''
+		selector: #prettyPrintColor.
+	model generate.
+	self
+		assert: model writeImage executeInVM
+		equals: expectedResult
+		
+]
+
+{ #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMMultiobjectDoesNotUnderstand [
 	entryPointCode := '| dog |
 	dog := DogMulti new.

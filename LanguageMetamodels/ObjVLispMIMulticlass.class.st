@@ -30,6 +30,25 @@ ObjVLispMIMulticlass >> addSuperclass: aMulticlass [
 ]
 
 { #category : #'bootstrap - build model fields' }
+ObjVLispMIMulticlass >> allSlots [
+	| result |
+	" slots inherited by normal inheritance are prioritized. 
+	slots inherited from extra superclasses are prioritized in the order in which the superclasses were defined "
+	
+	" first get my slots plus slots inherited by normal inheritance "
+	result := super allSlots asOrderedCollection.
+	
+	" add slots inherited from extra superclasses "
+	self superclasses
+		do: [ :class | 
+			class allSlots
+				do: [ :slot | 
+					(result noneSatisfy: [ :mySlot | mySlot name = slot name ])
+						ifTrue: [ result add: slot ] ] ].
+	^ result asArray
+]
+
+{ #category : #'bootstrap - build model fields' }
 ObjVLispMIMulticlass >> initialize [ 
 	super initialize.
 	self metaclass: (self parent classNamed: #Multiclass).
