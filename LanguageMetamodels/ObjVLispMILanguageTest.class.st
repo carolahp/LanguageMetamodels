@@ -184,7 +184,7 @@ ObjVLispMILanguageTest >> testInVMPrintMulticlassSlots [
 	entryPointCode := '
 	System log: DogMulti allSlots asString. 
 	System quit'.
-	expectedResult := 'OrderedCollection (address => InstanceVariableSlot )'.
+	expectedResult := '#(instVarsDict => InstanceVariableSlot address => InstanceVariableSlot name => InstanceVariableSlot color => InstanceVariableSlot )'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 

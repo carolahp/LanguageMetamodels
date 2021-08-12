@@ -47,9 +47,9 @@ ObjVLispMILanguage >> transformClassModel [
 			'allSlots
 			self superclass 
 				ifNil: [ ^ slots asOrderedCollection ].
-			^ self superclass allSlots
+			^ self superclass allSlots asOrderedCollection
 				addAll: slots;
-				yourself'
+				asArray'
 		selector: #allSlots.
 	classModel
 		addLocalMethodFromSource:
@@ -70,7 +70,20 @@ ObjVLispMILanguage >> transformMulticlassModel [
 		addLocalMethodFromSource:
 			'superclasses
 			^ superclasses'
-		selector: #superclasses
+		selector: #superclasses.
+	multiclassModel 
+		addLocalMethodFromSource:  'allSlots
+		| result |	
+		result := super allSlots asOrderedCollection.
+		" add slots inherited from extra superclasses "
+		self superclasses
+			do: [ :class | 
+				class allSlots
+					do: [ :slot | 
+						(result noneSatisfy: [ :mySlot | mySlot name = slot name ])
+							ifTrue: [ result add: slot ] ] ].
+	^ result asArray'
+		selector: #allSlots
 ]
 
 { #category : #hooks }
@@ -150,7 +163,9 @@ ObjVLispMILanguage >> transformObjectModel [
 	multiObject addLocalMethodFromSource:
 			'initialize
 	super initialize.
-	instVarsDict := Dictionary new'
+	instVarsDict := Dictionary new.
+	self class allSlots do: [:slot |
+		instVarsDict at: slot name ifAbsentPut: nil ]'
 		selector: #initialize.
 	multiObject addLocalMethodFromSource:
 			'doesNotUnderstand: aMessage
@@ -183,5 +198,9 @@ ObjVLispMILanguage >> transformSlotModel [
 				nextPutAll: '' => '';
 				nextPutAll: self class name'
 		selector: #printOn:.
-	
+	slotModel
+		addLocalMethodFromSource:
+			'name
+				^ name'
+		selector: #name.
 ]
