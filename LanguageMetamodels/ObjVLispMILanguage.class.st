@@ -10,10 +10,34 @@ ObjVLispMILanguage class >> classModel [
 	^ ObjVLispMIClass  
 ]
 
+{ #category : #'hooks-api' }
+ObjVLispMILanguage class >> classModelFor: aString [
+	^ (aString endsWith: self multiclassSuffix)
+		ifTrue: [ self multiclassModel ]
+		ifFalse: [ self classModel ]
+]
+
+{ #category : #'hooks-api' }
+ObjVLispMILanguage class >> multiclassModel [
+	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
+	^ ObjVLispMIMulticlass  
+]
+
+{ #category : #'hooks-api' }
+ObjVLispMILanguage class >> multiclassSuffix [
+	^ 'Multi'
+]
+
 { #category : #hooks }
 ObjVLispMILanguage >> transform [
-	| slotModel classModel |
+	| slotModel classModel dogMultiModel objectModel |
 	super transform.
+	objectModel := self classProtoObject.
+	objectModel
+		addLocalMethodFromSource:
+			'writeSlot: aSlot value: anObject
+	^aSlot write: anObject to: self'
+		selector: #writeSlot:value:.
 	slotModel := self classNamed: #InstanceVariableSlot.
 	slotModel
 		addLocalMethodFromSource:
@@ -26,8 +50,8 @@ ObjVLispMILanguage >> transform [
 			^ thisContext object: anObject instVarAt: index put: aValue'
 		selector: #write:to:.
 	slotModel
-		addLocalMethodFromSource: 
-		'printOn: aStream
+		addLocalMethodFromSource:
+			'printOn: aStream
 			aStream 
 				nextPutAll: name;
 				nextPutAll: '' => '';
@@ -36,7 +60,7 @@ ObjVLispMILanguage >> transform [
 	classModel := self classClass.
 	classModel
 		addLocalMethodFromSource:
-		'allSlots
+			'allSlots
 			self superclass 
 				ifNil: [ ^ slots asOrderedCollection ].
 			^ self superclass allSlots
@@ -45,8 +69,19 @@ ObjVLispMILanguage >> transform [
 		selector: #allSlots.
 	classModel
 		addLocalMethodFromSource:
-		'slots
+			'slots
 			^ slots'
 		selector: #slots.
-	
+	dogMultiModel := self ensureClassNamed: #DogMulti.
+	dogMultiModel addSlot: #address.
+	dogMultiModel
+		addLocalMethodFromSource:
+			'address
+		^ address'
+		selector: #address.
+	dogMultiModel
+		addLocalMethodFromSource:
+			'address: aString
+		^ address := aString'
+		selector: #address:
 ]
