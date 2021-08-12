@@ -80,6 +80,29 @@ ObjVLispMILanguageTest >> testInVMMultiobjectDefinesMLocalMethodReferencingInher
 ]
 
 { #category : #'instance creation' }
+ObjVLispMILanguageTest >> testInVMMultiobjectDefinesMLocalMethodReferencingInheritedSlotFromNormalSuperclassAndExtraSuperclass [
+	entryPointCode := '| dog |
+	dog := DogMulti new.
+	dog color: #red.
+	dog address: #anAddress.
+	dog name: #spike.
+	System log: dog fullData asString.
+	System quit'.
+	expectedResult := 'spikeredanAddress'.
+	
+	model := self newModel.
+	(model classNamed: #DogMulti)
+		addLocalMethodFromSource:
+			'fullData
+		^ name asString, color asString, address asString'
+		selector: #fullData.
+	model generate.
+	self
+		assert: model writeImage executeInVM
+		equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMMultiobjectDoesNotUnderstand [
 	entryPointCode := '| dog |
 	dog := DogMulti new.
