@@ -4,7 +4,7 @@ Class {
 	#category : #'LanguageMetamodels-ObjVLispMultipleInheritance'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'code generation' }
 ObjVLispMIInstanceVariableSlot >> emitStore: aMethodBuilder [
 	"generate bytecode to call the reflective write method of the Slot"
 	| tempName |
@@ -19,7 +19,7 @@ ObjVLispMIInstanceVariableSlot >> emitStore: aMethodBuilder [
 		send: #writeSlot:value:
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'code generation' }
 ObjVLispMIInstanceVariableSlot >> emitValue: aMethodBuilder [
 	aMethodBuilder
 		pushLiteralVariable: (AdditionalBinding key: #slot value: self);
