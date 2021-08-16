@@ -7,7 +7,6 @@ Class {
 { #category : #metamodel }
 ObjVLispDynMethod class >> tempVariableModel [
 	^ DynamicVariableModel
-	"^ TempVariableModel"
 ]
 
 { #category : #hooks }

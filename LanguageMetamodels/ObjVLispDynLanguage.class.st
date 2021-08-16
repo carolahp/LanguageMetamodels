@@ -7,8 +7,14 @@ Class {
 { #category : #metamodel }
 ObjVLispDynLanguage class >> classModel [
 	" Return the subclass of ClassModel that defines the metamodel for classes of the language "
-	"^ ObjVLispDynClass "
 	^ ObjVLispMinClass
+]
+
+{ #category : #metamodel }
+ObjVLispDynLanguage class >> classModelFor: aString [
+	^ (aString endsWith: self dynClassSuffix)
+		ifTrue: [ self dynClassModel ]
+		ifFalse: [ self classModel ]
 ]
 
 { #category : #metamodel }
@@ -17,24 +23,29 @@ ObjVLispDynLanguage class >> customModels [
 ]
 
 { #category : #metamodel }
-ObjVLispDynLanguage class >> tempVariableModel [
-	self deprecated: 'Use MethodModel >> tempVariableModel'.
-	^ DynamicVariableModel
-	"^ TempVariableModel"
+ObjVLispDynLanguage class >> dynClassModel [
+	^ ObjVLispDynClass
+]
+
+{ #category : #metamodel }
+ObjVLispDynLanguage class >> dynClassSuffix [
+	^ 'Dyn'
 ]
 
 { #category : #hooks }
-ObjVLispDynLanguage >> createClassDynTest1 [
+ObjVLispDynLanguage >> createClassTest1Dyn [
 	| test1 |
-	test1 := self ensureClassNamed: #DynTest1.
+	test1 := self ensureClassNamed: #Test1Dyn.
+	self assert: test1 class = ObjVLispDynClass.
 	test1 addLocalMethodFromSource: 'test
 	|  out holahola |
 	holahola := ''hola''.
 	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
 	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	out := DynTest2 new.
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
+	
+	out := Test2Dyn new.
+	System log: ''TEMP AT 1(out):'', (thisContext tempAt:1) asString.
+	System log: ''TEMP AT 2(holahola):'', (thisContext tempAt:2) asString.
 
 	"out readHolaFromOutside.
 		System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
@@ -50,28 +61,36 @@ ObjVLispDynLanguage >> createClassDynTest1 [
 	System log: holahola asString.
 	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
 	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
+	System log: ''self readHolaHola, should be hola''.
 	self readHolahola.
+
 	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
 	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
 	System log: holahola asString.
+
 	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
 	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	self writeHolahola.
 
+	System log: ''self writeHolahola, should be chao''.
+	self writeHolahola.
+	
+	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
 	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
+	System log: ''holahola asString, should be chao''.	
 	System log: holahola asString.' selector: #test.
 	
 	test1 addLocalMethodFromSource: 'readHolahola
 	^ holahola' selector: #readHolahola.
 	test1 addLocalMethodFromSource: 'writeHolahola
-	^ holahola:=chao' selector: #writeHolahola.
+	^ holahola := #chao' selector: #writeHolahola.
 	
 ]
 
 { #category : #hooks }
-ObjVLispDynLanguage >> createClassDynTest2 [
+ObjVLispDynLanguage >> createClassTest2Dyn [
 	| test2 |
-	test2 := self ensureClassNamed: #DynTest2.
+	test2 := self ensureClassNamed: #Test2Dyn.
+	self assert: test2 class = ObjVLispDynClass. 
 	test2 addLocalMethodFromSource: 'readHolaFromOutside
 	System log: ''Leyendo desde DynamicTest2: '', holahola asString' 
 	selector: #readHolaFromOutside.
@@ -82,6 +101,7 @@ ObjVLispDynLanguage >> createClassDynTest2 [
 
 { #category : #hooks }
 ObjVLispDynLanguage >> transform [ 
+	super transform.
 	self transformKernelClasses.
 	self transformDynamicVariableClass.
 	self transformTestClasses.
@@ -97,9 +117,10 @@ ObjVLispDynLanguage >> transformDynamicVariableClass [
 	classDynVar addLocalMethodFromSource: 'read
 	| context var |
 	context := thisContext sender.
+	System log: ''DynVar>>read''.
 	[ context isNil ] whileFalse: [ 
-		
 		var := context method dynamicVariableNamed: name.
+		System log: context asString, '' (var is'', var asString, '')''.
 		(var isNil not) ifTrue: [ 
 			^ context tempAt: var index ].
 		context :=  context sender
@@ -108,8 +129,10 @@ ObjVLispDynLanguage >> transformDynamicVariableClass [
 	classDynVar addLocalMethodFromSource: 'write: anObject
 	| context var |
 	context := thisContext sender.
+	System log: ''DynVar>>write:'', anObject asString.
 	[ context isNil ] whileFalse: [ 
 		var := context method dynamicVariableNamed: name.
+		System log: context asString, '' (var is'', var asString, '')''.
 		(var isNil not) ifTrue: [ 
 			^ context tempAt: var index put: anObject ].
 		context :=  context sender
@@ -167,6 +190,6 @@ ObjVLispDynLanguage >> transformKernelClasses [
 
 { #category : #hooks }
 ObjVLispDynLanguage >> transformTestClasses [
-	self createClassDynTest1.
-	self createClassDynTest2
+	self createClassTest1Dyn.
+	self createClassTest2Dyn
 ]

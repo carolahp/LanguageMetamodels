@@ -50,6 +50,6 @@ ObjVLispSlotsLanguageTest >> testInVMWriteAPointSlotsXAndY [
 	System quit'.
 	expectedResult := '1
 2'.
-self halt.
+
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]

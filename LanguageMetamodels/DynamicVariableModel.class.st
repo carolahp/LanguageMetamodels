@@ -31,25 +31,26 @@ DynamicVariableModel class >> role [
 
 { #category : #'accessing-api' }
 DynamicVariableModel >> asRemoteObjectInObjectSpace: anEP2ObjectSpace [ 
-	remote := ((self parent classNamed: 'DynVar') ensureRemote basicNew).
-	remote instanceVariableAtIndex: 1 put: (objectName asRemoteObjectInObjectSpace: anEP2ObjectSpace).
-	remote instanceVariableAtIndex: 2 put: (index asRemoteObjectInObjectSpace: anEP2ObjectSpace).
+	remote := ((self parent classWithRole: 'DynamicVariable') ensureRemote basicNew).
+	remote name: self name.
+	remote index: self index.
 	^ remote
 ]
 
 { #category : #'accessing-api' }
 DynamicVariableModel >> emitStore: methodBuilder [
-
 	"generate bytecode to call the reflective write method of the Slot"
-	| tempName |
 
-	tempName := '0slotTempForStackManipulation'.  
+	| tempName |
+	tempName := '0slotTempForStackManipulation'.
 	methodBuilder
 		addTemp: tempName;
 		storeTemp: tempName;
 		popTop;
-		"pushReceiver;"
-		pushLiteralVariable: (AdditionalBinding key: #dynvar value: (self asRemoteObjectInObjectSpace: self environment objectSpace));
+		pushLiteralVariable:
+			(AdditionalBinding
+				key: #dynvar
+				value: (self asRemoteObjectInObjectSpace: self environment objectSpace));
 		pushTemp: tempName;
 		send: #write:
 ]
@@ -57,19 +58,16 @@ DynamicVariableModel >> emitStore: methodBuilder [
 { #category : #'accessing-api' }
 DynamicVariableModel >> emitValue: methodBuilder [
 	methodBuilder
-		pushLiteralVariable: (AdditionalBinding key: #dynvar value: (self asRemoteObjectInObjectSpace: self parent objectSpace));
-		"pushReceiver;"
-		send: #read
+		pushLiteralVariable:
+			(AdditionalBinding
+				key: #dynvar
+				value: (self asRemoteObjectInObjectSpace: self parent objectSpace));
+			send: #read
 ]
 
 { #category : #accessing }
 DynamicVariableModel >> index [
 	^ index
-]
-
-{ #category : #accessing }
-DynamicVariableModel >> index: anInteger [ 
-	index := anInteger
 ]
 
 { #category : #'accessing-api' }
