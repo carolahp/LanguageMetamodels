@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #metamodel }
+DynamicVariableModel class >> acceptsUndeclaredReferences [
+	^ true
+]
+
+{ #category : #metamodel }
 DynamicVariableModel class >> allModelInstVarNames [
 	^ #(#index #name)
 ]
