@@ -15,16 +15,20 @@ Class {
 
 { #category : #install }
 OwnerClass >> installCustom [
-	| dictionary |
 	super installCustom.
 	"dictionary := self objectSpace newRemoteDictionaryOfSize: 2."
-	dictionary := self newInstruction
-		code: 'InstancesDictionary new: 100';
-		temps: #();
-		evaluate.
-	self remote instancesDict: dictionary.
+	self remote instancesDict: self instancesDict.
 	self test.
 	self parent myRemoteSystemDictionary 
 		at: self name asSymbol
 		put: self remote
+]
+
+{ #category : #install }
+OwnerClass >> instancesDict [
+	^ self newInstruction
+		code: 'InstancesDictionary new: 100';
+		temps: #();
+		evaluate.
+	
 ]

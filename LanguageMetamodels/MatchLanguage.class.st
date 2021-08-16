@@ -101,11 +101,6 @@ MatchLanguage >> firstMetaclasses [
 	^ { metaclass . metaclass metaclass }
 ]
 
-{ #category : #hooks }
-MatchLanguage >> initializeSpecialObjectsArray [
-	^ nil
-]
-
 { #category : #roles }
 MatchLanguage >> isValidMetaclassName: aString [
 	^ (aString endsWith: self class metaclassSuffix)

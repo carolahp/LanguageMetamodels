@@ -70,6 +70,7 @@ PrototypesLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 { #category : #hooks }
 PrototypesLanguage >> initializeRemoteGlobals [
 	| smalltalkImageDef smalltalk remoteSystemDictionary |
+	self deprecated: 'use LanguageModel>>loadGlobals, and set their initial value'.
 	smalltalkImageDef := self
 		classWithRole: #SmalltalkImage.
 	remoteSystemDictionary := self remote objectSpace systemDictionary systemDictionary.

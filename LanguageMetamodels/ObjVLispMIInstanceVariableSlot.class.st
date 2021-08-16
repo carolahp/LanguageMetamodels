@@ -1,7 +1,7 @@
 Class {
 	#name : #ObjVLispMIInstanceVariableSlot,
 	#superclass : #InstanceVariableSlotModel,
-	#category : #'LanguageMetamodels-ObjVLispMI'
+	#category : #'LanguageMetamodels-ObjVLispMultipleInheritance'
 }
 
 { #category : #'as yet unclassified' }

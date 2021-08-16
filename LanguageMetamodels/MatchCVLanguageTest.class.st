@@ -16,7 +16,7 @@ MatchCVLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
-MatchCVLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
+MatchCVLanguageTest >> testInVMCreateAndAccessDictionary [
 	entryPointCode := '| dict |
 	dict := Dictionary new.
 	dict at: #a put: #hola.

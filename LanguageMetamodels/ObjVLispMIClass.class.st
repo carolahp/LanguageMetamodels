@@ -4,8 +4,13 @@ Class {
 	#instVars : [
 		'slots'
 	],
-	#category : #'LanguageMetamodels-ObjVLispMI'
+	#category : #'LanguageMetamodels-ObjVLispMultipleInheritance'
 }
+
+{ #category : #metamodel }
+ObjVLispMIClass class >> customModels [
+	^ { self instanceVariableSlotModel }
+]
 
 { #category : #install }
 ObjVLispMIClass >> initialize [ 

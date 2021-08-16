@@ -52,7 +52,9 @@ CandleNSLanguage class >> classModel [
 
 { #category : #'accessing classes' }
 CandleNSLanguage >> allClasses [
-	^ self packages flatCollect: #definedBehaviors
+	^ ((self packages flatCollect: #definedBehaviors)
+		collect: [ :beh | beh fullName -> beh ]) asDictionary
+		ifEmpty: [ IdentityDictionary new ]
 ]
 
 { #category : #'accessing classes' }

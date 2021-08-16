@@ -11,7 +11,7 @@ KernelQuitLanguageTest >> languageModelClass [
 
 { #category : #'instance creation' }
 KernelQuitLanguageTest >> sourcesPath [
-	^ PBBootstrapGeneric baseLanguageModelRepository location asString
+	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
 ]
 
 { #category : #'instance creation' }

@@ -22,7 +22,7 @@ CandleLanguageTest >> testInInterpreterExecuteOnePlusOne [
 ]
 
 { #category : #'instance creation' }
-CandleLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
+CandleLanguageTest >> testInVMCreateAndAccessDictionary [
 	entryPointCode := '| dict |
 	dict := PCDictionary new.
 	dict at: #a put: #hola.
@@ -34,14 +34,14 @@ CandleLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
 ]
 
 { #category : #'instance creation' }
-CandleLanguageTest >> testInVMExecuteOnePlusOne [
+CandleLanguageTest >> testInVMOnePlusOne [
 	entryPointCode := 'PCSystem log: (1+1) asString. PCSystem quit'.
 	expectedResult := '2'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
 { #category : #'instance creation' }
-CandleLanguageTest >> testInVMExecutePrintHola [
+CandleLanguageTest >> testInVMPrintHola [
 	entryPointCode := 'PCSystem log: ''hola'' asString. PCSystem quit'.
 	expectedResult := 'hola'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult

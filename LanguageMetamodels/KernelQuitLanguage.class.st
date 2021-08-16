@@ -22,24 +22,10 @@ KernelQuitLanguage class >> classModel [
 	^ KernelQuitClass
 ]
 
-{ #category : #'hooks-api' }
-KernelQuitLanguage class >> globalModel [
-	^KernelQuitGlobal
-]
-
 { #category : #hooks }
-KernelQuitLanguage >> createInitialObjects [
-	^ nil
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> createRemoteSystemDictionary [
-	^nil
-]
-
-{ #category : #roles }
 KernelQuitLanguage >> customClassRoles [
-	^nil
+	^ { #ProtoObject -> #Object.
+	#Class -> #Metaclass }
 ]
 
 { #category : #hooks }
@@ -63,16 +49,6 @@ KernelQuitLanguage >> firstMetaclasses [
 ]
 
 { #category : #hooks }
-KernelQuitLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
-	^ nil
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> initializeSpecialObjectsArray [
-	^ nil
-]
-
-{ #category : #hooks }
 KernelQuitLanguage >> installClasses [
 	self classClass install
 ]
@@ -80,11 +56,6 @@ KernelQuitLanguage >> installClasses [
 { #category : #hooks }
 KernelQuitLanguage >> installMethods [
 	self classClass installMethods
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> loadGlobalVariables [
-	^ nil
 ]
 
 { #category : #roles }

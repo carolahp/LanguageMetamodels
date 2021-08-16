@@ -1,7 +1,7 @@
 Class {
 	#name : #ObjVLispMILanguage,
 	#superclass : #ObjVLispMinLanguage,
-	#category : #'LanguageMetamodels-ObjVLispMI'
+	#category : #'LanguageMetamodels-ObjVLispMultipleInheritance'
 }
 
 { #category : #'hooks-api' }

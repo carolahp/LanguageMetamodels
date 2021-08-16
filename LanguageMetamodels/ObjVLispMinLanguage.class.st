@@ -31,18 +31,6 @@ ObjVLispMinLanguage class >> classModel [
 	^ ObjVLispMinClass  
 ]
 
-{ #category : #hooks }
-ObjVLispMinLanguage >> createInitialObjects [
-	"perform operations to initialize Classes classPools, or instructinos such as String initialize"
-	^ nil
-]
-
-{ #category : #hooks }
-ObjVLispMinLanguage >> createRemoteSystemDictionary [
-	" return a new SystemDictionary instance, or nil if your language does not define a system dictionary"
-	^ nil
-]
-
 { #category : #roles }
 ObjVLispMinLanguage >> customClassRoles [
 	^ { #ProtoObject -> #Object }
@@ -51,16 +39,6 @@ ObjVLispMinLanguage >> customClassRoles [
 { #category : #hooks }
 ObjVLispMinLanguage >> firstMetaclasses [
 	^{self classClass}
-]
-
-{ #category : #hooks }
-ObjVLispMinLanguage >> initializeSpecialObjectsArray [
-	^ nil
-]
-
-{ #category : #'building-class-model' }
-ObjVLispMinLanguage >> loadGlobalVariables [
-	" no globals in objvlisp min"
 ]
 
 { #category : #hooks }

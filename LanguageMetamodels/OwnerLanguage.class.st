@@ -18,6 +18,11 @@ OwnerLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
+OwnerLanguage class >> customModels [
+	^ {OwnerMetaclass}
+]
+
+{ #category : #'hooks-api' }
 OwnerLanguage class >> globalModel [
 	^ OwnerGlobal
 ]

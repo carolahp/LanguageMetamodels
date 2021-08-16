@@ -32,6 +32,14 @@ CandleNSClass >> fullName [
 ]
 
 { #category : #binding }
+CandleNSClass >> initialize [
+	"force classes to have a package"
+	self package.
+	super initialize.
+	
+]
+
+{ #category : #binding }
 CandleNSClass >> installCustom [
 	self remote
 		name: self name;

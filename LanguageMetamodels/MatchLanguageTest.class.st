@@ -16,7 +16,7 @@ MatchLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
-MatchLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
+MatchLanguageTest >> testInVMCreateAndAccessDictionary [
 	entryPointCode := '| dict |
 	dict := Dictionary new.
 	dict at: #a put: #hola.
@@ -28,7 +28,7 @@ MatchLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
 ]
 
 { #category : #'instance creation' }
-MatchLanguageTest >> testInVMExecuteGetClassInstVarsNames [
+MatchLanguageTest >> testInVMGetClassInstVarsNames [
 	entryPointCode := '
 	System log: Point instVarsNames asString. 
 	System quit'.
@@ -37,7 +37,7 @@ MatchLanguageTest >> testInVMExecuteGetClassInstVarsNames [
 ]
 
 { #category : #'instance creation' }
-MatchLanguageTest >> testInVMExecuteOnePlusOne [
+MatchLanguageTest >> testInVMOnePlusOne [
 	entryPointCode := 'System log: (1+1) asString. System quit'.
 	expectedResult := '2'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult

@@ -15,7 +15,7 @@ ObjVLispMinLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
-ObjVLispMinLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
+ObjVLispMinLanguageTest >> testInVMCreateAndAccessDictionary [
 	entryPointCode := '| dict |
 	dict := Dictionary new.
 	dict at: #a put: #hola.
@@ -27,21 +27,21 @@ ObjVLispMinLanguageTest >> testInVMExecuteCreateAndAccessDictionary [
 ]
 
 { #category : #'instance creation' }
-ObjVLispMinLanguageTest >> testInVMExecutePrintClassName [
+ObjVLispMinLanguageTest >> testInVMPrintClassName [
 	entryPointCode := 'System log: Point name asString. System quit'.
 	expectedResult := 'Point'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
 { #category : #'instance creation' }
-ObjVLispMinLanguageTest >> testInVMExecutePrintHola [
+ObjVLispMinLanguageTest >> testInVMPrintHola [
 	entryPointCode := 'System log: ''hola'' asString. System quit'.
 	expectedResult := 'hola'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
 { #category : #'instance creation' }
-ObjVLispMinLanguageTest >> testInVMExecutePrintThisContext [
+ObjVLispMinLanguageTest >> testInVMPrintThisContext [
 	entryPointCode := 'System log: thisContext asString. System quit'.
 	expectedResult := '*nil* UndefinedObject(UndefinedObject) >>> entryPoint'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult

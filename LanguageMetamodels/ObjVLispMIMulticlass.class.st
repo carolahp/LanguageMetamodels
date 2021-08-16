@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'superclasses'
 	],
-	#category : #'LanguageMetamodels-ObjVLispMI'
+	#category : #'LanguageMetamodels-ObjVLispMultipleInheritance'
 }
 
 { #category : #metamodel }
