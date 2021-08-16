@@ -13,7 +13,7 @@ ObjVLispDynLanguage class >> classModel [
 
 { #category : #metamodel }
 ObjVLispDynLanguage class >> customModels [
-	^ DynamicVariableModel
+	^ {DynamicVariableModel}
 ]
 
 { #category : #metamodel }
@@ -32,7 +32,7 @@ ObjVLispDynLanguage >> createClassDynTest1 [
 	holahola := ''hola''.
 	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
 	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	out := DynamicTest2 new.
+	out := DynTest2 new.
 	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
 	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
 
@@ -90,9 +90,10 @@ ObjVLispDynLanguage >> transform [
 { #category : #hooks }
 ObjVLispDynLanguage >> transformDynamicVariableClass [
 	| classDynVar |
-	classDynVar := self ensureClassNamed: #DynVar.
-	classDynVar addSlot: #name.
-	classDynVar addSlot: #index.
+	classDynVar := self classWithRole: #DynamicVariable.
+	self assert: (classDynVar slotNamed: #index) isNotNil.
+	self assert: (classDynVar slotNamed: #name) isNotNil.
+	
 	classDynVar addLocalMethodFromSource: 'read
 	| context var |
 	context := thisContext sender.

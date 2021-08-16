@@ -17,8 +17,9 @@ ObjVLispDynLanguageTest >> sourcesPath [
 { #category : #'instance creation' }
 ObjVLispDynLanguageTest >> testInVMExecuteDynamicVarTest [
 	"This won't work because EP2SemanticAnalyzer>>declareVariableNode: is not creating instances of VariableModel"
-	entryPointCode := 'System log: ''Processor: '', Processor asString. 
-	DynamicTest new test.
+	entryPointCode := 
+	'System log: ''Processor: '', Processor asString. 
+	DynTest1 new test.
 	System quit.'.
 	expectedResult := 'nil'.
 	self assert: (self inVMExecuteEntryPoint) equals: expectedResult

@@ -4,6 +4,16 @@ Class {
 	#category : #'LanguageMetamodels-ObjVLispDyn'
 }
 
+{ #category : #metamodel }
+DynamicVariableModel class >> allModelInstVarNames [
+	^ #(#index #name)
+]
+
+{ #category : #layout }
+DynamicVariableModel class >> defaultLayout [
+	^ EP2FixedLayout
+]
+
 { #category : #instanciation }
 DynamicVariableModel class >> named: aString parent: anEP2MLanguage [ 
 
@@ -53,6 +63,22 @@ DynamicVariableModel >> emitValue: methodBuilder [
 ]
 
 { #category : #accessing }
+DynamicVariableModel >> index [
+	^ index
+]
+
+{ #category : #accessing }
 DynamicVariableModel >> index: anInteger [ 
 	index := anInteger
+]
+
+{ #category : #'accessing-api' }
+DynamicVariableModel >> initialize [ 
+	super initialize.
+	name := objectName
+]
+
+{ #category : #accessing }
+DynamicVariableModel >> name [
+	^ name
 ]
