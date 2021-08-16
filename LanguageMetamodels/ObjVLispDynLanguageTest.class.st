@@ -15,6 +15,25 @@ ObjVLispDynLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
+ObjVLispDynLanguageTest >> testInVMAccessCompiledMethodDynamicVariables [
+	"This won't work because EP2SemanticAnalyzer>>declareVariableNode: is not creating instances of VariableModel"
+	entryPointCode := 
+	' |var1 var2|
+	var1 := (Test1Dyn methodDict at: #test) dynamicVariableNamed: #out.
+	var2 := (Test1Dyn methodDict at: #test) dynamicVariableNamed: #holahola.
+	System log: var1 name asString.
+	System log: var1 index asString.
+	System log: var2 name asString.
+	System log: var2 index asString.
+	System quit.'.
+	expectedResult := 'out
+1
+holahola
+2'.
+	self assert: (self inVMExecuteEntryPoint) equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 ObjVLispDynLanguageTest >> testInVMExecuteDynamicVarTest [
 	
 	entryPointCode := 
@@ -36,20 +55,5 @@ ObjVLispDynLanguageTest >> testInVMPrintCompiledMethod [
 	'System log: (DynTest1 methodDict at: #test) asString. 
 	System quit.'.
 	expectedResult := 'DynTest1>>test'.
-	self assert: (self inVMExecuteEntryPoint) equals: expectedResult
-]
-
-{ #category : #'instance creation' }
-ObjVLispDynLanguageTest >> testInVMPrintCompiledMethodLiterals [
-	"This won't work because EP2SemanticAnalyzer>>declareVariableNode: is not creating instances of VariableModel"
-	entryPointCode := 
-	'System log: (Test1Dyn methodDict at: #test) allLiterals asString. 
-	System quit.'.
-	expectedResult := '#(#out #holahola)'.
-	"self newModel.
-	model generate.
-	self halt.
-	model spurImage."
-	
 	self assert: (self inVMExecuteEntryPoint) equals: expectedResult
 ]
