@@ -236,7 +236,7 @@ AnimalMulti'.
 ]
 
 { #category : #'instance creation' }
-ObjVLispMILanguageTest >> testInVMWriteAPointSlotX [
+ObjVLispMILanguageTest >> testInVMWriteAPointSlotsXAndY [
 	entryPointCode := '|p|
 	p := Point new.
 	p x: 1 y: 2.

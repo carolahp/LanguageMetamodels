@@ -15,6 +15,16 @@ ObjVLispSlotsLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
+ObjVLispSlotsLanguageTest >> testInVMCreateArray [
+	entryPointCode := '
+	System log: #() asString.
+	System quit'.
+	expectedResult := '#()'.
+
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
 ObjVLispSlotsLanguageTest >> testInVMGetPointSlots [
 	entryPointCode := '
 	System log: Point allSlots asString.
@@ -27,5 +37,19 @@ ObjVLispSlotsLanguageTest >> testInVMGetPointSlots [
 ObjVLispSlotsLanguageTest >> testInVMPrintHola [
 	entryPointCode := 'System log: ''hola'' asString. System quit'.
 	expectedResult := 'hola'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+]
+
+{ #category : #'instance creation' }
+ObjVLispSlotsLanguageTest >> testInVMWriteAPointSlotsXAndY [
+	entryPointCode := '|p|
+	p := Point new.
+	p x: 1 y: 2.
+	System log: p x asString.
+	System log: p y asString.
+	System quit'.
+	expectedResult := '1
+2'.
+self halt.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]

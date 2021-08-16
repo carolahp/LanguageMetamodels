@@ -14,7 +14,8 @@ ObjVLispSlotsLanguage class >> classModel [
 ObjVLispSlotsLanguage >> transform [ 
 	super transform.
 	self transformSlotModel.
-	self transformClassModel 
+	self transformObjectModel.
+	self transformClassModel
 ]
 
 { #category : #hooks }
@@ -39,19 +40,20 @@ ObjVLispSlotsLanguage >> transformClassModel [
 ]
 
 { #category : #hooks }
+ObjVLispSlotsLanguage >> transformObjectModel [
+	| objectModel |
+	objectModel := self classProtoObject.
+	objectModel
+		addLocalMethodFromSource:
+			'writeSlot: aSlot value: anObject
+	^aSlot write: anObject to: self'
+		selector: #writeSlot:value:
+]
+
+{ #category : #hooks }
 ObjVLispSlotsLanguage >> transformSlotModel [
 	| slotModel |
 	slotModel := self classNamed: #InstanceVariableSlot.
-	slotModel
-		addLocalMethodFromSource:
-			'read: anObject
-			^ anObject instVarsDict at: name'
-		selector: #read:.
-	slotModel
-		addLocalMethodFromSource:
-			'write: aValue to: anObject
-			^ anObject instVarsDict at: name put: aValue'
-		selector: #write:to:.
 	slotModel
 		addLocalMethodFromSource:
 			'printOn: aStream
@@ -65,4 +67,20 @@ ObjVLispSlotsLanguage >> transformSlotModel [
 			'name
 				^ name'
 		selector: #name.
+	
+	slotModel
+		addLocalMethodFromSource:
+			'read: anObject
+			System log: ''reading from slot''.
+			^ nil
+			"^ thisContext object: anObject instVarAt: index"'
+		selector: #read:.
+	slotModel
+		addLocalMethodFromSource:
+			'write: aValue to: anObject
+			System log: ''writing from slot''.
+			^ nil.
+			"^ thisContext object: anObject instVarAt: index put: aValue"'
+		selector: #write:to:.
+	
 ]
