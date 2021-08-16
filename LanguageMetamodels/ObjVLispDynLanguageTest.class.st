@@ -11,7 +11,7 @@ ObjVLispDynLanguageTest >> languageModelClass [
 
 { #category : #'instance creation' }
 ObjVLispDynLanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispDyn'
+	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
 ]
 
 { #category : #'instance creation' }

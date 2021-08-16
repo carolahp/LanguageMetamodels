@@ -14,6 +14,11 @@ DynamicVariableModel class >> named: aString parent: anEP2MLanguage [
 		yourself
 ]
 
+{ #category : #instanciation }
+DynamicVariableModel class >> role [ 
+	^ 'DynamicVariable'
+]
+
 { #category : #'accessing-api' }
 DynamicVariableModel >> asRemoteObjectInObjectSpace: anEP2ObjectSpace [ 
 	remote := ((self parent classNamed: 'DynVar') ensureRemote basicNew).
