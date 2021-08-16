@@ -39,50 +39,21 @@ ObjVLispDynLanguage >> createClassTest1Dyn [
 	self assert: test1 class = ObjVLispDynClass.
 	test1 addLocalMethodFromSource: 'test
 	|  out holahola |
-	holahola := ''hola''.
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	
 	out := Test2Dyn new.
-	System log: ''TEMP AT 1(out):'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2(holahola):'', (thisContext tempAt:2) asString.
-
-	"out readHolaFromOutside.
-		System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-		System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString."
-	
+	holahola := ''hola''.
+	System log: holahola asString. "prints hola"
+	System log: out readHolaFromOutside asString. "prints hola"
 	out writeHolaFromOutside.
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	System log: holahola asString.
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-
-	System log: holahola asString.
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	System log: ''self readHolaHola, should be hola''.
-	self readHolahola.
-
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	System log: holahola asString.
-
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-
-	System log: ''self writeHolahola, should be chao''.
+	System log: holahola asString. "prints 12"
+	System log: self readHolahola asString. "prints 12"
 	self writeHolahola.
-	
-	System log: ''TEMP AT 1:'', (thisContext tempAt:1) asString.
-	System log: ''TEMP AT 2:'', (thisContext tempAt:2) asString.
-	System log: ''holahola asString, should be chao''.	
-	System log: holahola asString.' selector: #test.
+	System log: holahola asString "prints chao".
+	System log: out readHolaFromOutside asString. "prints chao"' selector: #test.
 	
 	test1 addLocalMethodFromSource: 'readHolahola
 	^ holahola' selector: #readHolahola.
 	test1 addLocalMethodFromSource: 'writeHolahola
-	^ holahola := #chao' selector: #writeHolahola.
+	holahola := #chao' selector: #writeHolahola.
 	
 ]
 
@@ -92,7 +63,7 @@ ObjVLispDynLanguage >> createClassTest2Dyn [
 	test2 := self ensureClassNamed: #Test2Dyn.
 	self assert: test2 class = ObjVLispDynClass. 
 	test2 addLocalMethodFromSource: 'readHolaFromOutside
-	System log: ''Leyendo desde DynamicTest2: '', holahola asString' 
+	^ holahola' 
 	selector: #readHolaFromOutside.
 	test2 addLocalMethodFromSource: 'writeHolaFromOutside
 	holahola := 12' 
@@ -117,10 +88,8 @@ ObjVLispDynLanguage >> transformDynamicVariableClass [
 	classDynVar addLocalMethodFromSource: 'read
 	| context var |
 	context := thisContext sender.
-	System log: ''DynVar>>read''.
 	[ context isNil ] whileFalse: [ 
 		var := context method dynamicVariableNamed: name.
-		System log: context asString, '' (var is'', var asString, '')''.
 		(var isNil not) ifTrue: [ 
 			^ context tempAt: var index ].
 		context :=  context sender
@@ -129,10 +98,8 @@ ObjVLispDynLanguage >> transformDynamicVariableClass [
 	classDynVar addLocalMethodFromSource: 'write: anObject
 	| context var |
 	context := thisContext sender.
-	System log: ''DynVar>>write:'', anObject asString.
 	[ context isNil ] whileFalse: [ 
 		var := context method dynamicVariableNamed: name.
-		System log: context asString, '' (var is'', var asString, '')''.
 		(var isNil not) ifTrue: [ 
 			^ context tempAt: var index put: anObject ].
 		context :=  context sender

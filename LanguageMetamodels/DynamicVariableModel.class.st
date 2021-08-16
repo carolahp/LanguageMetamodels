@@ -65,11 +65,6 @@ DynamicVariableModel >> emitValue: methodBuilder [
 			send: #read
 ]
 
-{ #category : #accessing }
-DynamicVariableModel >> index [
-	^ index
-]
-
 { #category : #'accessing-api' }
 DynamicVariableModel >> initialize [ 
 	super initialize.

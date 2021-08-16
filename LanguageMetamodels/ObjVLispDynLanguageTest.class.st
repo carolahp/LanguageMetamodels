@@ -20,7 +20,12 @@ ObjVLispDynLanguageTest >> testInVMExecuteDynamicVarTest [
 	entryPointCode := 
 	'Test1Dyn new test.
 	System quit.'.
-	expectedResult := 'nil'.
+	expectedResult := 'hola
+hola
+12
+12
+chao
+chao'.
 	self assert: (self inVMExecuteEntryPoint) equals: expectedResult
 ]
 
