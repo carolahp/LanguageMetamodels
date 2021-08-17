@@ -29,6 +29,22 @@ DynamicVariableModel class >> named: aString parent: anEP2MLanguage [
 		yourself
 ]
 
+{ #category : #metamodel }
+DynamicVariableModel class >> newFrom: aEBVariableNode inContext: anEP2CompilationContext [
+	| node context |
+	node := aEBVariableNode.
+	context := anEP2CompilationContext.
+	node methodOrBlockNode isBlock
+		ifTrue: [ ^ super
+				newFrom: aEBVariableNode
+				inContext: anEP2CompilationContext ].
+	^ (self 
+		named: node name 
+		parent: context environment)
+		index: (node temporaryVariables indexOf: node name); "index 0 means that the variable was not defined in the method, it is a dynamic var!"
+		yourself
+]
+
 { #category : #instanciation }
 DynamicVariableModel class >> role [ 
 	^ 'DynamicVariable'
@@ -40,6 +56,12 @@ DynamicVariableModel >> asRemoteObjectInObjectSpace: anEP2ObjectSpace [
 	remote name: self name.
 	remote index: self index.
 	^ remote
+]
+
+{ #category : #'accessing-api' }
+DynamicVariableModel >> asUndeclaredReference [
+ 	self index: 0. "index 0 means the temp is not defined in the method"
+	^ self	
 ]
 
 { #category : #'accessing-api' }

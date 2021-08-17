@@ -15,6 +15,24 @@ ObjVLispMinLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
+ObjVLispMinLanguageTest >> testInUndeclaredGlobal [
+	entryPointCode := 'System1'.
+	self should: [ self inVMExecuteEntryPoint ] raise: EP2UndeclaredBindingError
+]
+
+{ #category : #'instance creation' }
+ObjVLispMinLanguageTest >> testInUndeclaredReadLiteral [
+	entryPointCode := 'a + 1'.
+	self should: [ self inVMExecuteEntryPoint ] raise: EP2UndeclaredBindingError
+]
+
+{ #category : #'instance creation' }
+ObjVLispMinLanguageTest >> testInUndeclaredWriteLiteral [
+	entryPointCode := 'a := 1'.
+	self should: [ self inVMExecuteEntryPoint ] raise: EP2UndeclaredBindingError
+]
+
+{ #category : #'instance creation' }
 ObjVLispMinLanguageTest >> testInVMCreateAndAccessDictionary [
 	entryPointCode := '| dict |
 	dict := Dictionary new.
@@ -37,12 +55,6 @@ ObjVLispMinLanguageTest >> testInVMPrintClassName [
 ObjVLispMinLanguageTest >> testInVMPrintHola [
 	entryPointCode := 'System log: ''hola'' asString. System quit'.
 	expectedResult := 'hola'.
-	self newModel.
-	model generate.
-	model spurImage.
-	self assert: (model classNamed: #SmallInteger) remote allSlots equals: #().
-	
-	self assert: (model classNamed: #SmallInteger) remote layout class equals: EP2ImmediateLayout.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 

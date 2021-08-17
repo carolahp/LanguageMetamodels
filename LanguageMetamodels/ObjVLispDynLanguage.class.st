@@ -32,6 +32,11 @@ ObjVLispDynLanguage class >> dynClassSuffix [
 	^ 'Dyn'
 ]
 
+{ #category : #metamodel }
+ObjVLispDynLanguage class >> undeclaredVariableModel [
+	^ ObjVLispDynUndeclaredVariable
+]
+
 { #category : #hooks }
 ObjVLispDynLanguage >> createClassTest1Dyn [
 	| test1 |
@@ -159,4 +164,9 @@ ObjVLispDynLanguage >> transformKernelClasses [
 ObjVLispDynLanguage >> transformTestClasses [
 	self createClassTest1Dyn.
 	self createClassTest2Dyn
+]
+
+{ #category : #hooks }
+ObjVLispDynLanguage >> undeclaredVariableModel [
+	^ ObjVLispDynUndeclaredVariable
 ]

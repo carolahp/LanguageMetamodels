@@ -15,23 +15,9 @@ ObjVLispNSLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
-ObjVLispNSLanguageTest >> testInModelAccessClassWithRole [
-	
-	entryPointCode := ''.
-	model := self newModel.
-	self assert: (model classNamed: #Array) role name equals: #Array.
-	self assert: (model classNamed: #SmallInteger) role name equals: #SmallInteger.
-	self assert: (model classNamed: #SmallInteger) layout class equals: EP2ImmediateLayout.
-	model generate.
-	self assert: (model classNamed: #SmallInteger) remote layout class equals: EP2ImmediateLayout.
-	
-	
-]
-
-{ #category : #'instance creation' }
 ObjVLispNSLanguageTest >> testInVMAccessClassesInPackage [
 	
-	entryPointCode := 'System log: System asString.
+	entryPointCode := 'System log: System name asString.
 	System quit'.
 	expectedResult := 'System'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
