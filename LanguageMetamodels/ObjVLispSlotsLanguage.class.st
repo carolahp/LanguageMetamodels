@@ -1,3 +1,6 @@
+"
+ObjVLisp with first class instance variables, as slots
+"
 Class {
 	#name : #ObjVLispSlotsLanguage,
 	#superclass : #ObjVLispMinLanguage,

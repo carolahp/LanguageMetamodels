@@ -1,4 +1,6 @@
 "
+Candle with defining objects with owner.
+
 Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc/tree/ownerlanguage
 and set them in the constructor 
 OwnerLanguage 
@@ -18,7 +20,7 @@ OwnerLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
-OwnerLanguage class >> customModels [
+OwnerLanguage class >> customFirstClassModels [
 	^ {self metaclassModel}
 ]
 

@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #metamodel }
-ObjVLispMIClass class >> customModels [
+ObjVLispMIClass class >> customFirstClassModels [
 	^ { self instanceVariableSlotModel }
 ]
 

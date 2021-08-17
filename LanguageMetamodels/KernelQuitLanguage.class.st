@@ -1,4 +1,6 @@
 "
+Minimum kernel that only quits after it starts.
+
 quit destroy.
 quit := (KernelQuitLanguage  
 	newWithName:  'Quit3' withEntryPoint:  'Metaclass quit.').

@@ -1,5 +1,6 @@
 "
-Match is ObjVLisp with implicit metaclasses. Its source code is the same as ObjVLisp
+Match is ObjVLisp with implicit metaclasses. 
+Its source code is the same as ObjVLisp.
 "
 Class {
 	#name : #MatchLanguage,
@@ -20,7 +21,7 @@ MatchLanguage class >> classModelFor: aString [
 ]
 
 { #category : #metamodel }
-MatchLanguage class >> customModels [
+MatchLanguage class >> customFirstClassModels [
 	^ { self metaclassModel }
 ]
 

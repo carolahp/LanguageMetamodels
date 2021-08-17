@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #instanciation }
-ObjVLispSlotsClass class >> customModels [
+ObjVLispSlotsClass class >> customFirstClassModels [
 	^ { self instanceVariableSlotModel }
 ]
 

@@ -1,3 +1,12 @@
+"
+ObjVLisp with static scope for class names, where packages play the role of ""namespaces"". 
+Classes are visible only from other classes within its same package.
+Packages are first class objects.
+To access a class from an external package, you can send the message #> to a package with the name of the class you want to reference. 
+Example: (Kernel>#Point) returns the class Point in package Kernel. 
+
+The system allows the existence of classes with the same name as far as they belong to different packages.
+"
 Class {
 	#name : #ObjVLispNSLanguage,
 	#superclass : #ObjVLispMinLanguage,
@@ -10,7 +19,7 @@ ObjVLispNSLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
-ObjVLispNSLanguage class >> customModels [ 
+ObjVLispNSLanguage class >> customFirstClassModels [ 
 	^ {self packageModel}
 ]
 

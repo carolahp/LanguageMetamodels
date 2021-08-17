@@ -1,3 +1,15 @@
+"
+ObjVLisp with dynamic temporaries. 
+Allowing methods to define temporaries whose scope is dynamic, i.e. they access and modify temporaries that are defined out of their scope. 
+Example:
+MyClass >> readX 
+	^ x
+MyClass >> test 
+	| x |
+	x := 3.
+	System log: self readX ""prints 3""
+Only methods returning DynamicVariableModel from the hook #tempVariableModel use dynamic temporaries.
+"
 Class {
 	#name : #ObjVLispDynLanguage,
 	#superclass : #ObjVLispMinLanguage,
@@ -18,7 +30,7 @@ ObjVLispDynLanguage class >> classModelFor: aString [
 ]
 
 { #category : #metamodel }
-ObjVLispDynLanguage class >> customModels [
+ObjVLispDynLanguage class >> customFirstClassModels [
 	^ {DynamicVariableModel}
 ]
 

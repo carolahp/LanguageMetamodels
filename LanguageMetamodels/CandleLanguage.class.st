@@ -1,4 +1,7 @@
 "
+Candle is a minimal Pharo-like kernel implementing implicit metaclasses, single inheritance, and class variables.
+Its source code is not the same as ObjVLisp.
+
 Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc (master branch)
 and set them in the constructor 
 --------------------------------------------------------------------------
@@ -52,7 +55,7 @@ CandleLanguage class >> classVariableModel [
 ]
 
 { #category : #'hooks-api' }
-CandleLanguage class >> customModels [
+CandleLanguage class >> customFirstClassModels [
 	^ {self metaclassModel }
 ]
 

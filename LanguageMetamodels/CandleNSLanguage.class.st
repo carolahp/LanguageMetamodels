@@ -51,7 +51,7 @@ CandleNSLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
-CandleNSLanguage class >> customModels [
+CandleNSLanguage class >> customFirstClassModels [
 	^ {self metaclassModel . self packageModel}
 ]
 

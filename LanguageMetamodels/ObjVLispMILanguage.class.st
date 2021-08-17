@@ -1,3 +1,11 @@
+"
+ObjVLisp with multiple inheritance. 
+Each class can have multiple superclasses from which it inherits its instance variables (as slots) and methods.
+Superclasses are defined in a collection. 
+The order in which they are stored defines the priority of method lookups (starting from the first superclass in the collection).
+In case of conflicting methods, the first one to be found is applied.
+In the case of conflicting instance variables (two superclasses defining an inst var with the same name), the subclass defines only one inst var with that name. 
+"
 Class {
 	#name : #ObjVLispMILanguage,
 	#superclass : #ObjVLispMinLanguage,

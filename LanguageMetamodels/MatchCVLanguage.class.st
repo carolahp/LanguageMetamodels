@@ -13,7 +13,7 @@ MatchCVLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
-MatchCVLanguage class >> customModels [
+MatchCVLanguage class >> customFirstClassModels [
 	^ { self metaclassModel }
 ]
 
