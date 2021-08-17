@@ -37,6 +37,9 @@ ObjVLispSlotsLanguageTest >> testInVMGetPointSlots [
 ObjVLispSlotsLanguageTest >> testInVMPrintHola [
 	entryPointCode := 'System log: ''hola'' asString. System quit'.
 	expectedResult := 'hola'.
+	"self newModel.
+model generate.
+model spurImage."
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 

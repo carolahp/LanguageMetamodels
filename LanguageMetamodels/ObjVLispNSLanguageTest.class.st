@@ -29,9 +29,19 @@ ObjVLispNSLanguageTest >> testInModelAccessClassWithRole [
 ]
 
 { #category : #'instance creation' }
-ObjVLispNSLanguageTest >> testInVMAccessKernelPackage [
+ObjVLispNSLanguageTest >> testInVMAccessClassesInPackage [
 	
 	entryPointCode := 'System log: System asString.
+	System quit'.
+	expectedResult := 'System'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
+	
+]
+
+{ #category : #'instance creation' }
+ObjVLispNSLanguageTest >> testInVMAccessKernelPackage [
+	
+	entryPointCode := 'System log: System name asString.
 	System quit'.
 	expectedResult := 'System'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
@@ -42,20 +52,25 @@ ObjVLispNSLanguageTest >> testInVMAccessKernelPackage [
 ObjVLispNSLanguageTest >> testInVMAccessPrivatePackage [
 	
 	entryPointCode := '| dog sys |
+dog := (Pets>#Dog) new.
+dog accessArrayClass.
 sys := (Kernel>#System).
-dog := (Animals>#Dog) new.
-dog logPackage.
 sys quit'.
-	expectedResult := 'Kernel
-PCArray
-Application
-App2'.
-self newModel.
-model generate.
-model spurImage.
-self halt.
+	expectedResult := 'Array'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 	
+]
+
+{ #category : #'instance creation' }
+ObjVLispNSLanguageTest >> testInVMCreateAndAccessDictionary [
+	entryPointCode := '| dict |
+	dict := Dictionary new.
+	dict at: #a put: #hola.
+	dict at: #b put: #chao.
+	System log: (dict at: #a) asString. 
+	System quit'.
+	expectedResult := 'hola'.
+	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 
 { #category : #'instance creation' }

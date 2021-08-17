@@ -37,6 +37,12 @@ ObjVLispMinLanguageTest >> testInVMPrintClassName [
 ObjVLispMinLanguageTest >> testInVMPrintHola [
 	entryPointCode := 'System log: ''hola'' asString. System quit'.
 	expectedResult := 'hola'.
+	self newModel.
+	model generate.
+	model spurImage.
+	self assert: (model classNamed: #SmallInteger) remote allSlots equals: #().
+	
+	self assert: (model classNamed: #SmallInteger) remote layout class equals: EP2ImmediateLayout.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
 ]
 

@@ -61,7 +61,13 @@ ObjVLispNSLanguage >> transformDemoClasses [
 	
 	dog1 := self newClassNamed: #Dog.
 	dog1 package: petsPkg.
-	self addClass: dog1
+	self addClass: dog1.
+	
+	dog1 addLocalMethodFromSource: 'accessArrayClass
+	| logger |
+	logger := Kernel>#System.
+	logger log: (Kernel>#Array) name asString' 
+	selector: #accessArrayClass
 ]
 
 { #category : #hooks }
