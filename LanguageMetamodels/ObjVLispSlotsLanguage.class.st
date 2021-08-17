@@ -39,6 +39,12 @@ ObjVLispSlotsLanguage >> transformClassModel [
 			'slots
 			^ slots'
 		selector: #slots.
+	classModel
+		addLocalMethodFromSource:
+			'slotNamed: aSymbol
+			^ (self allSlots 
+				select: [:slot | slot name = aSymbol asSymbol ]) anyOne'
+		selector: #slotNamed:.
 	
 ]
 
@@ -74,16 +80,12 @@ ObjVLispSlotsLanguage >> transformSlotModel [
 	slotModel
 		addLocalMethodFromSource:
 			'read: anObject
-			System log: ''reading from slot''.
-			^ nil
-			"^ thisContext object: anObject instVarAt: index"'
+			^ thisContext object: anObject instVarAt: index'
 		selector: #read:.
 	slotModel
 		addLocalMethodFromSource:
 			'write: aValue to: anObject
-			System log: ''writing from slot''.
-			^ nil.
-			"^ thisContext object: anObject instVarAt: index put: aValue"'
+			^ thisContext object: anObject instVarAt: index put: aValue'
 		selector: #write:to:.
 	
 ]
