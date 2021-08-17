@@ -21,6 +21,17 @@ ObjVLispNSClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 ]
 
 { #category : #'accessing-api' }
+ObjVLispNSClass >> installCustom [
+	super installCustom.
+	self remote name: self shortName
+]
+
+{ #category : #'accessing-api' }
 ObjVLispNSClass >> name [ 
 	^ self package name, '>', objectName
+]
+
+{ #category : #'accessing-api' }
+ObjVLispNSClass >> shortName [ 
+	^ objectName
 ]

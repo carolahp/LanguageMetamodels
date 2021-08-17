@@ -11,7 +11,12 @@ ObjVLispNSLanguage class >> classModel [
 
 { #category : #'hooks-api' }
 ObjVLispNSLanguage class >> customModels [ 
-	^ self packageModel 
+	^ {self packageModel}
+]
+
+{ #category : #'hooks-api' }
+ObjVLispNSLanguage class >> packageModel [
+	^ ObjVLispNSPackage
 ]
 
 { #category : #hooks }
@@ -29,7 +34,14 @@ ObjVLispNSLanguage >> defaultPackageName [
 ]
 
 { #category : #hooks }
-ObjVLispNSLanguage >> transform [ 
+ObjVLispNSLanguage >> transform [
+	super transform.
+	self transformPackageClass. 
+	self transformDemoClasses
+]
+
+{ #category : #hooks }
+ObjVLispNSLanguage >> transformDemoClasses [
 	| dog animalsPkg petsPkg dog1 |
 	self allClasses do: [ :class | class package: self defaultPackage ].
 	animalsPkg := self ensurePackageNamed: #Animals.
@@ -42,4 +54,27 @@ ObjVLispNSLanguage >> transform [
 	dog1 := self newClassNamed: #Dog.
 	dog1 package: petsPkg.
 	self addClass: dog1
+]
+
+{ #category : #hooks }
+ObjVLispNSLanguage >> transformPackageClass [
+	| classPackage |
+	classPackage := self classWithRole: #Package.
+	self assert: (classPackage slotNamed: #classesDict) isNotNil.
+	self assert: (classPackage slotNamed: #name) isNotNil.
+	classPackage
+		addLocalMethodFromSource:
+			'> aSymbol
+	^ classesDict at: aSymbol ifAbsent: [ nil ]	'
+		selector: #>.
+	classPackage
+		addLocalMethodFromSource:
+			'name
+	^ name	'
+		selector: #name.
+	classPackage
+		addLocalMethodFromSource:
+			'asString
+	^ name	'
+		selector: #asString
 ]

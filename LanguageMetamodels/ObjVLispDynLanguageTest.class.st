@@ -52,8 +52,8 @@ chao'.
 ObjVLispDynLanguageTest >> testInVMPrintCompiledMethod [
 	"This won't work because EP2SemanticAnalyzer>>declareVariableNode: is not creating instances of VariableModel"
 	entryPointCode := 
-	'System log: (DynTest1 methodDict at: #test) asString. 
+	'System log: (Test1Dyn methodDict at: #test) asString. 
 	System quit.'.
-	expectedResult := 'DynTest1>>test'.
+	expectedResult := 'Test1Dyn>>test'.
 	self assert: (self inVMExecuteEntryPoint) equals: expectedResult
 ]
