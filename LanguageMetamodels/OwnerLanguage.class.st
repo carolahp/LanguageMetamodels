@@ -19,7 +19,7 @@ OwnerLanguage class >> classModel [
 
 { #category : #'hooks-api' }
 OwnerLanguage class >> customModels [
-	^ {OwnerMetaclass}
+	^ {self metaclassModel}
 ]
 
 { #category : #'hooks-api' }

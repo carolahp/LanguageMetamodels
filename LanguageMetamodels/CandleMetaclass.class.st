@@ -112,7 +112,7 @@ CandleMetaclass >> isMeta [
 
 { #category : #accessing }
 CandleMetaclass >> metaclass [ 
-	^ self parent classNamed: self defaultMetaclassName
+	^ self parent classWithRole: #Metaclass
 ]
 
 { #category : #hooks }

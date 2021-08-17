@@ -14,7 +14,7 @@ MatchCVLanguage class >> classModel [
 
 { #category : #'hooks-api' }
 MatchCVLanguage class >> customModels [
-	^ { MatchCVMetaclass }
+	^ { self metaclassModel }
 ]
 
 { #category : #'hooks-api' }

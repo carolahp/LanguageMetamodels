@@ -27,6 +27,11 @@ CandleNSPackage >> asMCSnapshot [
 	^ MCSnapshot fromDefinitions: definitions
 ]
 
+{ #category : #installing }
+CandleNSPackage >> asRemoteObjectInObjectSpace: anObjectSpace [
+	^ self ensureRemote
+]
+
 { #category : #binding }
 CandleNSPackage >> at: aString ifAbsent: aBlockClosure [
 	^ self environment at: aString ifAbsent: aBlockClosure
@@ -35,25 +40,13 @@ CandleNSPackage >> at: aString ifAbsent: aBlockClosure [
 { #category : #binding }
 CandleNSPackage >> bindingOf: aSymbol [
 	| result |
-	result := self classNamed: aSymbol ifAbsent: [ nil ].
+	result := self
+		classNamed: aSymbol
+		ifAbsent: [ nil ]
+		ifPresent: [ :classModel | classModel ensureRemote ].
 	result := result
-		ifNil: [ 
-			(self environment bindingOf: aSymbol)
-				ifNil: [ 	^ nil ] ].
-	
+		ifNil: [ (self environment bindingOf: aSymbol) ifNil: [ ^ nil ] ].
 	^ self environment newGlobalBindingFor: aSymbol
-]
-
-{ #category : #binding }
-CandleNSPackage >> classNamed: aSymbol ifAbsent: aBlockClosure [ 
-	| found |
-	found := [ self environment classNamed: aSymbol ]
-		on: PBClassDefinitionNotFound
-		do: [ ^ aBlockClosure value ].
-	found := (self definedBehaviors like: found)
-		ifNil: [ ^ aBlockClosure value ].
-	found ensureRemote.
-	^ found
 ]
 
 { #category : #installing }
@@ -94,9 +87,4 @@ CandleNSPackage >> registerCustom [
 		instanceVariableAtIndex: 1) asRemoteDictionary
 		at: self name asSymbol
 		put: self remote
-]
-
-{ #category : #'accessing remote' }
-CandleNSPackage >> remote [
-	^ remote
 ]

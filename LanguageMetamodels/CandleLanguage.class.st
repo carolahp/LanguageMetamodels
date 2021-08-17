@@ -53,7 +53,7 @@ CandleLanguage class >> classVariableModel [
 
 { #category : #'hooks-api' }
 CandleLanguage class >> customModels [
-	^ {CandleMetaclass}
+	^ {self metaclassModel }
 ]
 
 { #category : #'hooks-api' }
@@ -84,11 +84,6 @@ CandleLanguage class >> newMetaclassFor: aCandleClass [
 				ifNil: [ aCandleClass parent ensureClassNamed: #PCClass ]
 				ifNotNil: [ aCandleClass superclass metaclass ]);
 		soleInstance: aCandleClass
-]
-
-{ #category : #'hooks-api' }
-CandleLanguage class >> packageModel [
-	^ CandleNSPackage 
 ]
 
 { #category : #'hooks-api' }
@@ -263,7 +258,7 @@ CandleLanguage >> test [
 	| model metamodel modelVars metamodelVars modelVarsLast metamodelVarsLast |
 	super test.
 	
-	model := self classNamed: 'PCClass'.
+	model := self classWithRole: 'Class'.
 	metamodel := self class classModel.
 	
 	modelVars := model allInstVarNames.

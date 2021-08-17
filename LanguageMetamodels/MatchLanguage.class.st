@@ -21,7 +21,7 @@ MatchLanguage class >> classModelFor: aString [
 
 { #category : #metamodel }
 MatchLanguage class >> customModels [
-	^ { MatchMetaclass }
+	^ { self metaclassModel }
 ]
 
 { #category : #metamodel }

@@ -8,6 +8,12 @@ Class {
 }
 
 { #category : #binding }
+CandleNSClass >> = aCandleNSClass [
+	(aCandleNSClass class == self class) ifFalse: [ ^ false ].
+	^ self fullName = aCandleNSClass fullName
+]
+
+{ #category : #binding }
 CandleNSClass >> binding [
 	^ self environment environment newGlobalBindingFor: self name asSymbol
 ]
@@ -26,17 +32,17 @@ CandleNSClass >> environment [
 	^ self package
 ]
 
-{ #category : #binding }
-CandleNSClass >> fullName [
-	^ self package name, '>', self name
+{ #category : #hooks }
+CandleNSClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
+	package := self parent ensurePackageNamed: anEP2MCClassDefinition category.
+	package addDefinedBehavior: self.
+	super extendWithMonticelloCustom: anEP2MCClassDefinition.
+	^ self
 ]
 
 { #category : #binding }
-CandleNSClass >> initialize [
-	"force classes to have a package"
-	self package.
-	super initialize.
-	
+CandleNSClass >> fullName [
+	^ self package name, '>', name
 ]
 
 { #category : #binding }
@@ -49,6 +55,31 @@ CandleNSClass >> installCustom [
 		at: self name
 		put: self remote.
 	self remote classVars ifNilObject: [ self initializeClassVars ]
+]
+
+{ #category : #binding }
+CandleNSClass >> name [
+	^ name 
+]
+
+{ #category : #binding }
+CandleNSClass >> name: aString [
+	name := (aString asString copyReplaceAll: 'Kernel>' with: '') asSymbol. 
+	super name: name
+]
+
+{ #category : #binding }
+CandleNSClass >> package [ 
+	^ package ifNil: [ 
+		self package: self parent defaultPackage.
+		self package ]
+]
+
+{ #category : #binding }
+CandleNSClass >> package: aCandleNSPackage [
+	package ifNotNil: [ package removeDefinedBehavior: self ].
+	package := aCandleNSPackage.
+	package addDefinedBehavior: self
 ]
 
 { #category : #binding }

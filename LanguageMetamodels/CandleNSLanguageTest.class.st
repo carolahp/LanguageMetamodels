@@ -23,7 +23,7 @@ CandleNSLanguageTest >> sourcesPath [
 ]
 
 { #category : #'instance creation' }
-CandleNSLanguageTest >> testExecuteInVMAccessPrivatePackage [
+CandleNSLanguageTest >> testInVMAccessPrivatePackage [
 	
 	entryPointCode := '| dog sys |
 sys := (Kernel>#PCSystem).
@@ -35,5 +35,32 @@ PCArray
 Application
 App2'.
 	self assert: self inVMExecuteEntryPoint equals: expectedResult
+	
+]
+
+{ #category : #'instance creation' }
+CandleNSLanguageTest >> testModelDefinesClassDogInPackageApplication [
+	
+	entryPointCode := ''.
+	model := self newModel.
+	self assert: (model classNamed: #Dog) isCandleClass.
+	self assert: (model classNamed: #Dog) package name equals: #Application.
+	
+]
+
+{ #category : #'instance creation' }
+CandleNSLanguageTest >> testModelDefinesClassesCatInDifferentPackages [
+	| appPackage app2Package cat cat2 |
+	
+	entryPointCode := ''.
+	model := self newModel.
+	appPackage := model packageNamed: #Application.
+	app2Package := model packageNamed: #App2.
+	cat := (appPackage behaviorNamed: #Cat).
+	cat2 := (app2Package behaviorNamed: #Cat).
+	self assert: cat isCandleClass.
+	self assert: cat package equals: appPackage.
+	self assert: cat2 isCandleClass.
+	self assert: cat2 package equals: app2Package.
 	
 ]
