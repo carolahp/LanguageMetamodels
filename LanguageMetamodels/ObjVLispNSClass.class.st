@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #'accessing-api' }
+ObjVLispNSClass >> environment [ 
+	^ self package
+]
+
+{ #category : #'accessing-api' }
 ObjVLispNSClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [ 
 	| mcDef metaclassDef |
 	mcDef := anEP2MCClassDefinition.
@@ -29,6 +34,17 @@ ObjVLispNSClass >> installCustom [
 { #category : #'accessing-api' }
 ObjVLispNSClass >> name [ 
 	^ self package name, '>', objectName
+]
+
+{ #category : #'accessing-api' }
+ObjVLispNSClass >> package [ 
+	^ package := super package
+]
+
+{ #category : #'accessing-api' }
+ObjVLispNSClass >> package: anObjVLispNSPackage [ 
+	super package: anObjVLispNSPackage.
+	package := anObjVLispNSPackage
 ]
 
 { #category : #'accessing-api' }

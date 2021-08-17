@@ -20,6 +20,14 @@ ObjVLispNSLanguage class >> packageModel [
 ]
 
 { #category : #hooks }
+ObjVLispNSLanguage >> bindingOf: aSymbol [
+	(self globalVariableNamed: aSymbol)
+		ifNil: [ (self packageNamed: aSymbol ifAbsent: [nil]) ifNil: [ ^ nil ] ].
+
+	^ self newGlobalBindingFor: aSymbol
+]
+
+{ #category : #hooks }
 ObjVLispNSLanguage >> classNamedExactly: aString [
 	| className |
 	className := (aString indexOf: $>) > 0
