@@ -33,7 +33,7 @@ ObjVLispMIMulticlass >> addSuperclass: aMulticlass [
 ObjVLispMIMulticlass >> allSlots [
 	| result |
 	" slots inherited by normal inheritance are prioritized. 
-	slots inherited from extra superclasses are prioritized in the order in which the superclasses were defined "
+	slots inherited from extra superclasses are prioritized in the order in which superclasses are defined in the 'superclasses' array "
 	
 	" first get my slots plus slots inherited by normal inheritance "
 	result := super allSlots asOrderedCollection.

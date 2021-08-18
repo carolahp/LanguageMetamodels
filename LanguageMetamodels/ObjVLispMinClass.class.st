@@ -43,13 +43,6 @@ ObjVLispMinClass >> innerBindingOf: aSymbol [
 	^ nil
 ]
 
-{ #category : #install }
-ObjVLispMinClass >> installCustom [
-	super installCustom
-	"self remote name: self name.
-	self remote metaclass: self metaclass ensureRemote"
-]
-
 { #category : #initialization }
 ObjVLispMinClass >> metaclass [
 	^ metaclass
@@ -58,9 +51,4 @@ ObjVLispMinClass >> metaclass [
 { #category : #initialization }
 ObjVLispMinClass >> metaclass: anObject [
 	metaclass := anObject 
-]
-
-{ #category : #hooks }
-ObjVLispMinClass >> registerCustom [
-	^ nil
 ]
