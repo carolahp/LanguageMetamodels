@@ -21,11 +21,6 @@ ObjVLispMinLanguage >> customClassRoles [
 ]
 
 { #category : #hooks }
-ObjVLispMinLanguage >> firstMetaclasses [
-	^{self classClass}
-]
-
-{ #category : #hooks }
 ObjVLispMinLanguage >> transform [ 
 	| metaclass instvars |
 	metaclass := self classClass.

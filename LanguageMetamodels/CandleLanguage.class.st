@@ -180,13 +180,6 @@ CandleLanguage >> exportAsTonelRepository: aFileReference [
 			EP2TonelWriter fileOut: aVersion on: aFileReference metamodel: self ]
 ]
 
-{ #category : #hooks }
-CandleLanguage >> firstMetaclasses [
-	| metaclass |
-	metaclass := self classMetaclass.
-	^ { metaclass . metaclass metaclass }
-]
-
 { #category : #util }
 CandleLanguage >> fixCircularInheritance [
 	self classProtoObject metaclass superclass: self classClass.

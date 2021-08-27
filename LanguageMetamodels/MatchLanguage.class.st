@@ -95,13 +95,6 @@ MatchLanguage >> ensureMetaclassNamed: aName [
 			newBeh ]
 ]
 
-{ #category : #hooks }
-MatchLanguage >> firstMetaclasses [
-	| metaclass |
-	metaclass := self classMetaclass.
-	^ { metaclass . metaclass metaclass }
-]
-
 { #category : #roles }
 MatchLanguage >> isValidMetaclassName: aString [
 	^ (aString endsWith: self class metaclassSuffix)

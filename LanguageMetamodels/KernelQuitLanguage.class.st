@@ -46,11 +46,6 @@ KernelQuitLanguage >> entryPointReceiver [
 ]
 
 { #category : #hooks }
-KernelQuitLanguage >> firstMetaclasses [
-	^ {self classClass}
-]
-
-{ #category : #hooks }
 KernelQuitLanguage >> installClasses [
 	self classClass install
 ]
