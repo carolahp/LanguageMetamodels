@@ -10,11 +10,6 @@ ObjVLispMinLanguageTest >> languageModelClass [
 ]
 
 { #category : #'instance creation' }
-ObjVLispMinLanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
-]
-
-{ #category : #'instance creation' }
 ObjVLispMinLanguageTest >> testInUndeclaredGlobal [
 	entryPointCode := 'System1'.
 	self should: [ self inVMExecuteEntryPoint ] raise: EP2UndeclaredBindingError

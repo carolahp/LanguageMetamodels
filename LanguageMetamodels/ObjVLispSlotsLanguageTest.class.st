@@ -10,11 +10,6 @@ ObjVLispSlotsLanguageTest >> languageModelClass [
 ]
 
 { #category : #'instance creation' }
-ObjVLispSlotsLanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
-]
-
-{ #category : #'instance creation' }
 ObjVLispSlotsLanguageTest >> testInVMCreateArray [
 	entryPointCode := '
 	System log: #() asString.

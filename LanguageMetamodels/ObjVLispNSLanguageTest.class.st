@@ -10,11 +10,6 @@ ObjVLispNSLanguageTest >> languageModelClass [
 ]
 
 { #category : #'instance creation' }
-ObjVLispNSLanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
-]
-
-{ #category : #'instance creation' }
 ObjVLispNSLanguageTest >> testInVMAccessClassesInPackage [
 	
 	entryPointCode := 'System log: System name asString.

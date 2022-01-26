@@ -4,14 +4,15 @@ Class {
 	#category : #'LanguageMetamodels-Tests'
 }
 
-{ #category : #'instance creation' }
-CandleLanguageTest >> languageModelClass [
-	^ CandleLanguage
+{ #category : #'external repository' }
+CandleLanguageTest >> gitRepoName [
+	" Use candle sources. If you want to build Candle from ObjVLispMin sources see MatchLanguageTest "
+	^ 'PharoCandleSrc'
 ]
 
 { #category : #'instance creation' }
-CandleLanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/gitrepos/PharoCandleLast/PharoCandleSrc'
+CandleLanguageTest >> languageModelClass [
+	^ CandleLanguage
 ]
 
 { #category : #'instance creation' }

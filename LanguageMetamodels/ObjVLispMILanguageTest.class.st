@@ -10,11 +10,6 @@ ObjVLispMILanguageTest >> languageModelClass [
 ]
 
 { #category : #'instance creation' }
-ObjVLispMILanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
-]
-
-{ #category : #'instance creation' }
 ObjVLispMILanguageTest >> testInVMGetPointSlots [
 	entryPointCode := '
 	System log: Point allSlots asString.

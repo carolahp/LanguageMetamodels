@@ -5,13 +5,15 @@ Class {
 }
 
 { #category : #'instance creation' }
-OwnerLanguageTest >> languageModelClass [
-	^ OwnerLanguage
+OwnerLanguageTest >> gitRepoName [
+	" Use candle sources "
+	" ToDo: change to 'ownerlanguage' branch automatically "
+	^ 'PharoCandleSrc'
 ]
 
 { #category : #'instance creation' }
-OwnerLanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/gitrepos/PharoCandleLast/Owner'
+OwnerLanguageTest >> languageModelClass [
+	^ OwnerLanguage
 ]
 
 { #category : #'instance creation' }

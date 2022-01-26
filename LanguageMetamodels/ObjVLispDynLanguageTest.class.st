@@ -10,11 +10,6 @@ ObjVLispDynLanguageTest >> languageModelClass [
 ]
 
 { #category : #'instance creation' }
-ObjVLispDynLanguageTest >> sourcesPath [
-	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
-]
-
-{ #category : #'instance creation' }
 ObjVLispDynLanguageTest >> testInVMAccessCompiledMethodDynamicVariables [
 	"This won't work because EP2SemanticAnalyzer>>declareVariableNode: is not creating instances of VariableModel"
 	entryPointCode := 

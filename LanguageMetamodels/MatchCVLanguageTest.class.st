@@ -10,12 +10,6 @@ MatchCVLanguageTest >> languageModelClass [
 ]
 
 { #category : #'instance creation' }
-MatchCVLanguageTest >> sourcesPath [
-	" same as objvlispMin "
-	^ '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMin'
-]
-
-{ #category : #'instance creation' }
 MatchCVLanguageTest >> testInVMCreateAndAccessDictionary [
 	entryPointCode := '| dict |
 	dict := Dictionary new.
