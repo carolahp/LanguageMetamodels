@@ -6,7 +6,7 @@ Class {
 
 { #category : #'instance creation' }
 OwnerLanguageTest >> gitBranchName [
-	^ 'ownerlanguage'
+	^ 'origin/ownerlanguage'
 ]
 
 { #category : #'instance creation' }
