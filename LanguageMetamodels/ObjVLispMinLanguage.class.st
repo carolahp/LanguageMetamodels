@@ -1,23 +1,7 @@
 "
-Language Definitions found in https://github.com/carolahp/KernelExplicitMetaclasses/tree/minimum
-
-""instantiate the language model""
-language := (ObjVLispMinLanguage 
-newFromModel: '/Users/carolina.hernandez/Documents/restaurado/bootstrap/language-definitions/ObjVLispMinLiterals' asFileReference 
-withName:  'ObjVLispMin'  
-withEntryPoint: '
-	| holi |
-	holi := 1.
-	System log: ''hello world''.
-	System log: ''hello world'' identityHash asString.
-   
-	System quit.').
-language generate.
-language writeImage.
-language imageInDisk executeInVM.
-
-language imageInDisk executeInVMSimulator.
-language browse.
+ObjVLisp minimum. 
+Used a base to develop multiple variants.
+It implements explicit metaclasses, single inheritance, instance variables, and the same variable scope for literals and globals than Pharo.
 "
 Class {
 	#name : #ObjVLispMinLanguage,
@@ -26,54 +10,26 @@ Class {
 }
 
 { #category : #'hooks-api' }
-ObjVLispMinLanguage class >> globalModel [
-	^ ObjVLispMinGlobal 
-]
-
-{ #category : #'hooks-api' }
-ObjVLispMinLanguage class >> metaclassModel [
+ObjVLispMinLanguage class >> classModel [
 	" Return the subclass of EP2MClass that defines the metamodel for classes of the language "
 	^ ObjVLispMinClass  
 ]
 
-{ #category : #'hooks-api' }
-ObjVLispMinLanguage class >> packageModel [
-	^ PackageModel
-]
-
-{ #category : #hooks }
-ObjVLispMinLanguage >> createInitialObjects [
-	"perform operations to initialize Classes classPools, or instructinos such as String initialize"
-	^ nil
-]
-
-{ #category : #hooks }
-ObjVLispMinLanguage >> createRemoteSystemDictionary [
-	" return a new SystemDictionary instance, or nil if your language does not define a system dictionary"
-	^ nil
-]
-
 { #category : #roles }
 ObjVLispMinLanguage >> customClassRoles [
-	^ nil
-]
-
-{ #category : #hooks }
-ObjVLispMinLanguage >> firstMetaclasses [
-	^{self classWithRole: #Metaclass}
-]
-
-{ #category : #hooks }
-ObjVLispMinLanguage >> initializeSpecialObjectsArray [
-	^ nil
-]
-
-{ #category : #'building-class-model' }
-ObjVLispMinLanguage >> loadGlobalVariables [
-	" no globals in objvlisp min"
+	^ { #ProtoObject -> #Object }
 ]
 
 { #category : #hooks }
 ObjVLispMinLanguage >> transform [ 
-	^ self
+	| metaclass instvars |
+	metaclass := self classClass.
+	instvars := metaclass allInstVarNames.
+	metaclass class allModelInstVarNames do: [ :name |
+		(instvars includes: name) ifFalse: [ metaclass addSlot: name ] ] .
+	metaclass addLocalMethodFromSource: 'name
+	^ name' selector: #name.
+	metaclass addLocalMethodFromSource: 'name: aSymbol
+	name := aSymbol' selector: #name:.
+	
 ]

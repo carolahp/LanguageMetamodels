@@ -53,6 +53,12 @@ CandleClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	^ self
 ]
 
+{ #category : #hooks }
+CandleClass >> initialize [
+	super initialize.
+	self classVars: #()
+]
+
 { #category : #'initialize remote' }
 CandleClass >> initializeClassVars [
 	| dictionary |
@@ -62,12 +68,16 @@ CandleClass >> initializeClassVars [
 	^ dictionary
 ]
 
+{ #category : #hooks }
+CandleClass >> initializeCustom [
+	self metaclass initializeWithSoleInstance: self
+]
+
 { #category : #initialization }
 CandleClass >> initializeWithTemplateCustom: aTemplateClass [
-	
+	self deprecated: 'this code should be called from initialize'.
 	self classVars: #().
 	self parent ensureClassNamed: self name, self parent metaclassSuffix.
-	
 	self metaclass initializeWithSoleInstance: self.
 	^ self
 ]
@@ -90,10 +100,11 @@ CandleClass >> instVarsNames [
 
 { #category : #install }
 CandleClass >> installCustom [
-	self remote
+	super installCustom
+	"self remote
 		name: self name;
 		instVarsNames: self instVarsNames.
-	self remote classVars ifNilObject: [ self initializeClassVars ]
+	self remote classVars ifNilObject: [ self initializeClassVars ]"
 ]
 
 { #category : #'class stub' }
@@ -169,11 +180,8 @@ CandleClass >> registerCustom [
 { #category : #accessing }
 CandleClass >> test [ 
 	super test.
-	self assert: self metaclass isNotNil.
+	
 	self assert: self name isNotNil.
-	self assert: self name = self name.
-	self assert: (self parent isValidMetaclassName: self name) not
-"	self assert: self classVariables1 isArray.
-	self assert: self instVarNames1 isNotNil.
-	self assert: self instVarNames1 isArray"
+	self assert: (self parent isValidMetaclassName: self name) not.
+	self assert: (self allSuperclasses includes: self parent classClass) not
 ]

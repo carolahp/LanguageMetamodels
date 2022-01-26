@@ -1,4 +1,6 @@
 "
+Minimum kernel that only quits after it starts.
+
 quit destroy.
 quit := (KernelQuitLanguage  
 	newWithName:  'Quit3' withEntryPoint:  'Metaclass quit.').
@@ -18,38 +20,19 @@ Class {
 }
 
 { #category : #'hooks-api' }
-KernelQuitLanguage class >> globalModel [
-	^KernelQuitGlobal
-]
-
-{ #category : #'hooks-api' }
-KernelQuitLanguage class >> metaclassModel [
+KernelQuitLanguage class >> classModel [
 	^ KernelQuitClass
 ]
 
-{ #category : #'hooks-api' }
-KernelQuitLanguage class >> packageModel [
-	^PackageModel
-]
-
 { #category : #hooks }
-KernelQuitLanguage >> createInitialObjects [
-	^ nil
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> createRemoteSystemDictionary [
-	^nil
-]
-
-{ #category : #roles }
 KernelQuitLanguage >> customClassRoles [
-	^nil
+	^ { #ProtoObject -> #Object.
+	#Class -> #Metaclass }
 ]
 
 { #category : #hooks }
 KernelQuitLanguage >> entryPointClass [
-	^ self classWithRole: #Metaclass
+	^ self classClass
 ]
 
 { #category : #hooks }
@@ -59,47 +42,27 @@ KernelQuitLanguage >> entryPointCode [
 
 { #category : #hooks }
 KernelQuitLanguage >> entryPointReceiver [
-	^ 'Metaclass'
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> firstMetaclasses [
-	^ {self classWithRole: #Metaclass}
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> hookSetSpecialObjectsArray: anEP2RemoteArray [
-	^ nil
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> initializeSpecialObjectsArray [
-	^ nil
+	^ 'Class'
 ]
 
 { #category : #hooks }
 KernelQuitLanguage >> installClasses [
-	(self classWithRole: #Metaclass) install
+	self classClass install
 ]
 
 { #category : #hooks }
 KernelQuitLanguage >> installMethods [
-	(self classWithRole: #Metaclass) installMethods
-]
-
-{ #category : #hooks }
-KernelQuitLanguage >> loadGlobalVariables [
-	^ nil
+	self classClass installMethods
 ]
 
 { #category : #roles }
 KernelQuitLanguage >> testRemote [
-	(self classWithRole: #Metaclass) testRemote
+	self classClass testRemote
 ]
 
 { #category : #hooks }
 KernelQuitLanguage >> transform [
-	((self classWithRole: #Metaclass) 
+	(self classClass 
 		ensureLocalMethodNamed: #quit)
 		sourceCode:
 			'quit

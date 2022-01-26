@@ -1,4 +1,6 @@
 "
+Candle with defining objects with owner.
+
 Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc/tree/ownerlanguage
 and set them in the constructor 
 OwnerLanguage 
@@ -15,6 +17,11 @@ Class {
 { #category : #'hooks-api' }
 OwnerLanguage class >> classModel [
 	^ OwnerClass
+]
+
+{ #category : #'hooks-api' }
+OwnerLanguage class >> customFirstClassModels [
+	^ {self metaclassModel}
 ]
 
 { #category : #'hooks-api' }
@@ -77,13 +84,20 @@ OwnerLanguage >> transform [
 	self allClasses
 		do: [ :class | 
 			| getSrc setSrc |
-			getSrc := 'owner ^ owner'.
-			setSrc := 'owner:object owner:=object'.
+			getSrc := 'owner 
+	^ owner'.
+			setSrc := 'owner:object 
+	owner:=object'.
 			"special methods if owner does not exist"
 			class
 				slotNamed: #owner
-				ifAbsent: [ getSrc := 'owner ^ self class instancesDict at: self basicIdentityHash'.
-					setSrc := 'owner:object self class instancesDict at: self basicIdentityHash put: object' ].
+				ifAbsent: [ getSrc := 'owner 
+	^ self class instancesDict 
+		at: self basicIdentityHash'.
+					setSrc := 'owner:object 
+	self class instancesDict 
+		at: self basicIdentityHash 
+		put: object' ].
 			class addLocalMethodFromSource: getSrc selector: #owner.
-			class addLocalMethodFromSource: setSrc selector: #owner:. ]
+			class addLocalMethodFromSource: setSrc selector: #owner: ]
 ]

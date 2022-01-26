@@ -40,13 +40,6 @@ ExplicitMetaclassesAugmentedClass >> hookInstall [
 ]
 
 { #category : #accessing }
-ExplicitMetaclassesAugmentedClass >> initializeWithTemplateCustom: aTemplate [
-	super initializeWithTemplateCustom: aTemplate.
-	self instVarNames: aTemplate instVarNames. 
-	self classVariables: nil
-]
-
-{ #category : #accessing }
 ExplicitMetaclassesAugmentedClass >> instVarNames1 [
 	^ instVarNames
 ]

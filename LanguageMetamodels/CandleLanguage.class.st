@@ -1,4 +1,7 @@
 "
+Candle is a minimal Pharo-like kernel implementing implicit metaclasses, single inheritance, and class variables.
+Its source code is not the same as ObjVLisp.
+
 Download my Language Definitions from https://github.com/carolahp/PharoCandleSrc (master branch)
 and set them in the constructor 
 --------------------------------------------------------------------------
@@ -40,8 +43,20 @@ CandleLanguage class >> classModel [
 ]
 
 { #category : #'hooks-api' }
+CandleLanguage class >> classModelFor: aString [
+	^ (aString endsWith: self metaclassSuffix)
+		ifTrue: [ self metaclassModel ]
+		ifFalse: [ self classModel ]
+]
+
+{ #category : #'hooks-api' }
 CandleLanguage class >> classVariableModel [
 	^ CandleClassVariable
+]
+
+{ #category : #'hooks-api' }
+CandleLanguage class >> customFirstClassModels [
+	^ {self metaclassModel }
 ]
 
 { #category : #'hooks-api' }
@@ -75,15 +90,31 @@ CandleLanguage class >> newMetaclassFor: aCandleClass [
 ]
 
 { #category : #'hooks-api' }
-CandleLanguage class >> packageModel [
-	^ CandleNSPackage 
+CandleLanguage class >> simpleClassModel [
+	^ CandleClass
 ]
 
-{ #category : #util }
-CandleLanguage >> classNameFrom: aMetaclassName [
-	^ aMetaclassName
-		copyFrom: 1
-		to: aMetaclassName size - self metaclassSuffix size
+{ #category : #'tonel repository' }
+CandleLanguage >> addMethodFromMonticelloDefinition: aMCMethodDefinition [
+	| methodDef classDef mcDef className |
+	mcDef := aMCMethodDefinition.
+	className := self classNameFromMonticello: mcDef className.
+	mcDef classIsMeta
+		ifTrue: [ self
+				assert: self metaclassSuffix isNotNil
+				description:
+					'Your language should define implicit metaclasses to load class side methods'.
+			self assert: (self isValidMetaclassName: className) not.
+			className := className , self metaclassSuffix ].
+	classDef := self ensureClassNamed: className.
+	methodDef := classDef ensureLocalMethodNamed: mcDef selector.
+	methodDef extendWithMonticello: mcDef.
+	^ methodDef
+]
+
+{ #category : #'access special class' }
+CandleLanguage >> classMetaclass [
+	^ self classNamed: #PCMetaclass
 ]
 
 { #category : #hooks }
@@ -119,6 +150,7 @@ CandleLanguage >> customClassRoles [
 	(#LargeNegativeInteger -> #PCLargeNegativeInteger).
 	(#LargePositiveInteger -> #PCLargePositiveInteger).
 	(#Message -> #PCMessage).
+	(#Class -> #PCClass).
 	(#Metaclass -> #PCMetaclass).
 	(#MethodDictionary -> #PCMethodDictionary).
 	(#Point -> #PCPoint).
@@ -130,18 +162,6 @@ CandleLanguage >> customClassRoles [
 	(#SmallInteger -> #PCSmallInteger).
 	(#True -> #PCTrue).
 	(#UndefinedObject -> #PCUndefinedObject)}
-]
-
-{ #category : #util }
-CandleLanguage >> ensureClassNamed: aName [
-	^ self
-		classNamed: aName
-		ifAbsent: [ | newBeh |
-			newBeh := (self isValidMetaclassName: aName)
-				ifTrue: [ self class metaclassModel named: aName parent: self ]
-				ifFalse: [ self class classModel named: aName parent: self ].
-			self addBehavior: newBeh.
-			newBeh ]
 ]
 
 { #category : #hooks }
@@ -160,16 +180,16 @@ CandleLanguage >> exportAsTonelRepository: aFileReference [
 			EP2TonelWriter fileOut: aVersion on: aFileReference metamodel: self ]
 ]
 
-{ #category : #hooks }
-CandleLanguage >> firstMetaclasses [
-	| metaclass |
-	metaclass := self classWithRole: #Metaclass.
-	^ { metaclass . metaclass metaclass }
-]
-
-{ #category : #hooks }
-CandleLanguage >> initializeSpecialObjectsArray [
-	^ nil
+{ #category : #util }
+CandleLanguage >> fixCircularInheritance [
+	self classProtoObject metaclass superclass: self classClass.
+	
+	"self allClasses
+		do: [ :class | 
+			class superclass = class
+				ifTrue: [ self halt.class superclass: nil ].
+			class metaclass superclass 
+				ifNil: [ self halt. class metaclass superclass: self classClass ] ]"
 ]
 
 { #category : #util }
@@ -179,6 +199,12 @@ CandleLanguage >> isValidMetaclassName: aString [
 				and: [ (aString occurrencesOf: Character space) = 1 ] ]
 ]
 
+{ #category : #util }
+CandleLanguage >> loadClasses [
+	super loadClasses.
+	self fixCircularInheritance
+]
+
 { #category : #hooks }
 CandleLanguage >> loadGlobalVariables [
 	self globalVariables
@@ -186,6 +212,29 @@ CandleLanguage >> loadGlobalVariables [
 			((self class globalModel named: #Smalltalk parent: self)
 				role: #Smalltalk;
 				initializationCode: 'PCSmalltalkImage basicNew')
+]
+
+{ #category : #'class instantiating' }
+CandleLanguage >> loadKernel [
+	| object class metaclass objectClass |
+	object := self basicNewClassWithRole: #ProtoObject.
+	self addClass: object.
+	class := self basicNewClassWithRole: #Class.
+	self addClass: class.
+	metaclass := self basicNewClassWithRole: #Metaclass.
+	self addClass: metaclass.
+	object superclass: nil.
+	class superclass: object.
+	metaclass superclass: object.
+	objectClass := (self basicNewClassNamed: object name, self class metaclassSuffix)
+		parent: self;
+		yourself.
+	objectClass superclass: class.
+	self addClass: objectClass.
+	metaclass initialize.
+	object initialize.
+	class initialize.
+	objectClass initialize
 ]
 
 { #category : #constants }
@@ -204,12 +253,12 @@ CandleLanguage >> newClassVariableNamed: aString parent: aCandleClass [
 CandleLanguage >> test [ 
 	| model metamodel modelVars metamodelVars modelVarsLast metamodelVarsLast |
 	super test.
-		
-	model := self classNamed: 'PCClass'.
+	
+	model := self classWithRole: 'Class'.
 	metamodel := self class classModel.
 	
 	modelVars := model allInstVarNames.
-	metamodelVars := self class classModel allClassModelInstVarNames.
+	metamodelVars := self class classModel allModelInstVarNames.
 	
 	modelVarsLast := (modelVars
 		copyFrom: 4
@@ -235,5 +284,9 @@ CandleLanguage >> test [
 
 { #category : #util }
 CandleLanguage >> transform [ 
+	| class object |
+	class := (self classNamed: #PCClass).
+	object := (self classWithRole: #ProtoObject).
+	object metaclass superclass: class.
 	^ self
 ]

@@ -21,41 +21,26 @@ ObjVLispMinClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 	| mcDef metaclassDef |
 	mcDef := anEP2MCClassDefinition.
 	metaclassDef := mcDef metaclass.
+	self assert: (self name isNil or: [self name = anEP2MCClassDefinition name]).
 	self
 		metaclass:
 			(metaclassDef
 				ifNotNil: [ self parent ensureClassNamed: metaclassDef ]
-				ifNil: [ self parent classMetaclass ]).
+				ifNil: [ self parent classClass ]).
 ]
 
-{ #category : #initialization }
-ObjVLispMinClass >> initializeWithTemplateCustom: aTemplate [
-	
-	self metaclass: self parent classMetaclass
+{ #category : #binding }
+ObjVLispMinClass >> initialize [
+	super initialize.
+	self assert: objectName isNotNil.
+	name := objectName.
+	metaclass := self parent classClass
 ]
 
 { #category : #hooks }
 ObjVLispMinClass >> innerBindingOf: aSymbol [ 
 	" no classPool, nor classVars"
 	^ nil
-]
-
-{ #category : #install }
-ObjVLispMinClass >> installCustom [
-	^ nil
-]
-
-{ #category : #hooks }
-ObjVLispMinClass >> installStubCustom [
-
-	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
-	self metaclass = self
-		ifTrue: [ ^ self installMetacircularStub ].
-	"first install the stub of my metaclass"
-	self metaclass installStub.
-	"instantiate my metaclass to create a stub of me"
-	^ self metaclass newStubWithFormat: self format.
-	
 ]
 
 { #category : #initialization }
@@ -66,9 +51,4 @@ ObjVLispMinClass >> metaclass [
 { #category : #initialization }
 ObjVLispMinClass >> metaclass: anObject [
 	metaclass := anObject 
-]
-
-{ #category : #hooks }
-ObjVLispMinClass >> registerCustom [
-	^ nil
 ]

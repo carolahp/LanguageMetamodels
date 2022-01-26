@@ -7,6 +7,11 @@ Class {
 	#category : #'LanguageMetamodels-Candle'
 }
 
+{ #category : #'hooks-api' }
+CandleMetaclass class >> role [ 
+	^ #Metaclass
+]
+
 { #category : #testing }
 CandleMetaclass >> bindingOf: aSymbol [ 
 	^ self instanceSide bindingOf: aSymbol
@@ -25,7 +30,7 @@ CandleMetaclass >> defaultMetaclassName [
 
 { #category : #contants }
 CandleMetaclass >> defaultSuperclassName [
-	^ #PCClass
+	^ #'PCObject class'
 ]
 
 { #category : #hooks }
@@ -53,15 +58,23 @@ CandleMetaclass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 ]
 
 { #category : #initializing }
+CandleMetaclass >> initializeCustom [
+	self
+		initializeWithSoleInstance:
+			(self parent
+				classNamed: (self name copyReplaceAll: self parent class metaclassSuffix with: ''))
+]
+
+{ #category : #initializing }
 CandleMetaclass >> initializeWithSoleInstance: aCandleClass [ 
 	self setLayoutKeepingSlots: (EP2FixedLayout on: self).
-	
 	^ self
 		superclass:
 			(aCandleClass superclass
-				ifNil: [ aCandleClass parent ensureClassNamed: self defaultSuperclassName ]
+				ifNil: [ aCandleClass parent classClass ]
 				ifNotNil: [ aCandleClass superclass metaclass ]);
-		soleInstance: aCandleClass
+		soleInstance: aCandleClass;
+		package: aCandleClass package
 ]
 
 { #category : #hooks }
@@ -71,18 +84,9 @@ CandleMetaclass >> innerBindingOf: varName [
 
 { #category : #install }
 CandleMetaclass >> installCustom [
-	self remote
-		soleInstance: self soleInstance remote
-]
-
-{ #category : #hooks }
-CandleMetaclass >> installStubCustom [
-
-	self deprecated: 'Use LanguageModel >> installMulticlassStubs:'.
-	"first install the stub of my metaclass"
-	self metaclass installStub.
-	"instantiate my metaclass to create a stub of me"
-	^ self metaclass newStubWithFormat: self format
+	super installCustom
+	"self remote
+		soleInstance: self soleInstance remote"
 ]
 
 { #category : #accessing }
@@ -108,7 +112,7 @@ CandleMetaclass >> isMeta [
 
 { #category : #accessing }
 CandleMetaclass >> metaclass [ 
-	^ self parent classNamed: self defaultMetaclassName
+	^ self parent classWithRole: #Metaclass
 ]
 
 { #category : #hooks }
@@ -128,6 +132,8 @@ CandleMetaclass >> remote [
 { #category : #accessing }
 CandleMetaclass >> soleInstance [
 	^ soleInstance
+		ifNil: [ self initializeCustom.
+			soleInstance ]
 ]
 
 { #category : #accessing }
@@ -138,10 +144,16 @@ CandleMetaclass >> soleInstance: anObject [
 { #category : #testing }
 CandleMetaclass >> test [ 
 	super test.
-	self assert: (self parent isValidMetaclassName: self name).
 	self assert: self soleInstance isNotNil.
-	self assert: self soleInstance isCandleMetaclass not
-	
+	self assert: self soleInstance isCandleClass.
+	self assert: (self parent isValidMetaclassName: self name).
+	self assert: (self allSuperclasses includes: self parent classClass).
+	self assert: self package = self soleInstance package.
+	self
+		assert:
+			((self soleInstance isProtoObject
+				and: [ self superclass = self parent classClass ])
+				or: [ self soleInstance superclass metaclass = self superclass ])
 ]
 
 { #category : #accessing }

@@ -50,9 +50,30 @@ CandleNSLanguage class >> classModel [
 	^ CandleNSClass
 ]
 
+{ #category : #'hooks-api' }
+CandleNSLanguage class >> customFirstClassModels [
+	^ {self metaclassModel . self packageModel}
+]
+
+{ #category : #'hooks-api' }
+CandleNSLanguage class >> metaclassModel [
+	^ CandleNSMetaclass
+]
+
+{ #category : #'hooks-api' }
+CandleNSLanguage class >> packageModel [
+	^ CandleNSPackage 
+]
+
 { #category : #'accessing classes' }
-CandleNSLanguage >> allClasses [
-	^ self packages flatCollect: #definedBehaviors
+CandleNSLanguage >> addClass: aMClass [
+	self
+		classNamed: aMClass name
+		ifAbsent: [ self allClasses at: aMClass fullName put: aMClass ]
+		ifPresent: [ :found | 
+			aMClass = found
+				ifFalse: [ self error: 'trying to replace existent behavior' ]
+				ifTrue: [ found ] ]
 ]
 
 { #category : #'accessing classes' }
@@ -72,6 +93,44 @@ CandleNSLanguage >> createInitialObjects [
 	classes do: [ :class | class initializeClassVars ].
 	classes do: [ :class | class register ].
 	self evaluateCode: '(Kernel>#PCFloat) initialize'
+]
+
+{ #category : #'accessing classes' }
+CandleNSLanguage >> customClassRoles [
+	
+	^ {
+	(#Array -> #'Kernel>PCArray').
+	(#Association -> #'Kernel>PCAssociation').
+	(#BlockClosure -> #'Kernel>PCBlock').
+	(#ByteArray -> #'Kernel>PCByteArray').
+	(#ByteString -> #'Kernel>PCString').
+	(#ByteSymbol -> #'Kernel>PCSymbol').
+	(#Character -> #'Kernel>PCCharacter').
+	(#CompiledMethod -> #'Kernel>PCCompiledMethod').
+	(#Context -> #'Kernel>PCMethodContext').
+	(#Dictionary -> #'Kernel>PCDictionary').
+	(#False -> #'Kernel>PCFalse').
+	(#Float -> #'Kernel>PCFloat').
+	(#LargeNegativeInteger -> #'Kernel>PCLargeNegativeInteger').
+	(#LargePositiveInteger -> #'Kernel>PCLargePositiveInteger').
+	(#Message -> #'Kernel>PCMessage').
+	(#Class -> #'Kernel>PCClass').
+	(#Metaclass -> #'Kernel>PCMetaclass').
+	(#MethodDictionary -> #'Kernel>PCMethodDictionary').
+	(#Point -> #'Kernel>PCPoint').
+	(#Process -> #'Kernel>PCProcess').
+	(#ProcessList -> #'Kernel>PCProcessList').
+	(#ProcessorScheduler -> #'Kernel>PCProcessorScheduler').
+	(#ProtoObject -> #'Kernel>PCObject').
+	(#Semaphore -> #'Kernel>PCSemaphore').
+	(#SmallInteger -> #'Kernel>PCSmallInteger').
+	(#True -> #'Kernel>PCTrue').
+	(#UndefinedObject -> #'Kernel>PCUndefinedObject')}
+]
+
+{ #category : #'accessing classes' }
+CandleNSLanguage >> defaultPackageName [ 
+	^ #Kernel
 ]
 
 { #category : #'accessing classes' }
@@ -99,22 +158,24 @@ CandleNSLanguage >> loadGlobalVariables [
 { #category : #'accessing classes' }
 CandleNSLanguage >> transform [
 	| objclass newclass newmetaclass package |
-	objclass := self classNamed: #PCObject.
-	package := self packageNamed: 'Application'.
+	objclass := self classProtoObject.
+	package := self ensurePackageNamed: 'Application'.
 
-	newclass := self class classModel named: #Cat parent: self.
+	newclass := self newClassNamed: #Cat.
 	newclass package: package.
 	newclass layout: (EP2FixedLayout on: newclass).
 	newclass superclass: objclass.
-
-	newmetaclass := self class metaclassModel named: #'Cat class' parent: self.
+	
+	newmetaclass := self newClassNamed: #'Cat class'.
 	newmetaclass package: package.
 	newmetaclass layout: (EP2FixedLayout on: newmetaclass).
 	newmetaclass soleInstance: newclass. 
 	newmetaclass superclass: objclass metaclass.
-
+	
 	package addDefinedBehavior: newclass.
 	package addDefinedBehavior: newmetaclass.
-
+	
+	self addClass: newclass.
+	self addClass: newmetaclass.
 	^ self
 ]

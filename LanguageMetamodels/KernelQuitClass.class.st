@@ -17,6 +17,7 @@ KernelQuitClass >> extendWithMonticelloCustom: anEP2MCClassDefinition [
 
 { #category : #initialization }
 KernelQuitClass >> initializeWithTemplateCustom: aClass [ 
+	self deprecated: 'this code should be called from initialize'.
 	^ self 
 ]
 
@@ -27,10 +28,11 @@ KernelQuitClass >> innerBindingOf: aSymbol [
 
 { #category : #install }
 KernelQuitClass >> installCustom [
-	^ self remote
+	super installCustom
+	"^ self remote"
 ]
 
 { #category : #'accessing backend' }
 KernelQuitClass >> metaclass [
-	^ self parent classMetaclass
+	^ self parent classClass
 ]
