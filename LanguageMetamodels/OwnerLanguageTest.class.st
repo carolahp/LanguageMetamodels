@@ -5,9 +5,13 @@ Class {
 }
 
 { #category : #'instance creation' }
+OwnerLanguageTest >> gitBranchName [
+	^ 'ownerlanguage'
+]
+
+{ #category : #'instance creation' }
 OwnerLanguageTest >> gitRepoName [
 	" Use candle sources "
-	" ToDo: change to 'ownerlanguage' branch automatically "
 	^ 'PharoCandleSrc'
 ]
 
